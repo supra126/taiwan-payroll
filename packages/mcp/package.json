@@ -1,0 +1,24 @@
+{
+  "name": "taiwan-payroll-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for taiwan-payroll — 台灣勞健保勞退計算的 MCP 工具",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "taiwan-payroll-mcp": "./dist/server.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29",
+    "taiwan-payroll": "workspace:*",
+    "zod": "^3.25"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  }
+}
