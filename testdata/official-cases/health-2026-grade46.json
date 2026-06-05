@@ -1,0 +1,18 @@
+{
+  "id": "official-2026-health-grade46",
+  "description": "健保第46級(204,500)本人 3,172 元(高薪對級)",
+  "source": "衛福部健保署 全民健康保險保險費負擔金額表(115.1.1) 第46級",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 200000,
+    "dependents": 0
+  },
+  "expected": {
+    "brackets": {
+      "health": 204500
+    },
+    "employee": {
+      "health": 3172
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "official-2026-health-cap",
+  "description": "健保最高級距 313,000，本人保費 4,855 元",
+  "source": "衛福部健保署 全民健康保險保險費負擔金額表(115.1.1) 第58級",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 500000,
+    "dependents": 0
+  },
+  "expected": {
+    "brackets": {
+      "health": 313000
+    },
+    "employee": {
+      "health": 4855
+    }
+  }
+}

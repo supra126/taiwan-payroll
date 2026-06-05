@@ -1,0 +1,17 @@
+{
+  "id": "official-2026-pension-cap",
+  "description": "勞退月提繳工資上限 150,000，雇主提繳 9,000 元",
+  "source": "勞動部勞工保險局 勞工退休金月提繳分級表（上限150,000）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 200000
+  },
+  "expected": {
+    "brackets": {
+      "pension": 150000
+    },
+    "employer": {
+      "pension": 9000
+    }
+  }
+}

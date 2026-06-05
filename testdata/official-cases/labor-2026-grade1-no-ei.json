@@ -1,0 +1,15 @@
+{
+  "id": "official-2026-labor-grade1-no-ei",
+  "description": "2026 最低級距不參加就業保險，費率 11.5%，勞保自付 679 元",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表（普通事故11.5%）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 29500,
+    "employmentInsurance": false
+  },
+  "expected": {
+    "employee": {
+      "labor": 679
+    }
+  }
+}

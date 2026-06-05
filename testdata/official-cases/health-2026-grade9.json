@@ -1,0 +1,21 @@
+{
+  "id": "official-2026-health-grade9",
+  "description": "健保第9級(42,000)本人 651、投保單位 2,032、政府 339",
+  "source": "衛福部健保署 全民健康保險保險費負擔金額表(115.1.1)",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 42000,
+    "dependents": 0
+  },
+  "expected": {
+    "employee": {
+      "health": 651
+    },
+    "employer": {
+      "health": 2032
+    },
+    "government": {
+      "health": 339
+    }
+  }
+}

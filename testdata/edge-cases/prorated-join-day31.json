@@ -1,0 +1,17 @@
+{
+  "id": "edge-2026-prorated-join-day31",
+  "description": "31日到職正規化為30，投保1日",
+  "source": "勞保局 30日基準",
+  "year": 2026,
+  "kind": "prorated",
+  "input": {
+    "monthlySalary": 29500,
+    "startDate": "2026-01-31"
+  },
+  "expected": {
+    "days": {
+      "insured": 1
+    },
+    "healthCharged": true
+  }
+}

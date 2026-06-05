@@ -1,0 +1,21 @@
+{
+  "id": "official-2026-pension-42000",
+  "description": "勞退月提繳工資 42,000，雇主提繳 6% = 2,520 元",
+  "source": "勞動部勞工保險局 勞工退休金月提繳分級表 勞動福3字第1140153598號令",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 42000,
+    "pensionSelfContribution": 0.06
+  },
+  "expected": {
+    "brackets": {
+      "pension": 42000
+    },
+    "employer": {
+      "pension": 2520
+    },
+    "employee": {
+      "pensionSelf": 2520
+    }
+  }
+}

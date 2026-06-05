@@ -1,0 +1,15 @@
+{
+  "id": "official-2026-supplementary-dividend",
+  "description": "股利 50,000（達2萬起扣）全額課2.11%=1,055",
+  "source": "健保署 補充保險費計算公式 cp-4516",
+  "year": 2026,
+  "kind": "supplementary",
+  "input": {
+    "type": "dividend",
+    "amount": 50000
+  },
+  "expected": {
+    "chargeable": 50000,
+    "premium": 1055
+  }
+}

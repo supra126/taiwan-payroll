@@ -1,0 +1,19 @@
+{
+  "id": "official-2026-labor-grade1-employee",
+  "description": "2026 最低級距(29,500)第1類勞工，含就保，勞保自付額 738 元",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表 勞動保2字第1140091863號令；新聞稿『最低級距勞工每月勞保自付738元』",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 29500,
+    "identity": "category1",
+    "employmentInsurance": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 29500
+    },
+    "employee": {
+      "labor": 738
+    }
+  }
+}

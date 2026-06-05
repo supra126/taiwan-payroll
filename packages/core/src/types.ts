@@ -1,0 +1,95 @@
+// Hand-written to mirror data/schema.json. Codegen from schema is deferred to M2.
+
+export interface Bracket {
+  grade: number;
+  min: number;
+  max: number | null;
+  insuredSalary: number;
+}
+
+export interface Burden {
+  employer: string;
+  employee: string;
+  government: string;
+}
+
+export interface YearData {
+  year: number;
+  rocYear?: number;
+  effectiveDate: string;
+  dataVersion: string;
+  minimumWage: { monthly: number; hourly: number };
+  laborInsurance: {
+    rate: string;
+    rateWithoutEmploymentInsurance: string;
+    burden: Burden;
+    brackets: Bracket[];
+    partTimeBrackets?: Bracket[];
+  };
+  occupationalInsurance: { defaultRate: string; brackets: Bracket[] };
+  healthInsurance: {
+    rate: string;
+    burden: Burden;
+    avgDependents: string;
+    employerMultiplier: string;
+    maxDependentsCharged: number;
+    brackets: Bracket[];
+    partTimeBrackets?: Bracket[];
+  };
+  pension: { employerRate: string; brackets: Bracket[] };
+  supplementaryPremium: {
+    rate: string;
+    bonusThresholdMultiplier: number;
+    lowerThreshold: number;
+    singlePaymentCap: number;
+  };
+}
+
+export type Identity = 'category1' | 'migrantGeneral' | 'migrantDomestic';
+export type Rounding = 'round' | 'ceil' | 'aggregate-then-round';
+
+export interface CalculateInput {
+  monthlySalary: number;
+  identity?: Identity; // default 'category1'
+  dependents?: number; // health dependents, default 0, charged cap from data
+  employmentInsurance?: boolean; // default true
+  pensionSelfContribution?: number; // self提繳 rate 0..0.06, default 0
+  occupationalRate?: number; // 職災行業別費率（小數比例），預設 data.occupationalInsurance.defaultRate
+  partTime?: boolean; // 部分工時：未達基本工資者勞保/健保適用低級距（職保仍歸第1類），預設 false
+  rounding?: Rounding; // default 'round'
+}
+
+export interface CalculateResult {
+  brackets: { labor: number; health: number; pension: number; occupational: number };
+  employee: { labor: number; health: number; pensionSelf: number; total: number };
+  employer: { labor: number; health: number; pension: number; occupational: number; total: number };
+  government: { labor: number; health: number };
+  meta: { year: number; dataVersion: string };
+}
+
+export type SupplementaryType = 'bonus' | 'parttime' | 'professional' | 'dividend' | 'interest' | 'rent';
+
+export interface SupplementaryInput {
+  type: SupplementaryType;
+  amount: number;
+  monthlyInsuredSalary?: number; // bonus: this payment's current-month insured amount
+  ytdBonus?: number; // bonus: cumulative bonuses paid before this one (default 0)
+  rounding?: Rounding;
+}
+
+export interface SupplementaryResult {
+  type: SupplementaryType;
+  chargeable: number;
+  rate: string;
+  premium: number;
+}
+
+export interface ProratedInput extends CalculateInput {
+  startDate?: string; // 'YYYY-MM-DD' 到職日
+  endDate?: string; // 'YYYY-MM-DD' 離職日
+}
+
+export interface ProratedResult extends CalculateResult {
+  days: { insured: number };
+  healthCharged: boolean;
+}

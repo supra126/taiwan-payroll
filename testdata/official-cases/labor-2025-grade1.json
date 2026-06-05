@@ -1,0 +1,18 @@
+{
+  "id": "official-2025-labor-grade1",
+  "description": "2025（114年）最低級距28,590 勞保自付715元",
+  "source": "勞保局 114年 勞工保險投保薪資分級表 勞動保2字第1130087589號令",
+  "year": 2025,
+  "input": {
+    "monthlySalary": 28590,
+    "employmentInsurance": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 28590
+    },
+    "employee": {
+      "labor": 715
+    }
+  }
+}

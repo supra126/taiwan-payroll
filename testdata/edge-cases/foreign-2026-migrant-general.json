@@ -1,0 +1,28 @@
+{
+  "id": "foreign-2026-migrant-general",
+  "description": "一般移工月薪 30,000：勞保 11.5%（無就保）、無勞退、健保+職災照常",
+  "source": "就業保險法§5（不含一般移工）；勞工退休金條例§7（限本國/外配）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 30000,
+    "identity": "migrantGeneral"
+  },
+  "expected": {
+    "brackets": {
+      "labor": 30300,
+      "pension": 0
+    },
+    "employee": {
+      "labor": 697,
+      "pensionSelf": 0,
+      "health": 470
+    },
+    "employer": {
+      "pension": 0,
+      "occupational": 64
+    },
+    "government": {
+      "labor": 348
+    }
+  }
+}

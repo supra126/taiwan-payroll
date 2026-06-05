@@ -1,0 +1,16 @@
+{
+  "id": "parttime-2026-floor-11100",
+  "description": "部分工時月薪 5,000 → 勞保/健保最低級 11,100",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表 備註（部分工時）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 5000,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 11100,
+      "health": 11100
+    }
+  }
+}

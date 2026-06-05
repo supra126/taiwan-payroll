@@ -1,0 +1,15 @@
+{
+  "id": "official-2026-supplementary-cap",
+  "description": "股利 12,000,000，單次上限1,000萬，課211,000",
+  "source": "健保署 補充保險費計算公式 cp-4516（單次給付上限1,000萬）",
+  "year": 2026,
+  "kind": "supplementary",
+  "input": {
+    "type": "dividend",
+    "amount": 12000000
+  },
+  "expected": {
+    "chargeable": 10000000,
+    "premium": 211000
+  }
+}

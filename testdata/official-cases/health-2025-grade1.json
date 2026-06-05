@@ -1,0 +1,18 @@
+{
+  "id": "official-2025-health-grade1",
+  "description": "2025（114年）健保第1級28,590 本人保費443元",
+  "source": "衛福部健保署 114年 健保投保金額分級表",
+  "year": 2025,
+  "input": {
+    "monthlySalary": 28590,
+    "dependents": 0
+  },
+  "expected": {
+    "brackets": {
+      "health": 28590
+    },
+    "employee": {
+      "health": 443
+    }
+  }
+}

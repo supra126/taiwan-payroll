@@ -1,0 +1,15 @@
+{
+  "id": "parttime-2026-not-flagged",
+  "description": "未勾選部分工時，月薪 15,000 仍 floor 到第 1 級 29,500（回歸保護）",
+  "source": "預設行為：低於基本工資以第 1 級申報",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 15000
+  },
+  "expected": {
+    "brackets": {
+      "labor": 29500,
+      "health": 29500
+    }
+  }
+}

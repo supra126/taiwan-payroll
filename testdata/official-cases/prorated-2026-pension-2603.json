@@ -1,0 +1,19 @@
+{
+  "id": "official-2026-prorated-pension-2603",
+  "description": "勞退月提繳48,200、27日，雇主提繳2,603元",
+  "source": "勞退金=月提繳工資×6%/30×提繳日數（官方範例）",
+  "year": 2026,
+  "kind": "prorated",
+  "input": {
+    "monthlySalary": 48200,
+    "startDate": "2026-07-04"
+  },
+  "expected": {
+    "days": {
+      "insured": 27
+    },
+    "employer": {
+      "pension": 2603
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "parttime-2026-boundary-28591",
+  "description": "部分工時月薪 28,591（超過部分工時頂級）→ 比照全職第1級 29,500（三險一致）",
+  "source": "勞動部 勞工保險投保薪資分級表 備註（超過 28,590 依第1級）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 28591,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 29500,
+      "health": 29500,
+      "occupational": 29500
+    }
+  }
+}

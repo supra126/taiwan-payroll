@@ -1,0 +1,18 @@
+{
+  "id": "official-2026-labor-cap",
+  "description": "高薪對到勞保最高級距 45,800，自付 1,145 元",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表（上限45,800）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 200000,
+    "employmentInsurance": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 45800
+    },
+    "employee": {
+      "labor": 1145
+    }
+  }
+}

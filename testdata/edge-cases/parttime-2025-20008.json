@@ -1,0 +1,17 @@
+{
+  "id": "parttime-2025-20008",
+  "description": "2025（114年）部分工時月薪 20,000 → 勞保/健保 20,008、職保 28,590",
+  "source": "勞動部 114年 勞工保險投保薪資分級表 備註（部分工時/職訓）",
+  "year": 2025,
+  "input": {
+    "monthlySalary": 20000,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 20008,
+      "health": 20008,
+      "occupational": 28590
+    }
+  }
+}

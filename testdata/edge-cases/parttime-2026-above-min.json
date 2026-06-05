@@ -1,0 +1,16 @@
+{
+  "id": "parttime-2026-above-min",
+  "description": "部分工時月薪 35,000（已達基本工資）→ 一般級距 36,300（三險一致）",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 35000,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 36300,
+      "occupational": 36300
+    }
+  }
+}

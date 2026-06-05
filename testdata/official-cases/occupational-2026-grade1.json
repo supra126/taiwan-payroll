@@ -1,0 +1,17 @@
+{
+  "id": "official-2026-occupational-grade1",
+  "description": "職災最低級距 29,500、平均費率 0.21%，雇主負擔 62 元",
+  "source": "勞工職業災害保險及保護法§17；勞動部 115 年平均費率 0.21%",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 29500
+  },
+  "expected": {
+    "brackets": {
+      "occupational": 29500
+    },
+    "employer": {
+      "occupational": 62
+    }
+  }
+}

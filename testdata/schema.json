@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "taiwan-payroll golden test vector",
+  "type": "object",
+  "required": ["id", "description", "year", "input", "expected"],
+  "properties": {
+    "id": { "type": "string" },
+    "description": { "type": "string" },
+    "source": { "type": "string" },
+    "year": { "type": "integer" },
+    "kind": { "type": "string", "enum": ["calculate", "supplementary", "prorated"], "default": "calculate" },
+    "input": { "type": "object" },
+    "expected": { "type": "object" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,16 @@
+{
+  "id": "foreign-2026-migrant-general-forced-ei",
+  "description": "一般移工即使輸入 employmentInsurance=true 仍以 11.5% 計（強制無就保）",
+  "source": "就業保險法§5",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 30000,
+    "identity": "migrantGeneral",
+    "employmentInsurance": true
+  },
+  "expected": {
+    "employee": {
+      "labor": 697
+    }
+  }
+}

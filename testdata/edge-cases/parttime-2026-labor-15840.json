@@ -1,0 +1,20 @@
+{
+  "id": "parttime-2026-labor-15840",
+  "description": "部分工時月薪 15,000 → 勞保/健保級 15,840、職保 29,500（無低級距）",
+  "source": "勞動部勞工保險局 勞工保險投保薪資分級表 備註（部分工時）；勞保局 FAQ 0006920（職保歸 29,500）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 15000,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 15840,
+      "health": 15840,
+      "occupational": 29500
+    },
+    "employee": {
+      "labor": 396
+    }
+  }
+}

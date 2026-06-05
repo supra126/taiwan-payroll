@@ -1,0 +1,15 @@
+{
+  "id": "official-2026-health-grade9-1dep",
+  "description": "健保第9級(42,000)本人+1眷口 1,302 元(逐人計算)",
+  "source": "衛福部健保署 全民健康保險保險費負擔金額表(115.1.1)『本人+1眷口』欄",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 42000,
+    "dependents": 1
+  },
+  "expected": {
+    "employee": {
+      "health": 1302
+    }
+  }
+}

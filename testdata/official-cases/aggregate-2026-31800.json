@@ -1,0 +1,16 @@
+{
+  "id": "official-2026-aggregate-31800",
+  "description": "aggregate-then-round：勞保31,800級，政府吸收進位差，三方相加=3,975",
+  "source": "進位策略詮釋——餘額吸收法",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 31800,
+    "employmentInsurance": true,
+    "rounding": "aggregate-then-round"
+  },
+  "expected": {
+    "government": {
+      "labor": 397
+    }
+  }
+}

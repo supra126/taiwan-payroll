@@ -1,0 +1,16 @@
+{
+  "id": "official-2026-supplementary-bonus",
+  "description": "獎金 200,000、當月投保 42,000，超過4倍(168,000)部分32,000課2.11%=675",
+  "source": "健保署 補充保險費計算公式 cp-4516",
+  "year": 2026,
+  "kind": "supplementary",
+  "input": {
+    "type": "bonus",
+    "amount": 200000,
+    "monthlyInsuredSalary": 42000
+  },
+  "expected": {
+    "chargeable": 32000,
+    "premium": 675
+  }
+}

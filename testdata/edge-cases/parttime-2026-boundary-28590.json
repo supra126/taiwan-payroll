@@ -1,0 +1,20 @@
+{
+  "id": "parttime-2026-boundary-28590",
+  "description": "部分工時月薪 28,590（部分工時頂級）→ 勞保/健保 28,590、職保 29,500",
+  "source": "勞動部 勞工保險投保薪資分級表 備註（115 職訓頂級 28,590）",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 28590,
+    "partTime": true
+  },
+  "expected": {
+    "brackets": {
+      "labor": 28590,
+      "health": 28590,
+      "occupational": 29500
+    },
+    "employee": {
+      "labor": 715
+    }
+  }
+}

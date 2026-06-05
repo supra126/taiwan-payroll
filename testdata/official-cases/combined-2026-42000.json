@@ -1,0 +1,34 @@
+{
+  "id": "official-2026-combined-42000",
+  "description": "綜合案例：月薪 42,000、第1類、1 眷口、含就保、自提 6% 的各方負擔",
+  "source": "勞保局＋健保署 2026 各分級表與負擔金額表交叉計算",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 42000,
+    "identity": "category1",
+    "dependents": 1,
+    "employmentInsurance": true,
+    "pensionSelfContribution": 0.06
+  },
+  "expected": {
+    "brackets": {
+      "labor": 42000,
+      "health": 42000,
+      "pension": 42000
+    },
+    "employee": {
+      "labor": 1050,
+      "health": 1302,
+      "pensionSelf": 2520
+    },
+    "employer": {
+      "labor": 3675,
+      "health": 2032,
+      "pension": 2520
+    },
+    "government": {
+      "labor": 525,
+      "health": 339
+    }
+  }
+}

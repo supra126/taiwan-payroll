@@ -1,0 +1,21 @@
+{
+  "id": "edge-2026-prorated-leave-health-zero",
+  "description": "離職當月健保不計收（月底歸屬），勞保按日8/30",
+  "source": "健保署 保費計收原則（月底歸屬）",
+  "year": 2026,
+  "kind": "prorated",
+  "input": {
+    "monthlySalary": 29500,
+    "endDate": "2026-03-08"
+  },
+  "expected": {
+    "days": {
+      "insured": 8
+    },
+    "healthCharged": false,
+    "employee": {
+      "health": 0,
+      "labor": 197
+    }
+  }
+}

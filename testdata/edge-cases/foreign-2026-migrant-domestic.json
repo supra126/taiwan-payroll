@@ -1,0 +1,27 @@
+{
+  "id": "foreign-2026-migrant-domestic",
+  "description": "家事移工月薪 30,000：無勞保/勞退，只有健保+職災（職災費率 0.18%）",
+  "source": "受僱自然人非強制勞保；勞工職業災害保險法（強制）；家事移工職災 0.18%",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 30000,
+    "identity": "migrantDomestic",
+    "occupationalRate": 0.0018
+  },
+  "expected": {
+    "brackets": {
+      "labor": 0,
+      "pension": 0
+    },
+    "employee": {
+      "labor": 0,
+      "pensionSelf": 0,
+      "health": 470
+    },
+    "employer": {
+      "labor": 0,
+      "pension": 0,
+      "occupational": 55
+    }
+  }
+}

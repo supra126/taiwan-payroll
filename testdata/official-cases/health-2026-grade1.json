@@ -1,0 +1,25 @@
+{
+  "id": "official-2026-health-grade1",
+  "description": "健保第1級(29,500)本人保費 458、投保單位 1,428、政府 238",
+  "source": "衛福部健保署 全民健康保險保險費負擔金額表(115.1.1) 衛部保字第1140153424號令",
+  "year": 2026,
+  "input": {
+    "monthlySalary": 29500,
+    "identity": "category1",
+    "dependents": 0
+  },
+  "expected": {
+    "brackets": {
+      "health": 29500
+    },
+    "employee": {
+      "health": 458
+    },
+    "employer": {
+      "health": 1428
+    },
+    "government": {
+      "health": 238
+    }
+  }
+}
