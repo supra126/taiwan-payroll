@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f4f1ea;
+  --color-paper-2: #efebe1;
+  --color-panel: #fbf9f4;
+  --color-ink: #1b1916;
+  --color-ink-soft: #5b564e;
+  --color-ink-faint: #8a8478;
+  --color-rule: #d8d0c0;
+  --color-rule-strong: #b8ad97;
+  --color-cinnabar: #b23c2e;
+  --color-cinnabar-deep: #8c2c22;
+
+  --font-serif: var(--font-serif-tc), "Songti TC", "STSong", serif;
+  --font-sans: var(--font-sans-tc), system-ui, "PingFang TC", sans-serif;
+  --font-mono: var(--font-mono-latin), ui-monospace, "SFMono-Regular", monospace;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* faint paper grain */
+    background-image:
+      radial-gradient(transparent 0, transparent 0),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.012) 0 1px, transparent 1px 3px);
+  }
+  body {
+    margin: 0;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-cinnabar);
+    color: var(--color-paper);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    letter-spacing: 0.01em;
+  }
+  /* tabular figures everywhere numbers matter */
+  .figures {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}
