@@ -1,0 +1,1241 @@
+{
+  "year": 2025,
+  "rocYear": 114,
+  "effectiveDate": "2025-01-01",
+  "dataVersion": "2025.1.0",
+  "sources": [
+    {
+      "topic": "勞工保險投保薪資分級表",
+      "authority": "勞動部勞工保險局",
+      "url": "https://www.bli.gov.tw/0005475.html",
+      "document": "勞動部勞動保2字第1130087589號令",
+      "issuedDate": "2024-11-15",
+      "note": "113年11月15日修正發布，自114年1月1日施行；12級"
+    },
+    {
+      "topic": "勞工退休金月提繳分級表",
+      "authority": "勞動部勞工保險局",
+      "url": "https://www.bli.gov.tw/0013083.html",
+      "document": "勞動部勞動福3字第1130153681號令",
+      "issuedDate": "2024-11-18",
+      "note": "自114年1月1日生效"
+    },
+    {
+      "topic": "勞工職業災害保險投保薪資分級表",
+      "authority": "勞動部勞工保險局",
+      "url": "https://www.bli.gov.tw/0106148.html",
+      "document": "勞工職業災害保險及保護法第17條",
+      "issuedDate": "2024-11-15",
+      "note": "自114年1月1日生效；22級，下段沿用標準級距"
+    },
+    {
+      "topic": "勞工職業災害保險費率",
+      "authority": "勞動部",
+      "url": "https://www.mol.gov.tw/1607/1632/1633/76836/",
+      "document": "114年各行業別平均費率0.21%",
+      "issuedDate": "2024-11-07",
+      "note": "113年0.19%調升為114年0.21%，平均費率，可覆寫"
+    },
+    {
+      "topic": "全民健康保險投保金額分級表",
+      "authority": "衛生福利部中央健康保險署",
+      "url": "https://www.nhi.gov.tw/ch/cp-17661-84c1f-2569-1.html",
+      "document": "衛福部113年公告",
+      "issuedDate": "2024-12-01",
+      "note": "自114年1月1日施行；59級，第1級28,590、上限313,000"
+    },
+    {
+      "topic": "二代健保補充保險費率",
+      "authority": "衛生福利部中央健康保險署",
+      "url": "https://www.nhi.gov.tw/ch/cp-4516-74b0f-2613-1.html",
+      "document": "補充保險費率2.11%",
+      "issuedDate": "2021-01-01",
+      "note": "自110年1月1日起為2.11%，114年沿用"
+    }
+  ],
+  "minimumWage": {
+    "monthly": 28590,
+    "hourly": 190
+  },
+  "laborInsurance": {
+    "rate": "0.125",
+    "ordinaryRate": "0.115",
+    "employmentInsuranceRate": "0.01",
+    "rateWithoutEmploymentInsurance": "0.115",
+    "burden": {
+      "employer": "0.7",
+      "employee": "0.2",
+      "government": "0.1"
+    },
+    "note": "普通事故11.5%＋就業保險1%＝12.5%；不參加就保者以11.5%計。負擔比例勞工20%、雇主70%、政府10%。",
+    "brackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 28590,
+        "insuredSalary": 28590
+      },
+      {
+        "grade": 2,
+        "min": 28591,
+        "max": 28800,
+        "insuredSalary": 28800
+      },
+      {
+        "grade": 3,
+        "min": 28801,
+        "max": 30300,
+        "insuredSalary": 30300
+      },
+      {
+        "grade": 4,
+        "min": 30301,
+        "max": 31800,
+        "insuredSalary": 31800
+      },
+      {
+        "grade": 5,
+        "min": 31801,
+        "max": 33300,
+        "insuredSalary": 33300
+      },
+      {
+        "grade": 6,
+        "min": 33301,
+        "max": 34800,
+        "insuredSalary": 34800
+      },
+      {
+        "grade": 7,
+        "min": 34801,
+        "max": 36300,
+        "insuredSalary": 36300
+      },
+      {
+        "grade": 8,
+        "min": 36301,
+        "max": 38200,
+        "insuredSalary": 38200
+      },
+      {
+        "grade": 9,
+        "min": 38201,
+        "max": 40100,
+        "insuredSalary": 40100
+      },
+      {
+        "grade": 10,
+        "min": 40101,
+        "max": 42000,
+        "insuredSalary": 42000
+      },
+      {
+        "grade": 11,
+        "min": 42001,
+        "max": 43900,
+        "insuredSalary": 43900
+      },
+      {
+        "grade": 12,
+        "min": 43901,
+        "max": null,
+        "insuredSalary": 45800
+      }
+    ],
+    "partTimeBrackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 11100,
+        "insuredSalary": 11100
+      },
+      {
+        "grade": 2,
+        "min": 11101,
+        "max": 12540,
+        "insuredSalary": 12540
+      },
+      {
+        "grade": 3,
+        "min": 12541,
+        "max": 13500,
+        "insuredSalary": 13500
+      },
+      {
+        "grade": 4,
+        "min": 13501,
+        "max": 15840,
+        "insuredSalary": 15840
+      },
+      {
+        "grade": 5,
+        "min": 15841,
+        "max": 16500,
+        "insuredSalary": 16500
+      },
+      {
+        "grade": 6,
+        "min": 16501,
+        "max": 17280,
+        "insuredSalary": 17280
+      },
+      {
+        "grade": 7,
+        "min": 17281,
+        "max": 17880,
+        "insuredSalary": 17880
+      },
+      {
+        "grade": 8,
+        "min": 17881,
+        "max": 19047,
+        "insuredSalary": 19047
+      },
+      {
+        "grade": 9,
+        "min": 19048,
+        "max": 20008,
+        "insuredSalary": 20008
+      },
+      {
+        "grade": 10,
+        "min": 20009,
+        "max": 21009,
+        "insuredSalary": 21009
+      },
+      {
+        "grade": 11,
+        "min": 21010,
+        "max": 22000,
+        "insuredSalary": 22000
+      },
+      {
+        "grade": 12,
+        "min": 22001,
+        "max": 23100,
+        "insuredSalary": 23100
+      },
+      {
+        "grade": 13,
+        "min": 23101,
+        "max": 24000,
+        "insuredSalary": 24000
+      },
+      {
+        "grade": 14,
+        "min": 24001,
+        "max": 25250,
+        "insuredSalary": 25250
+      },
+      {
+        "grade": 15,
+        "min": 25251,
+        "max": 26400,
+        "insuredSalary": 26400
+      },
+      {
+        "grade": 16,
+        "min": 26401,
+        "max": 27600,
+        "insuredSalary": 27600
+      }
+    ]
+  },
+  "occupationalInsurance": {
+    "defaultRate": "0.0021",
+    "industryRateAvg": "0.0014",
+    "commuteRate": "0.0007",
+    "burden": {
+      "employer": "1.0",
+      "employee": "0.0",
+      "government": "0.0"
+    },
+    "note": "職災保險費全額由雇主負擔；114平均費率0.21%，行業別可覆寫。",
+    "brackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 28590,
+        "insuredSalary": 28590
+      },
+      {
+        "grade": 2,
+        "min": 28591,
+        "max": 28800,
+        "insuredSalary": 28800
+      },
+      {
+        "grade": 3,
+        "min": 28801,
+        "max": 30300,
+        "insuredSalary": 30300
+      },
+      {
+        "grade": 4,
+        "min": 30301,
+        "max": 31800,
+        "insuredSalary": 31800
+      },
+      {
+        "grade": 5,
+        "min": 31801,
+        "max": 33300,
+        "insuredSalary": 33300
+      },
+      {
+        "grade": 6,
+        "min": 33301,
+        "max": 34800,
+        "insuredSalary": 34800
+      },
+      {
+        "grade": 7,
+        "min": 34801,
+        "max": 36300,
+        "insuredSalary": 36300
+      },
+      {
+        "grade": 8,
+        "min": 36301,
+        "max": 38200,
+        "insuredSalary": 38200
+      },
+      {
+        "grade": 9,
+        "min": 38201,
+        "max": 40100,
+        "insuredSalary": 40100
+      },
+      {
+        "grade": 10,
+        "min": 40101,
+        "max": 42000,
+        "insuredSalary": 42000
+      },
+      {
+        "grade": 11,
+        "min": 42001,
+        "max": 43900,
+        "insuredSalary": 43900
+      },
+      {
+        "grade": 12,
+        "min": 43901,
+        "max": 45800,
+        "insuredSalary": 45800
+      },
+      {
+        "grade": 13,
+        "min": 45801,
+        "max": 48200,
+        "insuredSalary": 48200
+      },
+      {
+        "grade": 14,
+        "min": 48201,
+        "max": 50600,
+        "insuredSalary": 50600
+      },
+      {
+        "grade": 15,
+        "min": 50601,
+        "max": 53000,
+        "insuredSalary": 53000
+      },
+      {
+        "grade": 16,
+        "min": 53001,
+        "max": 55400,
+        "insuredSalary": 55400
+      },
+      {
+        "grade": 17,
+        "min": 55401,
+        "max": 57800,
+        "insuredSalary": 57800
+      },
+      {
+        "grade": 18,
+        "min": 57801,
+        "max": 60800,
+        "insuredSalary": 60800
+      },
+      {
+        "grade": 19,
+        "min": 60801,
+        "max": 63800,
+        "insuredSalary": 63800
+      },
+      {
+        "grade": 20,
+        "min": 63801,
+        "max": 66800,
+        "insuredSalary": 66800
+      },
+      {
+        "grade": 21,
+        "min": 66801,
+        "max": 69800,
+        "insuredSalary": 69800
+      },
+      {
+        "grade": 22,
+        "min": 69801,
+        "max": null,
+        "insuredSalary": 72800
+      }
+    ]
+  },
+  "healthInsurance": {
+    "rate": "0.0517",
+    "burden": {
+      "employer": "0.6",
+      "employee": "0.3",
+      "government": "0.1"
+    },
+    "avgDependents": "0.56",
+    "employerMultiplier": "1.56",
+    "maxDependentsCharged": 3,
+    "note": "第1類受僱者；費率5.17%。被保險人本人及眷屬各30%（眷屬上限3口），投保單位60%×1.56，政府10%×1.56。",
+    "brackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 28590,
+        "insuredSalary": 28590
+      },
+      {
+        "grade": 2,
+        "min": 28591,
+        "max": 28800,
+        "insuredSalary": 28800
+      },
+      {
+        "grade": 3,
+        "min": 28801,
+        "max": 30300,
+        "insuredSalary": 30300
+      },
+      {
+        "grade": 4,
+        "min": 30301,
+        "max": 31800,
+        "insuredSalary": 31800
+      },
+      {
+        "grade": 5,
+        "min": 31801,
+        "max": 33300,
+        "insuredSalary": 33300
+      },
+      {
+        "grade": 6,
+        "min": 33301,
+        "max": 34800,
+        "insuredSalary": 34800
+      },
+      {
+        "grade": 7,
+        "min": 34801,
+        "max": 36300,
+        "insuredSalary": 36300
+      },
+      {
+        "grade": 8,
+        "min": 36301,
+        "max": 38200,
+        "insuredSalary": 38200
+      },
+      {
+        "grade": 9,
+        "min": 38201,
+        "max": 40100,
+        "insuredSalary": 40100
+      },
+      {
+        "grade": 10,
+        "min": 40101,
+        "max": 42000,
+        "insuredSalary": 42000
+      },
+      {
+        "grade": 11,
+        "min": 42001,
+        "max": 43900,
+        "insuredSalary": 43900
+      },
+      {
+        "grade": 12,
+        "min": 43901,
+        "max": 45800,
+        "insuredSalary": 45800
+      },
+      {
+        "grade": 13,
+        "min": 45801,
+        "max": 48200,
+        "insuredSalary": 48200
+      },
+      {
+        "grade": 14,
+        "min": 48201,
+        "max": 50600,
+        "insuredSalary": 50600
+      },
+      {
+        "grade": 15,
+        "min": 50601,
+        "max": 53000,
+        "insuredSalary": 53000
+      },
+      {
+        "grade": 16,
+        "min": 53001,
+        "max": 55400,
+        "insuredSalary": 55400
+      },
+      {
+        "grade": 17,
+        "min": 55401,
+        "max": 57800,
+        "insuredSalary": 57800
+      },
+      {
+        "grade": 18,
+        "min": 57801,
+        "max": 60800,
+        "insuredSalary": 60800
+      },
+      {
+        "grade": 19,
+        "min": 60801,
+        "max": 63800,
+        "insuredSalary": 63800
+      },
+      {
+        "grade": 20,
+        "min": 63801,
+        "max": 66800,
+        "insuredSalary": 66800
+      },
+      {
+        "grade": 21,
+        "min": 66801,
+        "max": 69800,
+        "insuredSalary": 69800
+      },
+      {
+        "grade": 22,
+        "min": 69801,
+        "max": 72800,
+        "insuredSalary": 72800
+      },
+      {
+        "grade": 23,
+        "min": 72801,
+        "max": 76500,
+        "insuredSalary": 76500
+      },
+      {
+        "grade": 24,
+        "min": 76501,
+        "max": 80200,
+        "insuredSalary": 80200
+      },
+      {
+        "grade": 25,
+        "min": 80201,
+        "max": 83900,
+        "insuredSalary": 83900
+      },
+      {
+        "grade": 26,
+        "min": 83901,
+        "max": 87600,
+        "insuredSalary": 87600
+      },
+      {
+        "grade": 27,
+        "min": 87601,
+        "max": 92100,
+        "insuredSalary": 92100
+      },
+      {
+        "grade": 28,
+        "min": 92101,
+        "max": 96600,
+        "insuredSalary": 96600
+      },
+      {
+        "grade": 29,
+        "min": 96601,
+        "max": 101100,
+        "insuredSalary": 101100
+      },
+      {
+        "grade": 30,
+        "min": 101101,
+        "max": 105600,
+        "insuredSalary": 105600
+      },
+      {
+        "grade": 31,
+        "min": 105601,
+        "max": 110100,
+        "insuredSalary": 110100
+      },
+      {
+        "grade": 32,
+        "min": 110101,
+        "max": 115500,
+        "insuredSalary": 115500
+      },
+      {
+        "grade": 33,
+        "min": 115501,
+        "max": 120900,
+        "insuredSalary": 120900
+      },
+      {
+        "grade": 34,
+        "min": 120901,
+        "max": 126300,
+        "insuredSalary": 126300
+      },
+      {
+        "grade": 35,
+        "min": 126301,
+        "max": 131700,
+        "insuredSalary": 131700
+      },
+      {
+        "grade": 36,
+        "min": 131701,
+        "max": 137100,
+        "insuredSalary": 137100
+      },
+      {
+        "grade": 37,
+        "min": 137101,
+        "max": 142500,
+        "insuredSalary": 142500
+      },
+      {
+        "grade": 38,
+        "min": 142501,
+        "max": 147900,
+        "insuredSalary": 147900
+      },
+      {
+        "grade": 39,
+        "min": 147901,
+        "max": 150000,
+        "insuredSalary": 150000
+      },
+      {
+        "grade": 40,
+        "min": 150001,
+        "max": 156400,
+        "insuredSalary": 156400
+      },
+      {
+        "grade": 41,
+        "min": 156401,
+        "max": 162800,
+        "insuredSalary": 162800
+      },
+      {
+        "grade": 42,
+        "min": 162801,
+        "max": 169200,
+        "insuredSalary": 169200
+      },
+      {
+        "grade": 43,
+        "min": 169201,
+        "max": 175600,
+        "insuredSalary": 175600
+      },
+      {
+        "grade": 44,
+        "min": 175601,
+        "max": 182000,
+        "insuredSalary": 182000
+      },
+      {
+        "grade": 45,
+        "min": 182001,
+        "max": 189500,
+        "insuredSalary": 189500
+      },
+      {
+        "grade": 46,
+        "min": 189501,
+        "max": 197000,
+        "insuredSalary": 197000
+      },
+      {
+        "grade": 47,
+        "min": 197001,
+        "max": 204500,
+        "insuredSalary": 204500
+      },
+      {
+        "grade": 48,
+        "min": 204501,
+        "max": 212000,
+        "insuredSalary": 212000
+      },
+      {
+        "grade": 49,
+        "min": 212001,
+        "max": 219500,
+        "insuredSalary": 219500
+      },
+      {
+        "grade": 50,
+        "min": 219501,
+        "max": 228200,
+        "insuredSalary": 228200
+      },
+      {
+        "grade": 51,
+        "min": 228201,
+        "max": 236900,
+        "insuredSalary": 236900
+      },
+      {
+        "grade": 52,
+        "min": 236901,
+        "max": 245600,
+        "insuredSalary": 245600
+      },
+      {
+        "grade": 53,
+        "min": 245601,
+        "max": 254300,
+        "insuredSalary": 254300
+      },
+      {
+        "grade": 54,
+        "min": 254301,
+        "max": 263000,
+        "insuredSalary": 263000
+      },
+      {
+        "grade": 55,
+        "min": 263001,
+        "max": 273000,
+        "insuredSalary": 273000
+      },
+      {
+        "grade": 56,
+        "min": 273001,
+        "max": 283000,
+        "insuredSalary": 283000
+      },
+      {
+        "grade": 57,
+        "min": 283001,
+        "max": 293000,
+        "insuredSalary": 293000
+      },
+      {
+        "grade": 58,
+        "min": 293001,
+        "max": 303000,
+        "insuredSalary": 303000
+      },
+      {
+        "grade": 59,
+        "min": 303001,
+        "max": null,
+        "insuredSalary": 313000
+      }
+    ],
+    "partTimeBrackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 11100,
+        "insuredSalary": 11100
+      },
+      {
+        "grade": 2,
+        "min": 11101,
+        "max": 12540,
+        "insuredSalary": 12540
+      },
+      {
+        "grade": 3,
+        "min": 12541,
+        "max": 13500,
+        "insuredSalary": 13500
+      },
+      {
+        "grade": 4,
+        "min": 13501,
+        "max": 15840,
+        "insuredSalary": 15840
+      },
+      {
+        "grade": 5,
+        "min": 15841,
+        "max": 16500,
+        "insuredSalary": 16500
+      },
+      {
+        "grade": 6,
+        "min": 16501,
+        "max": 17280,
+        "insuredSalary": 17280
+      },
+      {
+        "grade": 7,
+        "min": 17281,
+        "max": 17880,
+        "insuredSalary": 17880
+      },
+      {
+        "grade": 8,
+        "min": 17881,
+        "max": 19047,
+        "insuredSalary": 19047
+      },
+      {
+        "grade": 9,
+        "min": 19048,
+        "max": 20008,
+        "insuredSalary": 20008
+      },
+      {
+        "grade": 10,
+        "min": 20009,
+        "max": 21009,
+        "insuredSalary": 21009
+      },
+      {
+        "grade": 11,
+        "min": 21010,
+        "max": 22000,
+        "insuredSalary": 22000
+      },
+      {
+        "grade": 12,
+        "min": 22001,
+        "max": 23100,
+        "insuredSalary": 23100
+      },
+      {
+        "grade": 13,
+        "min": 23101,
+        "max": 24000,
+        "insuredSalary": 24000
+      },
+      {
+        "grade": 14,
+        "min": 24001,
+        "max": 25250,
+        "insuredSalary": 25250
+      },
+      {
+        "grade": 15,
+        "min": 25251,
+        "max": 26400,
+        "insuredSalary": 26400
+      },
+      {
+        "grade": 16,
+        "min": 26401,
+        "max": 27600,
+        "insuredSalary": 27600
+      }
+    ]
+  },
+  "pension": {
+    "employerRate": "0.06",
+    "maxSelfContributionRate": "0.06",
+    "note": "雇主提繳6%；勞工得自願提繳0%~6%。",
+    "brackets": [
+      {
+        "grade": 1,
+        "min": 0,
+        "max": 1500,
+        "insuredSalary": 1500
+      },
+      {
+        "grade": 2,
+        "min": 1501,
+        "max": 3000,
+        "insuredSalary": 3000
+      },
+      {
+        "grade": 3,
+        "min": 3001,
+        "max": 4500,
+        "insuredSalary": 4500
+      },
+      {
+        "grade": 4,
+        "min": 4501,
+        "max": 6000,
+        "insuredSalary": 6000
+      },
+      {
+        "grade": 5,
+        "min": 6001,
+        "max": 7500,
+        "insuredSalary": 7500
+      },
+      {
+        "grade": 6,
+        "min": 7501,
+        "max": 8700,
+        "insuredSalary": 8700
+      },
+      {
+        "grade": 7,
+        "min": 8701,
+        "max": 9900,
+        "insuredSalary": 9900
+      },
+      {
+        "grade": 8,
+        "min": 9901,
+        "max": 11100,
+        "insuredSalary": 11100
+      },
+      {
+        "grade": 9,
+        "min": 11101,
+        "max": 12540,
+        "insuredSalary": 12540
+      },
+      {
+        "grade": 10,
+        "min": 12541,
+        "max": 13500,
+        "insuredSalary": 13500
+      },
+      {
+        "grade": 11,
+        "min": 13501,
+        "max": 15840,
+        "insuredSalary": 15840
+      },
+      {
+        "grade": 12,
+        "min": 15841,
+        "max": 16500,
+        "insuredSalary": 16500
+      },
+      {
+        "grade": 13,
+        "min": 16501,
+        "max": 17280,
+        "insuredSalary": 17280
+      },
+      {
+        "grade": 14,
+        "min": 17281,
+        "max": 17880,
+        "insuredSalary": 17880
+      },
+      {
+        "grade": 15,
+        "min": 17881,
+        "max": 19047,
+        "insuredSalary": 19047
+      },
+      {
+        "grade": 16,
+        "min": 19048,
+        "max": 20008,
+        "insuredSalary": 20008
+      },
+      {
+        "grade": 17,
+        "min": 20009,
+        "max": 21009,
+        "insuredSalary": 21009
+      },
+      {
+        "grade": 18,
+        "min": 21010,
+        "max": 22000,
+        "insuredSalary": 22000
+      },
+      {
+        "grade": 19,
+        "min": 22001,
+        "max": 23100,
+        "insuredSalary": 23100
+      },
+      {
+        "grade": 20,
+        "min": 23101,
+        "max": 24000,
+        "insuredSalary": 24000
+      },
+      {
+        "grade": 21,
+        "min": 24001,
+        "max": 25250,
+        "insuredSalary": 25250
+      },
+      {
+        "grade": 22,
+        "min": 25251,
+        "max": 26400,
+        "insuredSalary": 26400
+      },
+      {
+        "grade": 23,
+        "min": 26401,
+        "max": 27600,
+        "insuredSalary": 27600
+      },
+      {
+        "grade": 24,
+        "min": 27601,
+        "max": 28590,
+        "insuredSalary": 28590
+      },
+      {
+        "grade": 25,
+        "min": 28591,
+        "max": 28800,
+        "insuredSalary": 28800
+      },
+      {
+        "grade": 26,
+        "min": 28801,
+        "max": 30300,
+        "insuredSalary": 30300
+      },
+      {
+        "grade": 27,
+        "min": 30301,
+        "max": 31800,
+        "insuredSalary": 31800
+      },
+      {
+        "grade": 28,
+        "min": 31801,
+        "max": 33300,
+        "insuredSalary": 33300
+      },
+      {
+        "grade": 29,
+        "min": 33301,
+        "max": 34800,
+        "insuredSalary": 34800
+      },
+      {
+        "grade": 30,
+        "min": 34801,
+        "max": 36300,
+        "insuredSalary": 36300
+      },
+      {
+        "grade": 31,
+        "min": 36301,
+        "max": 38200,
+        "insuredSalary": 38200
+      },
+      {
+        "grade": 32,
+        "min": 38201,
+        "max": 40100,
+        "insuredSalary": 40100
+      },
+      {
+        "grade": 33,
+        "min": 40101,
+        "max": 42000,
+        "insuredSalary": 42000
+      },
+      {
+        "grade": 34,
+        "min": 42001,
+        "max": 43900,
+        "insuredSalary": 43900
+      },
+      {
+        "grade": 35,
+        "min": 43901,
+        "max": 45800,
+        "insuredSalary": 45800
+      },
+      {
+        "grade": 36,
+        "min": 45801,
+        "max": 48200,
+        "insuredSalary": 48200
+      },
+      {
+        "grade": 37,
+        "min": 48201,
+        "max": 50600,
+        "insuredSalary": 50600
+      },
+      {
+        "grade": 38,
+        "min": 50601,
+        "max": 53000,
+        "insuredSalary": 53000
+      },
+      {
+        "grade": 39,
+        "min": 53001,
+        "max": 55400,
+        "insuredSalary": 55400
+      },
+      {
+        "grade": 40,
+        "min": 55401,
+        "max": 57800,
+        "insuredSalary": 57800
+      },
+      {
+        "grade": 41,
+        "min": 57801,
+        "max": 60800,
+        "insuredSalary": 60800
+      },
+      {
+        "grade": 42,
+        "min": 60801,
+        "max": 63800,
+        "insuredSalary": 63800
+      },
+      {
+        "grade": 43,
+        "min": 63801,
+        "max": 66800,
+        "insuredSalary": 66800
+      },
+      {
+        "grade": 44,
+        "min": 66801,
+        "max": 69800,
+        "insuredSalary": 69800
+      },
+      {
+        "grade": 45,
+        "min": 69801,
+        "max": 72800,
+        "insuredSalary": 72800
+      },
+      {
+        "grade": 46,
+        "min": 72801,
+        "max": 76500,
+        "insuredSalary": 76500
+      },
+      {
+        "grade": 47,
+        "min": 76501,
+        "max": 80200,
+        "insuredSalary": 80200
+      },
+      {
+        "grade": 48,
+        "min": 80201,
+        "max": 83900,
+        "insuredSalary": 83900
+      },
+      {
+        "grade": 49,
+        "min": 83901,
+        "max": 87600,
+        "insuredSalary": 87600
+      },
+      {
+        "grade": 50,
+        "min": 87601,
+        "max": 92100,
+        "insuredSalary": 92100
+      },
+      {
+        "grade": 51,
+        "min": 92101,
+        "max": 96600,
+        "insuredSalary": 96600
+      },
+      {
+        "grade": 52,
+        "min": 96601,
+        "max": 101100,
+        "insuredSalary": 101100
+      },
+      {
+        "grade": 53,
+        "min": 101101,
+        "max": 105600,
+        "insuredSalary": 105600
+      },
+      {
+        "grade": 54,
+        "min": 105601,
+        "max": 110100,
+        "insuredSalary": 110100
+      },
+      {
+        "grade": 55,
+        "min": 110101,
+        "max": 115500,
+        "insuredSalary": 115500
+      },
+      {
+        "grade": 56,
+        "min": 115501,
+        "max": 120900,
+        "insuredSalary": 120900
+      },
+      {
+        "grade": 57,
+        "min": 120901,
+        "max": 126300,
+        "insuredSalary": 126300
+      },
+      {
+        "grade": 58,
+        "min": 126301,
+        "max": 131700,
+        "insuredSalary": 131700
+      },
+      {
+        "grade": 59,
+        "min": 131701,
+        "max": 137100,
+        "insuredSalary": 137100
+      },
+      {
+        "grade": 60,
+        "min": 137101,
+        "max": 142500,
+        "insuredSalary": 142500
+      },
+      {
+        "grade": 61,
+        "min": 142501,
+        "max": 147900,
+        "insuredSalary": 147900
+      },
+      {
+        "grade": 62,
+        "min": 147901,
+        "max": null,
+        "insuredSalary": 150000
+      }
+    ]
+  },
+  "supplementaryPremium": {
+    "rate": "0.0211",
+    "bonusThresholdMultiplier": 4,
+    "singlePaymentCap": 10000000,
+    "lowerThreshold": 20000,
+    "note": "二代健保補充保費2.11%；獎金累計超過當月投保金額4倍部分課徵；單次給付上限1000萬。"
+  }
+}

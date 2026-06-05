@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "taiwan-payroll year data",
+  "type": "object",
+  "required": [
+    "year",
+    "effectiveDate",
+    "dataVersion",
+    "sources",
+    "minimumWage",
+    "laborInsurance",
+    "occupationalInsurance",
+    "healthInsurance",
+    "pension",
+    "supplementaryPremium"
+  ],
+  "additionalProperties": true,
+  "definitions": {
+    "rate": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+    "burden": {
+      "type": "object",
+      "required": ["employer", "employee", "government"],
+      "properties": {
+        "employer": { "$ref": "#/definitions/rate" },
+        "employee": { "$ref": "#/definitions/rate" },
+        "government": { "$ref": "#/definitions/rate" }
+      },
+      "additionalProperties": false
+    },
+    "bracket": {
+      "type": "object",
+      "required": ["grade", "min", "max", "insuredSalary"],
+      "properties": {
+        "grade": { "type": "integer", "minimum": 1 },
+        "min": { "type": "integer", "minimum": 0 },
+        "max": { "type": ["integer", "null"] },
+        "insuredSalary": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "brackets": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/bracket" } }
+  },
+  "properties": {
+    "year": { "type": "integer" },
+    "rocYear": { "type": "integer" },
+    "effectiveDate": { "type": "string", "format": "date" },
+    "dataVersion": { "type": "string" },
+    "sources": { "type": "array", "items": { "type": "object" } },
+    "minimumWage": {
+      "type": "object",
+      "required": ["monthly", "hourly"],
+      "properties": { "monthly": { "type": "integer" }, "hourly": { "type": "integer" } }
+    },
+    "laborInsurance": {
+      "type": "object",
+      "required": ["rate", "rateWithoutEmploymentInsurance", "burden", "brackets"],
+      "properties": {
+        "rate": { "$ref": "#/definitions/rate" },
+        "rateWithoutEmploymentInsurance": { "$ref": "#/definitions/rate" },
+        "burden": { "$ref": "#/definitions/burden" },
+        "brackets": { "$ref": "#/definitions/brackets" },
+        "partTimeBrackets": { "$ref": "#/definitions/brackets" }
+      }
+    },
+    "occupationalInsurance": {
+      "type": "object",
+      "required": ["defaultRate", "brackets"],
+      "properties": {
+        "defaultRate": { "$ref": "#/definitions/rate" },
+        "brackets": { "$ref": "#/definitions/brackets" }
+      }
+    },
+    "healthInsurance": {
+      "type": "object",
+      "required": ["rate", "burden", "avgDependents", "employerMultiplier", "maxDependentsCharged", "brackets"],
+      "properties": {
+        "rate": { "$ref": "#/definitions/rate" },
+        "burden": { "$ref": "#/definitions/burden" },
+        "avgDependents": { "$ref": "#/definitions/rate" },
+        "employerMultiplier": { "$ref": "#/definitions/rate" },
+        "maxDependentsCharged": { "type": "integer" },
+        "brackets": { "$ref": "#/definitions/brackets" },
+        "partTimeBrackets": { "$ref": "#/definitions/brackets" }
+      }
+    },
+    "pension": {
+      "type": "object",
+      "required": ["employerRate", "brackets"],
+      "properties": {
+        "employerRate": { "$ref": "#/definitions/rate" },
+        "brackets": { "$ref": "#/definitions/brackets" }
+      }
+    },
+    "supplementaryPremium": {
+      "type": "object",
+      "required": ["rate", "bonusThresholdMultiplier"],
+      "properties": {
+        "rate": { "$ref": "#/definitions/rate" },
+        "bonusThresholdMultiplier": { "type": "integer" }
+      }
+    }
+  }
+}
