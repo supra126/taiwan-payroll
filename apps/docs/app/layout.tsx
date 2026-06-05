@@ -34,6 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/docs" className="transition-colors hover:text-cinnabar-deep">
                 文件
               </Link>
+              <Link href="/docs/api" className="transition-colors hover:text-cinnabar-deep">
+                API
+              </Link>
               <a
                 href="https://www.npmjs.com/package/taiwan-payroll"
                 className="transition-colors hover:text-cinnabar-deep"

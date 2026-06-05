@@ -28,6 +28,13 @@ engine.calculate({ monthlySalary: 42000, dependents: 1, pensionSelfContribution:
 engine.calculateSupplementary({ type: 'bonus', amount: 200000, monthlyInsuredSalary: 42000 });
 engine.calculateProrated({ monthlySalary: 29500, startDate: '2026-03-08' });`}</code>
       </pre>
+      <p className="mt-4 text-ink-soft">
+        各函數的參數、預設值、範圍與回傳結構（TypeScript 與 Python 並列）見{' '}
+        <Link href="/docs/api" className="font-semibold text-cinnabar-deep hover:underline">
+          API 參考
+        </Link>
+        。
+      </p>
 
       <h2 className="mt-12 text-xl font-bold text-ink">MCP server</h2>
       <p className="mt-3 text-ink-soft">於 MCP client（如 Claude Desktop）設定：</p>
