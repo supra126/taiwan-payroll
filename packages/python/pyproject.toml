@@ -4,18 +4,49 @@ build-backend = "hatchling.build"
 
 [project]
 name = "taiwan-payroll"
-version = "1.0.0"
+version = "1.0.1"
 description = "台灣勞健保勞退法定費用計算引擎 — Taiwan statutory payroll calculation engine"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "supra126", email = "supra126@gmail.com" }]
+keywords = ["taiwan", "payroll", "labor-insurance", "health-insurance", "pension", "勞保", "健保", "勞退"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Chinese (Traditional)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial :: Accounting",
+]
 dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
 
+[project.urls]
+Homepage = "https://github.com/supra126/taiwan-payroll"
+Repository = "https://github.com/supra126/taiwan-payroll.git"
+Issues = "https://github.com/supra126/taiwan-payroll/issues"
+
+# Vendor the shared repo-root data/ into the package at build time (see hatch_build.py).
+[tool.hatch.build.hooks.custom]
+path = "hatch_build.py"
+
+# The vendored data lives inside the package but is gitignored; include it anyway
+# (applies to both sdist and wheel).
+[tool.hatch.build]
+artifacts = ["taiwan_payroll/data/**"]
+
 [tool.hatch.build.targets.wheel]
 packages = ["taiwan_payroll"]
 
-[tool.hatch.build.targets.wheel.force-include]
-"../../data" = "taiwan_payroll/data"
+[tool.hatch.build.targets.sdist]
+# Ship sources + the build hook + the vendored data so an isolated wheel build
+# from this sdist is fully self-contained.
+include = ["taiwan_payroll", "hatch_build.py", "README.md", "LICENSE"]

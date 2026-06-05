@@ -1,6 +1,6 @@
 # taiwan-payroll-mcp
 
-台灣勞健保勞退計算的 MCP（Model Context Protocol）server。薄包裝 [`taiwan-payroll`](../core) core，零計算邏輯。
+台灣勞健保勞退計算的 MCP（Model Context Protocol）server。薄包裝 [`taiwan-payroll`](https://www.npmjs.com/package/taiwan-payroll) core，零計算邏輯。
 
 ## Tools
 

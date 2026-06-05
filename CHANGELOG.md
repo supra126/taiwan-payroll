@@ -6,6 +6,18 @@
 
 ---
 
+## [1.0.1] - 2026-06-05
+
+維護性釋出，計算邏輯與資料不變。
+
+### Added
+- **Python（`taiwan-payroll` PyPI）**：`taiwan_payroll.__version__`，透過 `importlib.metadata` 讀取（`pyproject.toml` 為唯一版本來源）。
+
+### Changed
+- 發佈流程（`.github/workflows/publish.yml`）改用 **OIDC Trusted Publishing**，npm／PyPI 皆免 token。
+
+---
+
 ## [1.0.0] - 2026-06-05
 
 首個正式版本。完成 spec 規劃的 M1–M4 全部里程碑：以 `data/` 為單一事實來源、`testdata/` 為語言無關黃金測試向量，TypeScript 與 Python 兩語言實作對同一套 32 個向量逐位元一致。

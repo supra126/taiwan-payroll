@@ -1,6 +1,6 @@
 # taiwan-payroll
 
-台灣勞健保勞退計算引擎（TypeScript，零執行期依賴）。完整文件見 [repository root README](../../README.md)。
+台灣勞健保勞退計算引擎（TypeScript，零執行期依賴）。完整文件見 [GitHub repository](https://github.com/supra126/taiwan-payroll#readme)。
 
 ```ts
 import { createPayrollEngine } from 'taiwan-payroll';

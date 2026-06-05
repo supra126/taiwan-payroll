@@ -1,8 +1,28 @@
 {
   "name": "taiwan-payroll-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for taiwan-payroll — 台灣勞健保勞退計算的 MCP 工具",
   "license": "MIT",
+  "author": "supra126 <supra126@gmail.com>",
+  "homepage": "https://github.com/supra126/taiwan-payroll/tree/main/packages/mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supra126/taiwan-payroll.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": { "url": "https://github.com/supra126/taiwan-payroll/issues" },
+  "keywords": [
+    "taiwan",
+    "payroll",
+    "mcp",
+    "model-context-protocol",
+    "勞保",
+    "健保",
+    "勞退",
+    "薪資",
+    "台灣"
+  ],
+  "publishConfig": { "access": "public" },
   "type": "module",
   "bin": { "taiwan-payroll-mcp": "./dist/server.js" },
   "files": ["dist"],

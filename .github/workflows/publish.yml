@@ -1,0 +1,84 @@
+name: Publish
+
+# 發佈三個套件：npm `taiwan-payroll`(core) → npm `taiwan-payroll-mcp` → PyPI `taiwan-payroll`。
+# 觸發：發佈 GitHub Release（tag 例如 v1.0.1，需與各套件 version 相符），或手動 workflow_dispatch。
+#
+# 採 OIDC Trusted Publishing —— 不需要任何 token secret。前置設定（各做一次）：
+#   - npm：在 npmjs.com 兩個套件（taiwan-payroll、taiwan-payroll-mcp）的 settings 各加一個
+#          trusted publisher，指向 repo supra126/taiwan-payroll 與此 workflow（.github/workflows/publish.yml）。
+#   - PyPI：在 taiwan-payroll 專案設定加 trusted publisher，指向同一 repo 與 workflow。
+# 備註：
+#   - id-token: write 是 OIDC 換 token 的必要權限。
+#   - provenance 簽章需 public repo + public 套件；本 repo 為 private，發佈會成功但不產 provenance。
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 要發佈的目標
+        type: choice
+        options: [all, npm, pypi]
+        default: all
+
+jobs:
+  npm:
+    if: ${{ github.event_name == 'release' || inputs.target == 'all' || inputs.target == 'npm' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC trusted publishing
+      contents: read # 顯式宣告 permissions 後其餘預設降為 none；checkout 私有 repo 需要 contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 } # pnpm 10：直接 pnpm publish 走 OIDC（pnpm 11 的 OIDC 有 404 bug）
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # OIDC 需 Node >= 22.14.0
+          cache: pnpm
+          registry-url: https://registry.npmjs.org # 寫入 .npmrc 指定 registry；OIDC 認證需要（少了會 ENEEDAUTH）
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm validate:data
+      - run: pnpm -r test
+      - name: Build packages
+        run: |
+          pnpm --filter taiwan-payroll build
+          pnpm --filter taiwan-payroll-mcp build
+      # pnpm publish 直發：自動改寫 mcp 的 workspace:*、偵測 OIDC 免 token、產生 provenance（repo 為 public）。
+      # core 先發；mcp 安裝時需先在 registry 找得到 core。已發過的版本則略過（可重跑）。
+      - name: Publish core (taiwan-payroll)
+        run: |
+          V=$(node -p "require('./packages/core/package.json').version")
+          if npm view "taiwan-payroll@$V" version >/dev/null 2>&1; then
+            echo "taiwan-payroll@$V 已發佈，略過"
+          else
+            pnpm --filter taiwan-payroll publish --no-git-checks --provenance --access public
+          fi
+      - name: Publish mcp (taiwan-payroll-mcp)
+        run: |
+          V=$(node -p "require('./packages/mcp/package.json').version")
+          if npm view "taiwan-payroll-mcp@$V" version >/dev/null 2>&1; then
+            echo "taiwan-payroll-mcp@$V 已發佈，略過"
+          else
+            pnpm --filter taiwan-payroll-mcp publish --no-git-checks --provenance --access public
+          fi
+
+  pypi:
+    if: ${{ github.event_name == 'release' || inputs.target == 'all' || inputs.target == 'pypi' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC trusted publishing
+      contents: read # 顯式宣告 permissions 後其餘預設降為 none；checkout 私有 repo 需要 contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install build
+      - name: Build sdist + wheel
+        run: python -m build
+        working-directory: packages/python
+      # 無 password → gh-action-pypi-publish 走 OIDC（需先在 PyPI 設好 trusted publisher）。
+      - name: Publish to PyPI (trusted publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: packages/python/dist

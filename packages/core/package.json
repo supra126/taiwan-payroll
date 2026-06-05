@@ -1,8 +1,29 @@
 {
   "name": "taiwan-payroll",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "台灣勞健保勞退法定費用計算引擎 — Taiwan statutory payroll calculation engine",
   "license": "MIT",
+  "author": "supra126 <supra126@gmail.com>",
+  "homepage": "https://github.com/supra126/taiwan-payroll#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supra126/taiwan-payroll.git",
+    "directory": "packages/core"
+  },
+  "bugs": { "url": "https://github.com/supra126/taiwan-payroll/issues" },
+  "keywords": [
+    "taiwan",
+    "payroll",
+    "labor-insurance",
+    "health-insurance",
+    "pension",
+    "勞保",
+    "健保",
+    "勞退",
+    "薪資",
+    "台灣"
+  ],
+  "publishConfig": { "access": "public" },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
