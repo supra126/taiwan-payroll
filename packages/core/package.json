@@ -10,7 +10,9 @@
     "url": "git+https://github.com/supra126/taiwan-payroll.git",
     "directory": "packages/core"
   },
-  "bugs": { "url": "https://github.com/supra126/taiwan-payroll/issues" },
+  "bugs": {
+    "url": "https://github.com/supra126/taiwan-payroll/issues"
+  },
   "keywords": [
     "taiwan",
     "payroll",
@@ -23,13 +25,22 @@
     "薪資",
     "台灣"
   ],
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -38,9 +49,10 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^2.1.5",
+    "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "^4.1.8",
     "tsup": "^8.3.5",
-    "typescript": "^5.6.3",
-    "vitest": "^2.1.5"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.8"
   }
 }
