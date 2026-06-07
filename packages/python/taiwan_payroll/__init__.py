@@ -40,6 +40,14 @@ from .media.supplementary_professional_filing import (
     SupplementaryProfessionalRecord,
     SupplementaryProfessionalFilingInput,
 )
+from .media.supplementary_interest_filing import (
+    generate_supplementary_interest_filing,
+    SupplementaryInterestFilingInput,
+)
+from .media.supplementary_rent_filing import (
+    generate_supplementary_rent_filing,
+    SupplementaryRentFilingInput,
+)
 
 __all__ = [
     "__version__",
@@ -72,4 +80,8 @@ __all__ = [
     "generate_supplementary_professional_filing",
     "SupplementaryProfessionalRecord",
     "SupplementaryProfessionalFilingInput",
+    "generate_supplementary_interest_filing",
+    "SupplementaryInterestFilingInput",
+    "generate_supplementary_rent_filing",
+    "SupplementaryRentFilingInput",
 ]

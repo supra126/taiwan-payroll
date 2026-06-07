@@ -28,6 +28,8 @@ export { getYearData, getAvailableYears } from './data';
 export { generateSupplementaryBonusFiling } from './media/supplementaryBonusFiling';
 export { generateSupplementaryParttimeFiling } from './media/supplementaryParttimeFiling';
 export { generateSupplementaryProfessionalFiling } from './media/supplementaryProfessionalFiling';
+export { generateSupplementaryInterestFiling } from './media/supplementaryInterestFiling';
+export { generateSupplementaryRentFiling } from './media/supplementaryRentFiling';
 
 /** Validate the numeric/identity inputs shared by calculate() and calculateProrated(). */
 function validateBaseInput(input: CalculateInput): void {

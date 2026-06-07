@@ -93,3 +93,61 @@ def test_professional_golden_big5():
 
 def test_professional_filename():
     assert generate_supplementary_professional_filing(_prof()).filename == "DPR111111111110901001.csv"
+
+
+from taiwan_payroll import (
+    generate_supplementary_interest_filing,
+    generate_supplementary_rent_filing,
+    SupplementaryInterestFilingInput as II,
+    SupplementaryRentFilingInput as RI,
+)
+
+_ICSV = (_TD / "supplementary-interest-2022-example.csv").read_bytes().decode("utf-8")
+_IBIG5 = (_TD / "supplementary-interest-2022-example.big5").read_bytes()
+_RCSV = (_TD / "supplementary-rent-2022-example.csv").read_bytes().decode("utf-8")
+_RBIG5 = (_TD / "supplementary-rent-2022-example.big5").read_bytes()
+_U = U(tax_id="11111111", name="甄健康有限公司", phone="0227065866#0123", email="chuan@mail.tw", contact_name="陳一一")
+
+
+def _interest():
+    rows = [
+        ("20220130", "A222222222", "甄健康", "1"),
+        ("20220130", "A233333333", "甄美麗", "1"),
+        ("20220630", "A222222222", "甄健康", "1"),
+        ("20220630", "A233333333", "甄美麗", "1"),
+        ("20221230", "A222222222", "甄健康", "1"),
+        ("20221230", "A233333333", "甄美麗", "1"),
+        ("20221230", "A233333333", "甄美麗", "2"),
+    ]
+    recs = [PR(action="I", pay_date=d, payee_id=i, payee_name=n, amount=20000, filing_no=f) for d, i, n, f in rows]
+    return II(year=2026, filing_date="20220901", unit=_U, records=recs)
+
+
+def _rent():
+    dates = ["20220131", "20220227", "20220329", "20220430", "20220531", "20220630", "20220730", "20220830", "20220930", "20221030", "20221130", "20221230"]
+    recs = [PR(action="I", pay_date=d, payee_id="A222222222", payee_name="甄健康", amount=40000, filing_no="1") for d in dates]
+    return RI(year=2026, filing_date="20220901", unit=_U, records=recs)
+
+
+def test_interest_golden_char():
+    assert generate_supplementary_interest_filing(_interest()).content == _ICSV
+
+
+def test_interest_golden_big5():
+    assert to_big5_bytes(generate_supplementary_interest_filing(_interest()).content) == _IBIG5
+
+
+def test_interest_filename():
+    assert generate_supplementary_interest_filing(_interest()).filename == "DPR111111111110901001.csv"
+
+
+def test_rent_golden_char():
+    assert generate_supplementary_rent_filing(_rent()).content == _RCSV
+
+
+def test_rent_golden_big5():
+    assert to_big5_bytes(generate_supplementary_rent_filing(_rent()).content) == _RBIG5
+
+
+def test_rent_filename():
+    assert generate_supplementary_rent_filing(_rent()).filename == "DPR111111111110901001.csv"

@@ -142,3 +142,17 @@ export interface SupplementaryProfessionalFilingInput {
   records: SupplementaryProfessionalRecord[];
 }
 // 結果重用 SupplementaryBonusFilingResult。
+export interface SupplementaryInterestFilingInput {
+  year: number;
+  unit: SupplementaryBonusFilingUnit;
+  filingDate: string;
+  sequence?: string;
+  records: SupplementaryParttimeRecord[];
+}
+export interface SupplementaryRentFilingInput {
+  year: number;
+  unit: SupplementaryBonusFilingUnit;
+  filingDate: string;
+  sequence?: string;
+  records: SupplementaryParttimeRecord[];
+}

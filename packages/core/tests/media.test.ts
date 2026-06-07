@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { generateSupplementaryBonusFiling } from '../src/media/supplementaryBonusFiling';
 import { generateSupplementaryParttimeFiling } from '../src/media/supplementaryParttimeFiling';
 import { generateSupplementaryProfessionalFiling } from '../src/media/supplementaryProfessionalFiling';
-import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput, SupplementaryProfessionalFilingInput } from '../src/types';
+import { generateSupplementaryInterestFiling } from '../src/media/supplementaryInterestFiling';
+import { generateSupplementaryRentFiling } from '../src/media/supplementaryRentFiling';
+import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput, SupplementaryProfessionalFilingInput, SupplementaryInterestFilingInput, SupplementaryRentFilingInput } from '../src/types';
 
 const fixture = readFileSync(
   fileURLToPath(new URL('../../../testdata/media/supplementary-bonus-2022-example.csv', import.meta.url)),
@@ -98,5 +100,73 @@ describe('generateSupplementaryParttimeFiling', () => {
     expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [] })).toThrow();
     expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [{ ...ptExample.records[0], amount: -1 }] })).toThrow();
     expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [ptExample.records[0], { ...ptExample.records[1], payDate: '20230418' }] })).toThrow();
+  });
+});
+
+const interestFixture = readFileSync(
+  fileURLToPath(new URL('../../../testdata/media/supplementary-interest-2022-example.csv', import.meta.url)),
+  'utf8',
+);
+const rentFixture = readFileSync(
+  fileURLToPath(new URL('../../../testdata/media/supplementary-rent-2022-example.csv', import.meta.url)),
+  'utf8',
+);
+const irUnit = { taxId: '11111111', name: '甄健康有限公司', phone: '0227065866#0123', email: 'chuan@mail.tw', contactName: '陳一一' };
+
+const interestExample: SupplementaryInterestFilingInput = {
+  year: 2026,
+  filingDate: '20220901',
+  unit: irUnit,
+  records: ([
+    ['20220130', 'A222222222', '甄健康', '1'],
+    ['20220130', 'A233333333', '甄美麗', '1'],
+    ['20220630', 'A222222222', '甄健康', '1'],
+    ['20220630', 'A233333333', '甄美麗', '1'],
+    ['20221230', 'A222222222', '甄健康', '1'],
+    ['20221230', 'A233333333', '甄美麗', '1'],
+    ['20221230', 'A233333333', '甄美麗', '2'],
+  ] as const).map(([payDate, payeeId, payeeName, filingNo]) => ({
+    action: 'I' as const,
+    payDate,
+    payeeId,
+    payeeName,
+    amount: 20000,
+    filingNo,
+  })),
+};
+
+const rentExample: SupplementaryRentFilingInput = {
+  year: 2026,
+  filingDate: '20220901',
+  unit: irUnit,
+  records: ([
+    '20220131', '20220227', '20220329', '20220430', '20220531', '20220630',
+    '20220730', '20220830', '20220930', '20221030', '20221130', '20221230',
+  ] as const).map((payDate) => ({
+    action: 'I' as const,
+    payDate,
+    payeeId: 'A222222222',
+    payeeName: '甄健康',
+    amount: 40000,
+    filingNo: '1',
+  })),
+};
+
+describe('generateSupplementaryInterestFiling', () => {
+  it('逐字元重現官方範例 (dl-9094, 類別67)', () => {
+    expect(generateSupplementaryInterestFiling(interestExample).content).toBe(interestFixture);
+  });
+  it('檔名/空清單丟錯', () => {
+    expect(generateSupplementaryInterestFiling(interestExample).filename).toBe('DPR111111111110901001.csv');
+    expect(() => generateSupplementaryInterestFiling({ ...interestExample, records: [] })).toThrow();
+  });
+});
+
+describe('generateSupplementaryRentFiling', () => {
+  it('逐字元重現官方範例 (dl-9104, 類別68)', () => {
+    expect(generateSupplementaryRentFiling(rentExample).content).toBe(rentFixture);
+  });
+  it('負值丟錯', () => {
+    expect(() => generateSupplementaryRentFiling({ ...rentExample, records: [{ ...rentExample.records[0], amount: -1 }] })).toThrow();
   });
 });
