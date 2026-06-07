@@ -22,6 +22,14 @@ from ._types import (
     SupplementaryType,
     Identity,
 )
+from .media.supplementary_bonus_filing import (
+    generate_supplementary_bonus_filing,
+    to_big5_bytes,
+    SupplementaryBonusFilingUnit,
+    SupplementaryBonusRecord,
+    SupplementaryBonusFilingInput,
+    SupplementaryBonusFilingResult,
+)
 
 __all__ = [
     "__version__",
@@ -42,4 +50,10 @@ __all__ = [
     "Rounding",
     "SupplementaryType",
     "Identity",
+    "generate_supplementary_bonus_filing",
+    "to_big5_bytes",
+    "SupplementaryBonusFilingUnit",
+    "SupplementaryBonusRecord",
+    "SupplementaryBonusFilingInput",
+    "SupplementaryBonusFilingResult",
 ]

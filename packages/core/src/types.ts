@@ -74,3 +74,34 @@ export interface WithholdingResult {
   rate: string; // 適用稅率字串
   taxableAnnual?: number; // 僅 resident：估計全年應稅薪資所得
 }
+
+export interface SupplementaryBonusFilingUnit {
+  taxId: string;
+  name: string;
+  phone: string;
+  email: string;
+  contactName: string;
+}
+export interface SupplementaryBonusRecord {
+  action: 'I' | 'R';
+  payDate: string; // 'YYYYMMDD' 西元
+  payeeId: string;
+  payeeName: string;
+  bonusAmount: number;
+  insuredSalary: number;
+  ytdBonusCumulative: number; // 含本筆
+  unitCode: string;
+  filingNo?: string; // 預設 '1'
+  note?: string; // 預設 ''
+}
+export interface SupplementaryBonusFilingInput {
+  year: number; // 費率年度（2024–2026）
+  unit: SupplementaryBonusFilingUnit;
+  filingDate: string; // 'YYYYMMDD' 西元（僅用於檔名）
+  sequence?: string; // 預設 '001'
+  records: SupplementaryBonusRecord[];
+}
+export interface SupplementaryBonusFilingResult {
+  filename: string;
+  content: string; // Unicode CSV（存檔以 Big5 編碼）
+}
