@@ -6,7 +6,22 @@
 
 ---
 
-## [1.0.1] - 2026-06-05
+## [1.1.0] - 2026-06-07
+
+擴大「薪資扣項」涵蓋範圍：補上雇主端二代健保補充保費與薪資所得稅扣繳；型別改由 schema 自動生成；升級開發工具鏈。計算邏輯對既有 API 不變。
+
+### Added
+
+- **雇主端二代健保補充保費** `calculateEmployerSupplementary`（core / Python / MCP `calculate_employer_supplementary_premium`）：`(每月支付薪資總額 − 受僱者健保投保金額總額) × 2.11%`，無上限。
+- **薪資所得扣繳** `calculateWithholding`（core / Python / MCP `calculate_income_tax_withholding`）：居住者固定月薪公式法（115 級距、兩步四捨五入）、居住者非每月給付獎金 5%（起扣 90,501）、非居住者 18%／月薪≤1.5×基本工資為 6%。`data/{year}.json` 新增 `incomeTax` 區段（目前提供 2026；其餘年度未提供時丟明確錯誤）。
+- 文件站 `/docs/api`：新增上述兩方法段落（TS·Python 並列）。
+
+### Changed
+
+- **型別 codegen**：`packages/core` 的資料型別（`YearData`/`Bracket`/`Burden`/`IncomeTax`/`TaxBracket`）改由 `data/schema.json` 自動生成（`scripts/gen-types.ts` → `types.generated.ts`），根除手寫鏡像漂移；CI 加 `gen:types:check`。順帶補完 schema 既有缺漏（`supplementaryPremium` 的 `lowerThreshold`／`singlePaymentCap`、`YearData` 的 `sources`）。
+- **開發工具鏈**：TypeScript 升 6.0；GitHub Actions 升 v6（Node 24 runtime）、CI build Node 20→24。pnpm 維持 10。
+
+
 
 維護性釋出，計算邏輯與資料不變。
 

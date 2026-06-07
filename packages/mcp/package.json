@@ -1,6 +1,6 @@
 {
   "name": "taiwan-payroll-mcp",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "MCP server for taiwan-payroll — 台灣勞健保勞退計算的 MCP 工具",
   "license": "MIT",
   "author": "supra126 <supra126@gmail.com>",

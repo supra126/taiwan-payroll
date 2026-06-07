@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "taiwan-payroll"
-version = "1.0.1"
+version = "1.1.0"
 description = "台灣勞健保勞退法定費用計算引擎 — Taiwan statutory payroll calculation engine"
 readme = "README.md"
 requires-python = ">=3.10"
