@@ -2,12 +2,29 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { generateSupplementaryBonusFiling } from '../src/media/supplementaryBonusFiling';
-import type { SupplementaryBonusFilingInput } from '../src/types';
+import { generateSupplementaryParttimeFiling } from '../src/media/supplementaryParttimeFiling';
+import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput } from '../src/types';
 
 const fixture = readFileSync(
   fileURLToPath(new URL('../../../testdata/media/supplementary-bonus-2022-example.csv', import.meta.url)),
   'utf8',
 );
+
+const ptFixture = readFileSync(
+  fileURLToPath(new URL('../../../testdata/media/supplementary-parttime-2022-example.csv', import.meta.url)),
+  'utf8',
+);
+const ptExample: SupplementaryParttimeFilingInput = {
+  year: 2026,
+  filingDate: '20220901',
+  unit: { taxId: '11111111', name: '甄健康有限公司', phone: '0227065866#0123', email: 'chuan@mail.tw', contactName: '陳一一' },
+  records: [
+    { action: 'I', payDate: '20220228', payeeId: 'A222222222', payeeName: '甄健康', amount: 30000, filingNo: '1' },
+    { action: 'I', payDate: '20220418', payeeId: 'A222222222', payeeName: '甄健康', amount: 30000, filingNo: '1' },
+    { action: 'I', payDate: '20220529', payeeId: 'A222222222', payeeName: '甄健康', amount: 30000, filingNo: '1' },
+    { action: 'I', payDate: '20220529', payeeId: 'A222222222', payeeName: '甄健康', amount: 30000, filingNo: '2' },
+  ],
+};
 
 const example: SupplementaryBonusFilingInput = {
   year: 2026,
@@ -39,5 +56,19 @@ describe('generateSupplementaryBonusFiling', () => {
   it('負值/空清單丟錯', () => {
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [] })).toThrow();
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [{ ...example.records[0], bonusAmount: -1 }] })).toThrow();
+  });
+});
+
+describe('generateSupplementaryParttimeFiling', () => {
+  it('逐字元重現官方範例 (dl-9070, 類別63)', () => {
+    expect(generateSupplementaryParttimeFiling(ptExample).content).toBe(ptFixture);
+  });
+  it('檔名', () => {
+    expect(generateSupplementaryParttimeFiling(ptExample).filename).toBe('DPR111111111110901001.csv');
+  });
+  it('空清單/負值/跨年度丟錯', () => {
+    expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [] })).toThrow();
+    expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [{ ...ptExample.records[0], amount: -1 }] })).toThrow();
+    expect(() => generateSupplementaryParttimeFiling({ ...ptExample, records: [ptExample.records[0], { ...ptExample.records[1], payDate: '20230418' }] })).toThrow();
   });
 });

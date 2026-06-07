@@ -30,6 +30,11 @@ from .media.supplementary_bonus_filing import (
     SupplementaryBonusFilingInput,
     SupplementaryBonusFilingResult,
 )
+from .media.supplementary_parttime_filing import (
+    generate_supplementary_parttime_filing,
+    SupplementaryParttimeRecord,
+    SupplementaryParttimeFilingInput,
+)
 
 __all__ = [
     "__version__",
@@ -56,4 +61,7 @@ __all__ = [
     "SupplementaryBonusRecord",
     "SupplementaryBonusFilingInput",
     "SupplementaryBonusFilingResult",
+    "generate_supplementary_parttime_filing",
+    "SupplementaryParttimeRecord",
+    "SupplementaryParttimeFilingInput",
 ]

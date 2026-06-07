@@ -105,3 +105,21 @@ export interface SupplementaryBonusFilingResult {
   filename: string;
   content: string; // Unicode CSV（存檔以 Big5 編碼）
 }
+export interface SupplementaryParttimeRecord {
+  action: 'I' | 'R';
+  payDate: string; // 'YYYYMMDD'
+  payeeId: string;
+  payeeName: string;
+  amount: number; // 單次給付金額
+  filingNo?: string; // 申報編號，預設 '1'
+  trustNote?: string; // 信託註記，預設 ''
+  note?: string; // 資料註記，預設 ''
+}
+export interface SupplementaryParttimeFilingInput {
+  year: number; // 費率＋基本工資年度（2024–2026）
+  unit: SupplementaryBonusFilingUnit; // 與獎金同結構
+  filingDate: string; // 'YYYYMMDD'
+  sequence?: string; // 預設 '001'
+  records: SupplementaryParttimeRecord[];
+}
+// 結果型別重用 SupplementaryBonusFilingResult（{ filename, content }）。

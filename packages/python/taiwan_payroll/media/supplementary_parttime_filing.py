@@ -15,38 +15,31 @@ from ._common import (
     roc_ymd,
     validate_unit_and_date,
 )
+from .supplementary_bonus_filing import (
+    SupplementaryBonusFilingResult,
+    SupplementaryBonusFilingUnit,
+)
 
-INCOME_TYPE = "62"
-# 逐字複製自 testdata/media/supplementary-bonus-2022-example.csv 第 1、3 行
+INCOME_TYPE = "63"
+# 逐字複製自 testdata/media/supplementary-parttime-2022-example.csv 第 1、3 行
 HEADER_COMMENT = "*資料識別碼,統一編號,所得類別,給付起始年月,給付結束年月,申報總筆數,所得(收入)給付總額,扣繳補充保險費總額,扣費義務人,聯絡電話,電子郵件信箱,聯絡人姓名"
-DETAIL_COMMENT = "*資料識別碼,處理方式(新增I  覆蓋R),給付日期,所得人身分證號,所得人姓名,單次獎金給付金額,扣繳補充保險費金額,申報編號(詳格式說明),投保單位代號,扣費當月投保金額,同年度累計獎金金額,資料註記"
+DETAIL_COMMENT = "*資料識別碼,處理方式(新增I  覆蓋R),給付日期,所得人身分證號,所得人姓名,單次給付金額,扣繳補充保險費金額,申報編號(詳格式說明),信託註記,資料註記,,"
 
 
 @dataclass
-class SupplementaryBonusFilingUnit:
-    tax_id: str
-    name: str
-    phone: str
-    email: str
-    contact_name: str
-
-
-@dataclass
-class SupplementaryBonusRecord:
+class SupplementaryParttimeRecord:
     action: Literal["I", "R"]
     pay_date: str
     payee_id: str
     payee_name: str
-    bonus_amount: float
-    insured_salary: float
-    ytd_bonus_cumulative: float
-    unit_code: str
+    amount: float
     filing_no: str = "1"
+    trust_note: str = ""
     note: str = ""
 
 
 @dataclass
-class SupplementaryBonusFilingInput:
+class SupplementaryParttimeFilingInput:
     year: int
     unit: SupplementaryBonusFilingUnit
     filing_date: str
@@ -54,17 +47,7 @@ class SupplementaryBonusFilingInput:
     sequence: str = "001"
 
 
-@dataclass
-class SupplementaryBonusFilingResult:
-    filename: str
-    content: str
-
-
-def to_big5_bytes(content: str) -> bytes:
-    return content.encode("big5")
-
-
-def generate_supplementary_bonus_filing(inp: SupplementaryBonusFilingInput) -> SupplementaryBonusFilingResult:
+def generate_supplementary_parttime_filing(inp: SupplementaryParttimeFilingInput) -> SupplementaryBonusFilingResult:
     recs = inp.records
     if not recs:
         raise ValueError("records must not be empty")
@@ -72,28 +55,21 @@ def generate_supplementary_bonus_filing(inp: SupplementaryBonusFilingInput) -> S
     for r in recs:
         if not (r.pay_date.isdigit() and len(r.pay_date) == 8):
             raise ValueError(f"pay_date must be YYYYMMDD, got {r.pay_date}")
-        assert_non_neg("bonus_amount", r.bonus_amount)
-        assert_non_neg("insured_salary", r.insured_salary)
-        assert_non_neg("ytd_bonus_cumulative", r.ytd_bonus_cumulative)
+        assert_non_neg("amount", r.amount)
     start, end = range_ym([r.pay_date for r in recs])
     data = get_year_data(inp.year)
     premiums = [
-        calc_supplementary(
-            data,
-            SupplementaryInput(type="bonus", amount=int(r.bonus_amount), monthly_insured_salary=int(r.insured_salary), ytd_bonus=int(r.ytd_bonus_cumulative - r.bonus_amount)),
-            "round",
-        ).premium
+        calc_supplementary(data, SupplementaryInput(type="parttime", amount=int(r.amount)), "round").premium
         for r in recs
     ]
     u = inp.unit
     header = build_header_row(
         u, INCOME_TYPE, start, end, len(recs),
-        sum(int(r.bonus_amount) for r in recs), sum(premiums),
+        sum(int(r.amount) for r in recs), sum(premiums),
     )
     details = [
         ",".join(["2", r.action, roc_ymd(r.pay_date), r.payee_id, r.payee_name,
-                  str(int(r.bonus_amount)), str(premiums[i]), r.filing_no, r.unit_code,
-                  str(int(r.insured_salary)), str(int(r.ytd_bonus_cumulative)), r.note])
+                  str(int(r.amount)), str(premiums[i]), r.filing_no, r.trust_note, r.note, "", ""])
         for i, r in enumerate(recs)
     ]
     content = build_content(HEADER_COMMENT, header, DETAIL_COMMENT, details)
