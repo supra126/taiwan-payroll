@@ -6,6 +6,28 @@
 
 ---
 
+## [1.3.0] - 2026-06-08
+
+新增「勞保老年給付試算」——引擎從「算扣項／產申報檔」延伸到「算給付」。三套件同步發佈 1.3.0（`taiwan-payroll-mcp` 自 1.1.0 起含此版新增的 tool 與一項修正）。
+
+### Added
+
+- **勞保老年給付試算（3 種，core / Python / MCP）**，皆以勞保局官方試算數值/公式驗證，整數運算、TS≡Python：
+  - `calculateOldAgePension`（老年年金月領）：擇優兩式（`平均×年資×0.775%+3000`、`×1.55%`），提前/延後請領 `claimOffsetMonths`（每年 ±4%、上限 ±20%），年資未滿 15 年 `eligible:false`。便利函式 `averageHighestInsuredSalary`、`statutoryClaimAge`。
+  - `calculateOldAgeLumpSum`（老年一次金）：`平均 × 給付月數`（年資每滿 1 年 1 個月、逾 60 歲後年資最多 5 年）。
+  - `calculateOldAgeSinglePayment`（一次請領老年給付，舊制基數）：前 15 年每年 1 基數、超過部分每年 2 基數、滿 60 歲前最高 45 基數、逾 60 歲後合併最高 50 基數；平均採退保前 36 個月。
+- `data/{year}.json` 新增 `oldAgePension` 區段（法定參數，目前 2026）。
+- MCP 新增 tools `calculate_old_age_pension`、`calculate_old_age_lump_sum`、`calculate_old_age_single_payment`。
+- 文件站 `/docs/api` 新增上述段落。
+
+### Fixed
+
+- **MCP server 漏註冊 tool**：`server.ts` 原為手列註冊，自 1.1.0 起未註冊 `calculate_employer_supplementary_premium` 與 `calculate_income_tax_withholding`（兩 tool 已在程式內但 stdio server 未暴露）。改為自單一來源 `allTools` 迭代註冊，杜絕漂移；本版起 9 個 tool 全部可用。
+
+### Notes
+
+- 勞退新制專戶累積試算（B）暫不納入（為多假設 what-if 投影、最複雜，官方演算法已逆推保存待未來實作）。
+
 ## [1.2.0] - 2026-06-08
 
 新增「健保二代補充保費明細申報檔（CSV）產生器」——將引擎從「算扣項」延伸到「產申報檔」。本版僅 `taiwan-payroll`（npm core）與 `taiwan-payroll`（PyPI）發佈；`taiwan-payroll-mcp` 無變更，維持 1.1.0（媒體檔產生器刻意不做為 MCP tool，MCP 聚焦計算）。

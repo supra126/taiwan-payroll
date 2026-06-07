@@ -29,6 +29,16 @@ const { filename, content } = generateSupplementaryBonusFiling({
 
 皆以健保署官方範例逐位元驗證。股利逐列保費由呼叫端提供（另附 `calcDividendPremium`）。完整 API 見 [文件站 /docs/api](https://taiwan-payroll-docs.vercel.app/docs/api)。
 
+## 勞保老年給付試算
+
+三種老年給付，皆對勞保局官方數值/公式驗證：`calcOldAgePension`（年金月領，擇優兩式、可提前/延後）、`calcOldAgeLumpSum`（老年一次金）、`calcOldAgeSinglePayment`（一次請領，舊制基數）。另附 `averageHighestInsuredSalary`、`statutoryClaimAge`。
+
+```ts
+import { calcOldAgePension, getYearData } from 'taiwan-payroll';
+calcOldAgePension(getYearData(2026), { avgInsuredSalary: 32000, years: 35, months: 6 });
+// → { formulaA, formulaB, monthly, adjustmentMonths, eligible }
+```
+
 ## 免責聲明
 
 計算結果僅供參考，實際應繳金額以勞保局、健保署核發之繳款單為準。本套件不構成法律或會計建議。

@@ -8,6 +8,11 @@
 |---|---|
 | `calculate_payroll` | 勞保＋健保＋勞退＋職災各方負擔 |
 | `calculate_supplementary_premium` | 二代健保補充保費（六類所得） |
+| `calculate_employer_supplementary_premium` | 雇主端二代健保補充保費 |
+| `calculate_income_tax_withholding` | 薪資所得稅扣繳 |
+| `calculate_old_age_pension` | 勞保老年年金（月領，擇優兩式） |
+| `calculate_old_age_lump_sum` | 勞保老年一次金 |
+| `calculate_old_age_single_payment` | 勞保一次請領老年給付（舊制基數） |
 | `calculate_prorated` | 月中到職／離職破月（健保月底歸屬） |
 | `list_years` | 列出可用年度、資料版本、基本工資 |
 

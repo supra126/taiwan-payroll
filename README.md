@@ -66,6 +66,23 @@ const { filename, content } = generateSupplementaryBonusFiling({
 - 輸出為「資料檔」供以官方入口上傳。**Big5 編碼**：TS 由呼叫端編碼，Python 提供 `to_big5_bytes()`（core 維持零依賴）。
 - API 詳見文件站 `/docs/api`。
 
+## 勞保老年給付試算（1.3.0 新增）
+
+依勞保局官方公式試算三種老年給付（皆對官方數值/公式驗證、TS≡Python）：
+
+```ts
+import { calcOldAgePension, calcOldAgeLumpSum, calcOldAgeSinglePayment, getYearData } from 'taiwan-payroll';
+const d = getYearData(2026);
+calcOldAgePension(d, { avgInsuredSalary: 32000, years: 35, months: 6 });     // 月領年金（擇優兩式，可提前/延後）
+calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 10 });                // 老年一次金
+calcOldAgeSinglePayment(d, { avgInsuredSalary: 30000, preSixtyYears: 20 });  // 一次請領（舊制基數）
+```
+
+- **老年年金**：擇優兩式（`平均×年資×0.775%+3000` vs `×1.55%`），提前/延後 `claimOffsetMonths`（±4%/年、上限±20%）；附 `averageHighestInsuredSalary`、`statutoryClaimAge`。
+- **老年一次金**：年資每滿 1 年發 1 個月，逾 60 歲後年資最多 5 年。
+- **一次請領**：基數制（前 15 年每年 1 基數、超過部分每年 2 基數、前 60 上限 45、合併上限 50），平均採退保前 36 個月。
+- 試算僅供參考，實際以勞保局核定為準。
+
 ## 架構
 
 - `data/{year}.json` — 單一事實來源，年度法規參數（級距表、費率），以 JSON Schema 驗證。

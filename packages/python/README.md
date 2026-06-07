@@ -37,6 +37,15 @@ open(r.filename, "wb").write(to_big5_bytes(r.content))  # 檔案為 Big5
 
 股利（`generate_supplementary_dividend_filing`）逐列保費由呼叫端提供（另附 `calc_dividend_premium`）。
 
+### 勞保老年給付試算
+
+`calc_old_age_pension`（年金月領，擇優兩式、可提前/延後）、`calc_old_age_lump_sum`（老年一次金）、`calc_old_age_single_payment`（一次請領，舊制基數），皆對勞保局官方數值/公式驗證、與 TypeScript 版一致。
+
+```python
+from taiwan_payroll import calc_old_age_pension, get_year_data, OldAgePensionInput
+calc_old_age_pension(get_year_data(2026), OldAgePensionInput(avg_insured_salary=32000, years=35, months=6))
+```
+
 ## 開發
 
 ```bash
