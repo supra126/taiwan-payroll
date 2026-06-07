@@ -49,7 +49,9 @@ describe('golden test vectors', () => {
               ? engine.calculateSupplementary(v.input)
               : kind === 'prorated'
                 ? engine.calculateProrated(v.input)
-                : engine.calculate(v.input);
+                : kind === 'old-age-pension'
+                  ? engine.calculateOldAgePension(v.input)
+                  : engine.calculate(v.input);
       assertSubset(result, v.expected, '');
     });
   }

@@ -3,6 +3,11 @@ from importlib.metadata import PackageNotFoundError, version as _pkg_version
 from ._data import get_available_years, get_year_data
 from ._engine import create_payroll_engine, PayrollEngine
 from .engine.supplementary import calc_dividend_premium
+from .engine.old_age_pension import (
+    calc_old_age_pension,
+    average_highest_insured_salary,
+    statutory_claim_age,
+)
 
 try:
     __version__ = _pkg_version("taiwan-payroll")
@@ -19,6 +24,8 @@ from ._types import (
     EmployerSupplementaryResult,
     WithholdingInput,
     WithholdingResult,
+    OldAgePensionInput,
+    OldAgePensionResult,
     Rounding,
     SupplementaryType,
     Identity,
@@ -71,6 +78,11 @@ __all__ = [
     "EmployerSupplementaryResult",
     "WithholdingInput",
     "WithholdingResult",
+    "OldAgePensionInput",
+    "OldAgePensionResult",
+    "calc_old_age_pension",
+    "average_highest_insured_salary",
+    "statutory_claim_age",
     "Rounding",
     "SupplementaryType",
     "Identity",

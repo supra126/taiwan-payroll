@@ -10,6 +10,8 @@ import type {
   EmployerSupplementaryResult,
   WithholdingInput,
   WithholdingResult,
+  OldAgePensionInput,
+  OldAgePensionResult,
 } from './types';
 import { getYearData } from './data';
 import { calcLaborInsurance } from './engine/laborInsurance';
@@ -20,6 +22,7 @@ import { calcSupplementary } from './engine/supplementary';
 import { calcEmployerSupplementary } from './engine/employerSupplementary';
 import { calcWithholding } from './engine/withholding';
 import { calcProrated } from './engine/prorated';
+import { calcOldAgePension } from './engine/oldAgePension';
 import { numberToRateString } from './rounding/strategies';
 import { getIdentityRules } from './identity';
 
@@ -32,6 +35,7 @@ export { generateSupplementaryInterestFiling } from './media/supplementaryIntere
 export { generateSupplementaryRentFiling } from './media/supplementaryRentFiling';
 export { generateSupplementaryDividendFiling } from './media/supplementaryDividendFiling';
 export { calcDividendPremium } from './engine/supplementary';
+export { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from './engine/oldAgePension';
 
 /** Validate the numeric/identity inputs shared by calculate() and calculateProrated(). */
 function validateBaseInput(input: CalculateInput): void {
@@ -53,6 +57,7 @@ export interface PayrollEngine {
   calculateEmployerSupplementary(input: EmployerSupplementaryInput): EmployerSupplementaryResult;
   calculateWithholding(input: WithholdingInput): WithholdingResult;
   calculateProrated(input: ProratedInput): ProratedResult;
+  calculateOldAgePension(input: OldAgePensionInput): OldAgePensionResult;
 }
 
 export function createPayrollEngine(opts: { year: number }): PayrollEngine {
@@ -127,6 +132,10 @@ export function createPayrollEngine(opts: { year: number }): PayrollEngine {
       validateBaseInput(input);
       const occupationalRate = resolveOccupationalRate(input.occupationalRate);
       return calcProrated(data, input, occupationalRate);
+    },
+
+    calculateOldAgePension(input: OldAgePensionInput): OldAgePensionResult {
+      return calcOldAgePension(data, input);
     },
   };
 }

@@ -136,3 +136,20 @@ class WithholdingResult:
     withholding: int
     rate: str
     taxable_annual: Optional[int] = None
+
+
+@dataclass
+class OldAgePensionInput:
+    avg_insured_salary: float
+    years: int
+    months: int = 0
+    claim_offset_months: int = 0
+
+
+@dataclass
+class OldAgePensionResult:
+    formula_a: int
+    formula_b: int
+    monthly: int
+    adjustment_months: int
+    eligible: bool

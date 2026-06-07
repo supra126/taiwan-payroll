@@ -292,3 +292,33 @@ def test_withholding_validation_and_missing():
 
 def test_withholding_engine_method():
     assert create_payroll_engine(2026).calculate_withholding(WithholdingInput(type="resident", monthly_salary=60000)).withholding == 500
+
+
+from taiwan_payroll import (
+    calc_old_age_pension,
+    average_highest_insured_salary,
+    statutory_claim_age,
+    OldAgePensionInput as OAI,
+)
+
+
+def test_old_age_pension_official():
+    d = get_year_data(2026)
+    r = calc_old_age_pension(d, OAI(avg_insured_salary=32000, years=35, months=6))
+    assert (r.formula_a, r.formula_b, r.monthly, r.adjustment_months, r.eligible) == (11804, 17608, 17608, 0, True)
+    r2 = calc_old_age_pension(d, OAI(avg_insured_salary=45800, years=40))
+    assert (r2.formula_a, r2.formula_b, r2.monthly) == (17198, 28396, 28396)
+
+
+def test_old_age_pension_adjust_round_eligible():
+    d = get_year_data(2026)
+    assert calc_old_age_pension(d, OAI(avg_insured_salary=30000, years=15, months=3)).formula_a == 6546
+    assert calc_old_age_pension(d, OAI(avg_insured_salary=32000, years=35, months=6, claim_offset_months=-24)).formula_b == 16199
+    assert calc_old_age_pension(d, OAI(avg_insured_salary=32000, years=35, months=6, claim_offset_months=-72)).adjustment_months == -60
+    assert calc_old_age_pension(d, OAI(avg_insured_salary=30000, years=10)).eligible is False
+
+
+def test_helpers():
+    d = get_year_data(2026)
+    assert average_highest_insured_salary([42000, 42000, 36000]) == 40000
+    assert statutory_claim_age(d, 50) == 64 and statutory_claim_age(d, 51) == 65

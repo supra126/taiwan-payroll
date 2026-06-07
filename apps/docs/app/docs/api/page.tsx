@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -164,6 +164,47 @@ engine.calculate(CalculateInput(monthly_salary=42000, dependents=1, pension_self
       />
       <p className="mt-5 text-sm text-ink-soft">
         居住者公式法：免稅額 101,000×(本人＋扶養)＋標準扣除 272,000＋薪資特別扣除 227,000，依級距稅率減累進差額、兩步四捨五入至元。獎金按 5%（單次未達 90,501 免扣）。非居住者月薪 ≤ 1.5× 基本工資為 6%、否則 18%。僅內建 2026；其餘年度未提供時丟錯。
+      </p>
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>calculateOldAgePension</code> — 勞保老年年金（月領）試算
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        勞保老年年金月領金額試算，採法定<strong>擇優兩式</strong>取高者。TS <code>calculateOldAgePension</code>（函式 <code>calcOldAgePension</code>）／Python <code>calculate_old_age_pension</code>（函式 <code>calc_old_age_pension</code>）。輸入 <code>OldAgePensionInput</code>，回傳 <code>OldAgePensionResult</code>。僅內建 2026；其餘年度未提供時丟錯。
+      </p>
+      <pre className={pre}>
+        <code>{`// TS
+engine.calculateOldAgePension({ avgInsuredSalary: 32000, years: 35, months: 6 });
+# Python
+engine.calculate_old_age_pension(OldAgePensionInput(avg_insured_salary=32000, years=35, months=6))`}</code>
+      </pre>
+      <ParamTable
+        rows={[
+          ['year', 'year', 'number', '最新年度', '費率／法定參數年度（僅 2026 提供老年年金資料）。'],
+          ['avgInsuredSalary', 'avg_insured_salary', 'number', '（必填）', '平均月投保薪資（最高 60 個月平均）。'],
+          ['years', 'years', 'number', '（必填）', '保險年資：年（整數）。'],
+          ['months', 'months', 'number', '0', '保險年資：月（0–11）。'],
+          ['claimOffsetMonths', 'claim_offset_months', 'number', '0', '相對法定請領年齡的提前(負)／延後(正)月數。'],
+        ]}
+      />
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">擇優兩式：</span>
+        式一 <code>平均 × 年資 × 0.775% + 3,000</code>、式二 <code>平均 × 年資 × 1.55%</code>，取高者為月領金額（角以下四捨五入）。
+        <span className="font-semibold text-ink"> 提前／延後：</span>
+        依 <code>claimOffsetMonths</code> 增減給，每年 ±4%（每月按比例 ±4%÷12），上限 ±20%（即 ±5 年）；超過上限自動夾限。
+        <span className="font-semibold text-ink"> 年資未滿 15 年：</span>
+        <code>eligible:false</code>（未達年金請領資格，公式數值仍計算供參考）。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">回傳 <code>OldAgePensionResult</code>：</span> <code>formulaA</code>（式一）、<code>formulaB</code>（式二）、<code>monthly</code>（擇優月領）、<code>adjustmentMonths</code>（實際採用的增減給月數，已夾限）、<code>eligible</code>（是否達 15 年年資門檻）。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">便利函式：</span>
+        <code>averageHighestInsuredSalary</code>（TS）/ <code>average_highest_insured_salary</code>（Python）取投保薪資序列中最高 60 個月平均（四捨五入）；
+        <code>statutoryClaimAge</code>（TS）/ <code>statutory_claim_age</code>（Python）依出生民國年回法定請領年齡。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">免責：</span>試算結果僅供參考，實際請領金額以勞保局核定為準。
       </p>
 
       <h2 className="mt-12 text-xl font-bold text-ink">

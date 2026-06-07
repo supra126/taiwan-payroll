@@ -76,6 +76,39 @@
         }
       },
       "additionalProperties": false
+    },
+    "oldAgePension": {
+      "type": "object",
+      "required": ["formulaARate", "formulaABonus", "formulaBRate", "adjustPerYearRate", "maxAdjustYears", "minYearsForPension", "statutoryAge"],
+      "additionalProperties": false,
+      "properties": {
+        "formulaARate": { "$ref": "#/definitions/rate" },
+        "formulaABonus": { "type": "integer" },
+        "formulaBRate": { "$ref": "#/definitions/rate" },
+        "adjustPerYearRate": { "$ref": "#/definitions/rate" },
+        "maxAdjustYears": { "type": "integer" },
+        "minYearsForPension": { "type": "integer" },
+        "statutoryAge": {
+          "type": "object",
+          "required": ["schedule", "defaultAge"],
+          "additionalProperties": false,
+          "properties": {
+            "schedule": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["maxBornRocYear", "age"],
+                "additionalProperties": false,
+                "properties": {
+                  "maxBornRocYear": { "type": "integer" },
+                  "age": { "type": "integer" }
+                }
+              }
+            },
+            "defaultAge": { "type": "integer" }
+          }
+        }
+      }
     }
   },
   "properties": {
@@ -139,6 +172,7 @@
         "singlePaymentCap": { "type": "integer" }
       }
     },
-    "incomeTax": { "$ref": "#/definitions/incomeTax" }
+    "incomeTax": { "$ref": "#/definitions/incomeTax" },
+    "oldAgePension": { "$ref": "#/definitions/oldAgePension" }
   }
 }

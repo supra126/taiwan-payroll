@@ -1,0 +1,9 @@
+{
+  "id": "old-age-pension-2026-a",
+  "description": "老年年金 平均32000/年資35年6月（勞保局官方試算 exact）",
+  "year": 2026,
+  "kind": "old-age-pension",
+  "source": "勞保局老年年金試算 bli.gov.tw/0100398.html",
+  "input": { "avgInsuredSalary": 32000, "years": 35, "months": 6 },
+  "expected": { "formulaA": 11804, "formulaB": 17608, "monthly": 17608, "adjustmentMonths": 0, "eligible": true }
+}

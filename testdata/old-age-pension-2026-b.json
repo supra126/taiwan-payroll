@@ -1,0 +1,9 @@
+{
+  "id": "old-age-pension-2026-b",
+  "description": "老年年金 平均45800/年資40年（勞保局官方試算 exact）",
+  "year": 2026,
+  "kind": "old-age-pension",
+  "source": "勞保局老年年金試算 bli.gov.tw/0100398.html",
+  "input": { "avgInsuredSalary": 45800, "years": 40 },
+  "expected": { "formulaA": 17198, "formulaB": 28396, "monthly": 28396, "adjustmentMonths": 0, "eligible": true }
+}

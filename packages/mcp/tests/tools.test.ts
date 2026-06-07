@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createPayrollEngine, getYearData, getAvailableYears } from 'taiwan-payroll';
-import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, proratedTool, listYearsTool, allTools } from '../src/tools';
+import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, proratedTool, listYearsTool, allTools } from '../src/tools';
 
 const latest = Math.max(...getAvailableYears()); // the year the tools default to
 
@@ -94,17 +94,36 @@ describe('calculate_income_tax_withholding tool', () => {
   });
 });
 
+describe('calculate_old_age_pension tool', () => {
+  it('回傳與 core 一致的數字與摘要（官方 exact 32000/35年6月）', () => {
+    const r = oldAgePensionTool.handler({ year: 2026, avgInsuredSalary: 32000, years: 35, months: 6 });
+    expect(r.isError).toBeUndefined();
+    const direct = createPayrollEngine({ year: 2026 }).calculateOldAgePension({ avgInsuredSalary: 32000, years: 35, months: 6 });
+    expect(textOf(r)).toContain(JSON.stringify(direct, null, 2));
+    expect(textOf(r)).toContain(`老年年金月領（擇優）：${direct.monthly} 元`);
+  });
+  it('年資未滿 15 年附資格提醒', () => {
+    const r = oldAgePensionTool.handler({ year: 2026, avgInsuredSalary: 30000, years: 10 });
+    expect(textOf(r)).toContain('未達年金請領資格');
+    expect(textOf(r)).toContain('"eligible": false');
+  });
+  it('被收進 allTools', () => {
+    expect(allTools.some((t) => t.name === 'calculate_old_age_pension')).toBe(true);
+  });
+});
+
 describe('allTools registry', () => {
-  it('exposes the six tools with unique names and a handler each', () => {
+  it('exposes the seven tools with unique names and a handler each', () => {
     expect(allTools.map((t) => t.name)).toEqual([
       'calculate_payroll',
       'calculate_supplementary_premium',
       'calculate_employer_supplementary_premium',
       'calculate_income_tax_withholding',
+      'calculate_old_age_pension',
       'calculate_prorated',
       'list_years',
     ]);
-    expect(new Set(allTools.map((t) => t.name)).size).toBe(6);
+    expect(new Set(allTools.map((t) => t.name)).size).toBe(7);
     for (const t of allTools) expect(typeof t.handler).toBe('function');
   });
 });

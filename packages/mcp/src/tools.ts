@@ -214,6 +214,43 @@ export const withholdingTool = {
   handler: withholdingHandler,
 };
 
+// --- calculate_old_age_pension ---
+const oldAgePensionShape = {
+  year: yearField,
+  avgInsuredSalary: z.number().describe('平均月投保薪資（最高 60 個月平均），新臺幣元。'),
+  years: z.number().int().describe('保險年資：年。'),
+  months: z.number().int().min(0).max(11).optional().describe('保險年資：月（0–11），預設 0。'),
+  claimOffsetMonths: z
+    .number()
+    .int()
+    .optional()
+    .describe('提前(負)/延後(正)請領月數，相對法定請領年齡；每年 ±4%，上限 ±5 年。預設 0。'),
+};
+type OldAgePensionArgs = z.infer<z.ZodObject<typeof oldAgePensionShape>>;
+
+function oldAgePensionHandler(args: OldAgePensionArgs): CallToolResult {
+  try {
+    const { year, ...input } = args;
+    const r = createPayrollEngine({ year: year ?? latestYear() }).calculateOldAgePension(input);
+    return ok(
+      r,
+      `老年年金月領（擇優）：${r.monthly} 元${r.eligible ? '' : '（年資未滿 15 年，未達年金請領資格，數值僅供參考）'}。`,
+    );
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export const oldAgePensionTool = {
+  name: 'calculate_old_age_pension',
+  config: {
+    title: '計算勞保老年年金（月領）',
+    description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4% 上限 ±5 年）試算月領金額；年資未滿 15 年不符年金請領資格。${DISCLAIMER}`,
+    inputSchema: oldAgePensionShape,
+  },
+  handler: oldAgePensionHandler,
+};
+
 // --- list_years ---
 const listYearsShape = {};
 type ListYearsArgs = z.infer<z.ZodObject<typeof listYearsShape>>;
@@ -240,4 +277,4 @@ export const listYearsTool = {
   handler: listYearsHandler,
 };
 
-export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, proratedTool, listYearsTool];
+export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, proratedTool, listYearsTool];

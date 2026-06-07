@@ -30,6 +30,16 @@ export interface IncomeTax {
   nonResident: { rate: string; reducedRate: string; reducedThresholdMultiplier: number };
 }
 
+export interface OldAgePension {
+  formulaARate: string;
+  formulaABonus: number;
+  formulaBRate: string;
+  adjustPerYearRate: string;
+  maxAdjustYears: number;
+  minYearsForPension: number;
+  statutoryAge: { schedule: { maxBornRocYear: number; age: number }[]; defaultAge: number };
+}
+
 export interface YearData {
   year: number;
   rocYear?: number;
@@ -43,4 +53,5 @@ export interface YearData {
   pension: { employerRate: string; brackets: Bracket[] };
   supplementaryPremium: { rate: string; bonusThresholdMultiplier: number; lowerThreshold: number; singlePaymentCap: number };
   incomeTax?: IncomeTax;
+  oldAgePension?: OldAgePension;
 }

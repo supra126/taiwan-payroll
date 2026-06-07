@@ -1246,5 +1246,23 @@
     ],
     "nonMonthly": { "rate": "0.05", "threshold": 90501 },
     "nonResident": { "rate": "0.18", "reducedRate": "0.06", "reducedThresholdMultiplier": 1.5 }
+  },
+  "oldAgePension": {
+    "formulaARate": "0.00775",
+    "formulaABonus": 3000,
+    "formulaBRate": "0.0155",
+    "adjustPerYearRate": "0.04",
+    "maxAdjustYears": 5,
+    "minYearsForPension": 15,
+    "statutoryAge": {
+      "schedule": [
+        { "maxBornRocYear": 46, "age": 60 },
+        { "maxBornRocYear": 47, "age": 61 },
+        { "maxBornRocYear": 48, "age": 62 },
+        { "maxBornRocYear": 49, "age": 63 },
+        { "maxBornRocYear": 50, "age": 64 }
+      ],
+      "defaultAge": 65
+    }
   }
 }

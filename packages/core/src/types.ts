@@ -181,3 +181,17 @@ export interface SupplementaryDividendFilingInput {
   records: SupplementaryDividendRecord[];
 }
 // 結果重用 SupplementaryBonusFilingResult。
+
+export interface OldAgePensionInput {
+  avgInsuredSalary: number; // 平均月投保薪資
+  years: number; // 年資：年
+  months?: number; // 年資：月（0–11，預設 0）
+  claimOffsetMonths?: number; // 提前(負)/延後(正)月（相對法定年齡，預設 0）
+}
+export interface OldAgePensionResult {
+  formulaA: number;
+  formulaB: number;
+  monthly: number;
+  adjustmentMonths: number;
+  eligible: boolean;
+}

@@ -16,6 +16,7 @@ import { calcSupplementary, calcDividendPremium } from '../src/engine/supplement
 import { calcEmployerSupplementary } from '../src/engine/employerSupplementary';
 import { calcWithholding } from '../src/engine/withholding';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
+import { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from '../src/engine/oldAgePension';
 import { createPayrollEngine, getAvailableYears, getYearData } from '../src/index';
 import data2026 from '../../../data/2026.json';
 import type { Bracket, YearData } from '../src/types';
@@ -525,5 +526,75 @@ describe('calcWithholding (薪資所得扣繳)', () => {
   });
   it('引擎方法委派', () => {
     expect(createPayrollEngine({ year: 2026 }).calculateWithholding({ type: 'resident', monthlySalary: 60000 }).withholding).toBe(500);
+  });
+});
+
+describe('calcOldAgePension', () => {
+  const d = getYearData(2026);
+  it('官方 exact：32000/35年6月 → 擇優 17608', () => {
+    expect(calcOldAgePension(d, { avgInsuredSalary: 32000, years: 35, months: 6 })).toEqual({
+      formulaA: 11804,
+      formulaB: 17608,
+      monthly: 17608,
+      adjustmentMonths: 0,
+      eligible: true,
+    });
+  });
+  it('官方 exact：45800/40年 → 擇優 28396', () => {
+    expect(calcOldAgePension(d, { avgInsuredSalary: 45800, years: 40 })).toEqual({
+      formulaA: 17198,
+      formulaB: 28396,
+      monthly: 28396,
+      adjustmentMonths: 0,
+      eligible: true,
+    });
+  });
+  it('捨入（角以下四捨五入）：30000/15年3月', () => {
+    const r = calcOldAgePension(d, { avgInsuredSalary: 30000, years: 15, months: 3 });
+    expect(r.formulaA).toBe(6546); // 6545.625→6546
+    expect(r.formulaB).toBe(7091); // 7091.25→7091
+    expect(r.monthly).toBe(7091);
+  });
+  it('減給 −24 月 ×0.92', () => {
+    const r = calcOldAgePension(d, { avgInsuredSalary: 32000, years: 35, months: 6, claimOffsetMonths: -24 });
+    expect(r.adjustmentMonths).toBe(-24);
+    expect(r.formulaB).toBe(16199); // 17608×0.92=16199.36→16199
+    expect(r.monthly).toBe(16199);
+  });
+  it('增給 +36 月 ×1.12', () => {
+    expect(
+      calcOldAgePension(d, { avgInsuredSalary: 32000, years: 35, months: 6, claimOffsetMonths: 36 }).formulaB,
+    ).toBe(19721); // 17608×1.12=19720.96→19721
+  });
+  it('夾限：claimOffsetMonths -72 → adjustmentMonths -60（×0.80）', () => {
+    const r = calcOldAgePension(d, { avgInsuredSalary: 32000, years: 35, months: 6, claimOffsetMonths: -72 });
+    expect(r.adjustmentMonths).toBe(-60);
+    expect(r.formulaB).toBe(14086); // 17608×0.80=14086.4→14086
+  });
+  it('年資<15 → eligible:false（仍給公式值）', () => {
+    expect(calcOldAgePension(d, { avgInsuredSalary: 30000, years: 10 }).eligible).toBe(false);
+  });
+  it('負值丟錯', () => {
+    expect(() => calcOldAgePension(d, { avgInsuredSalary: -1, years: 20 })).toThrow();
+  });
+  it('缺年度資料丟錯', () => {
+    expect(() => calcOldAgePension(getYearData(2025), { avgInsuredSalary: 32000, years: 20 })).toThrow();
+  });
+});
+
+describe('averageHighestInsuredSalary', () => {
+  it('取最高 60 個月平均（四捨五入）', () => {
+    expect(averageHighestInsuredSalary(Array(70).fill(30000))).toBe(30000);
+    expect(averageHighestInsuredSalary([42000, 42000, 36000])).toBe(40000); // (42000*2+36000)/3=40000
+  });
+});
+
+describe('statutoryClaimAge', () => {
+  const d = getYearData(2026);
+  it('依出生年', () => {
+    expect(statutoryClaimAge(d, 46)).toBe(60);
+    expect(statutoryClaimAge(d, 50)).toBe(64);
+    expect(statutoryClaimAge(d, 51)).toBe(65);
+    expect(statutoryClaimAge(d, 60)).toBe(65);
   });
 });
