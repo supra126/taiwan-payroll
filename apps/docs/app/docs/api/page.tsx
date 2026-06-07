@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、calculateOldAgeLumpSum、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -202,6 +202,42 @@ engine.calculate_old_age_pension(OldAgePensionInput(avg_insured_salary=32000, ye
         <span className="font-semibold text-ink">便利函式：</span>
         <code>averageHighestInsuredSalary</code>（TS）/ <code>average_highest_insured_salary</code>（Python）取投保薪資序列中最高 60 個月平均（四捨五入）；
         <code>statutoryClaimAge</code>（TS）/ <code>statutory_claim_age</code>（Python）依出生民國年回法定請領年齡。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">免責：</span>試算結果僅供參考，實際請領金額以勞保局核定為準。
+      </p>
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>calculateOldAgeLumpSum</code> — 勞保老年一次金試算
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        勞保老年<strong>一次金</strong>給付試算（適用年資未滿 15 年、不請領年金者）。TS <code>calculateOldAgeLumpSum</code>（函式 <code>calcOldAgeLumpSum</code>）／Python <code>calculate_old_age_lump_sum</code>（函式 <code>calc_old_age_lump_sum</code>）。輸入 <code>OldAgeLumpSumInput</code>，回傳 <code>OldAgeLumpSumResult</code>。僅內建 2026；其餘年度未提供時丟錯。
+      </p>
+      <pre className={pre}>
+        <code>{`// TS
+engine.calculateOldAgeLumpSum({ avgInsuredSalary: 30000, years: 10 });
+# Python
+engine.calculate_old_age_lump_sum(OldAgeLumpSumInput(avg_insured_salary=30000, years=10))`}</code>
+      </pre>
+      <ParamTable
+        rows={[
+          ['year', 'year', 'number', '最新年度', '費率／法定參數年度（僅 2026 提供老年給付資料）。'],
+          ['avgInsuredSalary', 'avg_insured_salary', 'number', '（必填）', '平均月投保薪資。'],
+          ['years', 'years', 'number', '（必填）', '保險年資：年（整數）。'],
+          ['months', 'months', 'number', '0', '保險年資：月（0–11）。'],
+          ['postSixtyMonths', 'post_sixty_months', 'number', '0', '逾 60 歲以後的保險年資月數（用於計算上限）。'],
+        ]}
+      />
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">計算公式：</span>
+        <code>給付 = 平均月投保薪資 × 給付月數</code>。給付月數＝保險年資每滿 1 年發給 1 個月；
+        <span className="font-semibold text-ink"> 逾 60 歲上限：</span>
+        逾 60 歲以後的年資最多計 5 年（60 個月），以 <code>postSixtyMonths</code> 指定逾 60 歲的月數，超過部分不計入。
+        <span className="font-semibold text-ink"> 適用對象：</span>
+        年資未滿 15 年、不請領老年年金者。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">回傳 <code>OldAgeLumpSumResult</code>：</span> <code>payment</code>（一次金給付金額）、<code>insuredMonthsCounted</code>（實際計入的給付月數）。
       </p>
       <p className="mt-5 text-sm text-ink-soft">
         <span className="font-semibold text-ink">免責：</span>試算結果僅供參考，實際請領金額以勞保局核定為準。

@@ -37,6 +37,7 @@ export interface OldAgePension {
   adjustPerYearRate: string;
   maxAdjustYears: number;
   minYearsForPension: number;
+  lumpSumPostAgeCapYears: number;
   statutoryAge: { schedule: { maxBornRocYear: number; age: number }[]; defaultAge: number };
 }
 

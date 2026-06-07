@@ -17,6 +17,7 @@ import { calcEmployerSupplementary } from '../src/engine/employerSupplementary';
 import { calcWithholding } from '../src/engine/withholding';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
 import { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from '../src/engine/oldAgePension';
+import { calcOldAgeLumpSum } from '../src/engine/oldAgeLumpSum';
 import { createPayrollEngine, getAvailableYears, getYearData } from '../src/index';
 import data2026 from '../../../data/2026.json';
 import type { Bracket, YearData } from '../src/types';
@@ -579,6 +580,41 @@ describe('calcOldAgePension', () => {
   });
   it('缺年度資料丟錯', () => {
     expect(() => calcOldAgePension(getYearData(2025), { avgInsuredSalary: 32000, years: 20 })).toThrow();
+  });
+});
+
+describe('calcOldAgeLumpSum', () => {
+  const d = getYearData(2026);
+  it('10年 → 300000（計入120月）', () => {
+    expect(calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 10 })).toEqual({
+      payment: 300000,
+      insuredMonthsCounted: 120,
+    });
+  });
+  it('14年6月 → 464000', () => {
+    expect(calcOldAgeLumpSum(d, { avgInsuredSalary: 32000, years: 14, months: 6 })).toEqual({
+      payment: 464000,
+      insuredMonthsCounted: 174,
+    });
+  });
+  it('逾60歲後年資上限5年：post60 84月 → 計入96月、240000', () => {
+    expect(calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 10, postSixtyMonths: 84 })).toEqual({
+      payment: 240000,
+      insuredMonthsCounted: 96,
+    });
+  });
+  it('捨入：30001/1年1月 → 32501', () => {
+    expect(calcOldAgeLumpSum(d, { avgInsuredSalary: 30001, years: 1, months: 1 }).payment).toBe(32501);
+  });
+  it('postSixtyMonths > 總月數 丟錯', () => {
+    expect(() => calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 1, postSixtyMonths: 20 })).toThrow();
+  });
+  it('負值/非整數丟錯', () => {
+    expect(() => calcOldAgeLumpSum(d, { avgInsuredSalary: -1, years: 10 })).toThrow();
+    expect(() => calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 1.5 })).toThrow();
+  });
+  it('缺年度資料丟錯', () => {
+    expect(() => calcOldAgeLumpSum(getYearData(2025), { avgInsuredSalary: 30000, years: 10 })).toThrow();
   });
 });
 

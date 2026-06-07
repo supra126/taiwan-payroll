@@ -12,6 +12,8 @@ import type {
   WithholdingResult,
   OldAgePensionInput,
   OldAgePensionResult,
+  OldAgeLumpSumInput,
+  OldAgeLumpSumResult,
 } from './types';
 import { getYearData } from './data';
 import { calcLaborInsurance } from './engine/laborInsurance';
@@ -23,6 +25,7 @@ import { calcEmployerSupplementary } from './engine/employerSupplementary';
 import { calcWithholding } from './engine/withholding';
 import { calcProrated } from './engine/prorated';
 import { calcOldAgePension } from './engine/oldAgePension';
+import { calcOldAgeLumpSum } from './engine/oldAgeLumpSum';
 import { numberToRateString } from './rounding/strategies';
 import { getIdentityRules } from './identity';
 
@@ -36,6 +39,7 @@ export { generateSupplementaryRentFiling } from './media/supplementaryRentFiling
 export { generateSupplementaryDividendFiling } from './media/supplementaryDividendFiling';
 export { calcDividendPremium } from './engine/supplementary';
 export { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from './engine/oldAgePension';
+export { calcOldAgeLumpSum } from './engine/oldAgeLumpSum';
 
 /** Validate the numeric/identity inputs shared by calculate() and calculateProrated(). */
 function validateBaseInput(input: CalculateInput): void {
@@ -58,6 +62,7 @@ export interface PayrollEngine {
   calculateWithholding(input: WithholdingInput): WithholdingResult;
   calculateProrated(input: ProratedInput): ProratedResult;
   calculateOldAgePension(input: OldAgePensionInput): OldAgePensionResult;
+  calculateOldAgeLumpSum(input: OldAgeLumpSumInput): OldAgeLumpSumResult;
 }
 
 export function createPayrollEngine(opts: { year: number }): PayrollEngine {
@@ -136,6 +141,10 @@ export function createPayrollEngine(opts: { year: number }): PayrollEngine {
 
     calculateOldAgePension(input: OldAgePensionInput): OldAgePensionResult {
       return calcOldAgePension(data, input);
+    },
+
+    calculateOldAgeLumpSum(input: OldAgeLumpSumInput): OldAgeLumpSumResult {
+      return calcOldAgeLumpSum(data, input);
     },
   };
 }

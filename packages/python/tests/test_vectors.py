@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from taiwan_payroll import create_payroll_engine, CalculateInput, SupplementaryInput, ProratedInput, EmployerSupplementaryInput, WithholdingInput, OldAgePensionInput
+from taiwan_payroll import create_payroll_engine, CalculateInput, SupplementaryInput, ProratedInput, EmployerSupplementaryInput, WithholdingInput, OldAgePensionInput, OldAgeLumpSumInput
 
 
 def _find_testdata() -> Path:
@@ -67,6 +67,8 @@ def test_vector(name, vector):
         result = engine.calculate_prorated(ProratedInput(**args))
     elif kind == "old-age-pension":
         result = engine.calculate_old_age_pension(OldAgePensionInput(**args))
+    elif kind == "old-age-lump-sum":
+        result = engine.calculate_old_age_lump_sum(OldAgeLumpSumInput(**args))
     else:
         result = engine.calculate(CalculateInput(**args))
     _assert_subset(asdict(result), _convert_keys(vector["expected"]))

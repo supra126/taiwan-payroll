@@ -251,6 +251,41 @@ export const oldAgePensionTool = {
   handler: oldAgePensionHandler,
 };
 
+// --- calculate_old_age_lump_sum ---
+const oldAgeLumpSumShape = {
+  year: yearField,
+  avgInsuredSalary: z.number().describe('平均月投保薪資（最高 60 個月平均），新臺幣元。'),
+  years: z.number().int().describe('保險年資：年。'),
+  months: z.number().int().min(0).max(11).optional().describe('保險年資：月（0–11），預設 0。'),
+  postSixtyMonths: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe('逾 60 歲以後之保險年資（月），最多計入 5 年（60 個月），超過部分不計。不得超過總保險月數。預設 0。'),
+};
+type OldAgeLumpSumArgs = z.infer<z.ZodObject<typeof oldAgeLumpSumShape>>;
+
+function oldAgeLumpSumHandler(args: OldAgeLumpSumArgs): CallToolResult {
+  try {
+    const { year, ...input } = args;
+    const r = createPayrollEngine({ year: year ?? latestYear() }).calculateOldAgeLumpSum(input);
+    return ok(r, `老年一次金：${r.payment} 元（計入 ${r.insuredMonthsCounted} 個月投保年資）。`);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export const oldAgeLumpSumTool = {
+  name: 'calculate_old_age_lump_sum',
+  config: {
+    title: '計算勞保老年一次金',
+    description: `依勞保老年一次金法定公式（平均月投保薪資 × 給付月數；年資每滿 1 年給 1 個月、逾 60 歲後之年資最多計入 5 年）試算給付金額。${DISCLAIMER}`,
+    inputSchema: oldAgeLumpSumShape,
+  },
+  handler: oldAgeLumpSumHandler,
+};
+
 // --- list_years ---
 const listYearsShape = {};
 type ListYearsArgs = z.infer<z.ZodObject<typeof listYearsShape>>;
@@ -277,4 +312,4 @@ export const listYearsTool = {
   handler: listYearsHandler,
 };
 
-export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, proratedTool, listYearsTool];
+export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, oldAgeLumpSumTool, proratedTool, listYearsTool];

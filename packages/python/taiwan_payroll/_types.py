@@ -153,3 +153,17 @@ class OldAgePensionResult:
     monthly: int
     adjustment_months: int
     eligible: bool
+
+
+@dataclass
+class OldAgeLumpSumInput:
+    avg_insured_salary: float
+    years: int
+    months: int = 0
+    post_sixty_months: int = 0
+
+
+@dataclass
+class OldAgeLumpSumResult:
+    payment: int
+    insured_months_counted: int

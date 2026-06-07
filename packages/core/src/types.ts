@@ -195,3 +195,14 @@ export interface OldAgePensionResult {
   adjustmentMonths: number;
   eligible: boolean;
 }
+
+export interface OldAgeLumpSumInput {
+  avgInsuredSalary: number;
+  years: number;
+  months?: number;
+  postSixtyMonths?: number;
+}
+export interface OldAgeLumpSumResult {
+  payment: number;
+  insuredMonthsCounted: number;
+}

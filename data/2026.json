@@ -1254,6 +1254,7 @@
     "adjustPerYearRate": "0.04",
     "maxAdjustYears": 5,
     "minYearsForPension": 15,
+    "lumpSumPostAgeCapYears": 5,
     "statutoryAge": {
       "schedule": [
         { "maxBornRocYear": 46, "age": 60 },

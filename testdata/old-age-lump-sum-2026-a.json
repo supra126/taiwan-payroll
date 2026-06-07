@@ -1,0 +1,9 @@
+{
+  "id": "old-age-lump-sum-2026-a",
+  "description": "老年一次金 30000/10年",
+  "year": 2026,
+  "kind": "old-age-lump-sum",
+  "source": "勞保局老年給付標準 bli.gov.tw/0004857.html 公式",
+  "input": { "avgInsuredSalary": 30000, "years": 10 },
+  "expected": { "payment": 300000, "insuredMonthsCounted": 120 }
+}

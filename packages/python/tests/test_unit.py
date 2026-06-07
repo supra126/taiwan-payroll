@@ -322,3 +322,18 @@ def test_helpers():
     d = get_year_data(2026)
     assert average_highest_insured_salary([42000, 42000, 36000]) == 40000
     assert statutory_claim_age(d, 50) == 64 and statutory_claim_age(d, 51) == 65
+
+
+def test_old_age_lump_sum():
+    from taiwan_payroll import calc_old_age_lump_sum, OldAgeLumpSumInput as OLI
+    d = get_year_data(2026)
+    r = calc_old_age_lump_sum(d, OLI(avg_insured_salary=30000, years=10))
+    assert (r.payment, r.insured_months_counted) == (300000, 120)
+    assert calc_old_age_lump_sum(d, OLI(avg_insured_salary=32000, years=14, months=6)).payment == 464000
+    rc = calc_old_age_lump_sum(d, OLI(avg_insured_salary=30000, years=10, post_sixty_months=84))
+    assert (rc.payment, rc.insured_months_counted) == (240000, 96)
+    assert calc_old_age_lump_sum(d, OLI(avg_insured_salary=30001, years=1, months=1)).payment == 32501
+    with pytest.raises(ValueError):
+        calc_old_age_lump_sum(d, OLI(avg_insured_salary=30000, years=1, post_sixty_months=20))
+    with pytest.raises(ValueError):
+        calc_old_age_lump_sum(get_year_data(2025), OLI(avg_insured_salary=30000, years=10))

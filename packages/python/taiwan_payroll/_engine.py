@@ -21,6 +21,8 @@ from ._types import (
     WithholdingResult,
     OldAgePensionInput,
     OldAgePensionResult,
+    OldAgeLumpSumInput,
+    OldAgeLumpSumResult,
 )
 from .engine.labor import calc_labor_insurance
 from .engine.health import calc_health_insurance
@@ -31,6 +33,7 @@ from .engine.prorated import calc_prorated
 from .engine.employer_supplementary import calc_employer_supplementary
 from .engine.withholding import calc_withholding
 from .engine.old_age_pension import calc_old_age_pension
+from .engine.old_age_lump_sum import calc_old_age_lump_sum
 
 
 def _validate_base(inp: CalculateInput | ProratedInput) -> None:
@@ -102,6 +105,9 @@ class PayrollEngine:
 
     def calculate_old_age_pension(self, inp: OldAgePensionInput) -> OldAgePensionResult:
         return calc_old_age_pension(self._data, inp)
+
+    def calculate_old_age_lump_sum(self, inp: OldAgeLumpSumInput) -> OldAgeLumpSumResult:
+        return calc_old_age_lump_sum(self._data, inp)
 
     def calculate_prorated(self, inp: ProratedInput) -> ProratedResult:
         _validate_base(inp)

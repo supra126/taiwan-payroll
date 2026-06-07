@@ -79,7 +79,7 @@
     },
     "oldAgePension": {
       "type": "object",
-      "required": ["formulaARate", "formulaABonus", "formulaBRate", "adjustPerYearRate", "maxAdjustYears", "minYearsForPension", "statutoryAge"],
+      "required": ["formulaARate", "formulaABonus", "formulaBRate", "adjustPerYearRate", "maxAdjustYears", "minYearsForPension", "lumpSumPostAgeCapYears", "statutoryAge"],
       "additionalProperties": false,
       "properties": {
         "formulaARate": { "$ref": "#/definitions/rate" },
@@ -88,6 +88,7 @@
         "adjustPerYearRate": { "$ref": "#/definitions/rate" },
         "maxAdjustYears": { "type": "integer" },
         "minYearsForPension": { "type": "integer" },
+        "lumpSumPostAgeCapYears": { "type": "integer" },
         "statutoryAge": {
           "type": "object",
           "required": ["schedule", "defaultAge"],

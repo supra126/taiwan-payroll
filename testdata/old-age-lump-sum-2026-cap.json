@@ -1,0 +1,9 @@
+{
+  "id": "old-age-lump-sum-2026-cap",
+  "description": "老年一次金 逾60歲年資上限5年",
+  "year": 2026,
+  "kind": "old-age-lump-sum",
+  "source": "勞保局老年給付標準 bli.gov.tw/0004857.html 公式",
+  "input": { "avgInsuredSalary": 30000, "years": 10, "postSixtyMonths": 84 },
+  "expected": { "payment": 240000, "insuredMonthsCounted": 96 }
+}
