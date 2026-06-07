@@ -151,3 +151,35 @@ def test_rent_golden_big5():
 
 def test_rent_filename():
     assert generate_supplementary_rent_filing(_rent()).filename == "DPR111111111110901001.csv"
+
+
+from taiwan_payroll import (
+    generate_supplementary_dividend_filing,
+    SupplementaryDividendFilingInput as DI,
+    SupplementaryDividendRecord as DR,
+)
+
+_DCSV = (_TD / "supplementary-dividend-2022-example.csv").read_bytes().decode("utf-8")
+_DBIG5 = (_TD / "supplementary-dividend-2022-example.big5").read_bytes()
+
+
+def _dividend():
+    recs = [
+        DR(action="I", pay_date="20220715", payee_id="A222222222", payee_name="甄健康", amount=25620, premium=541, ex_dividend_date="20220601", dividend_type="3"),
+        DR(action="I", pay_date="20220715", payee_id="A233333333", payee_name="甄美麗", amount=20000, premium=422, ex_dividend_date="20220601", dividend_type="3"),
+        DR(action="I", pay_date="20220825", payee_id="A244444444", payee_name="甄順利", amount=3000000, premium=17218, ex_dividend_date="20220701", dividend_type="2", employer_insured_total=2184000, belonging_year="110"),
+        DR(action="I", pay_date="20220915", payee_id="A255555555", payee_name="甄快樂", amount=20000, premium=0, ex_dividend_date="20220601", dividend_type="1"),
+    ]
+    return DI(filing_date="20220901", unit=_U, records=recs)
+
+
+def test_dividend_golden_char():
+    assert generate_supplementary_dividend_filing(_dividend()).content == _DCSV
+
+
+def test_dividend_golden_big5():
+    assert to_big5_bytes(generate_supplementary_dividend_filing(_dividend()).content) == _DBIG5
+
+
+def test_dividend_filename():
+    assert generate_supplementary_dividend_filing(_dividend()).filename == "DPR111111111110901001.csv"

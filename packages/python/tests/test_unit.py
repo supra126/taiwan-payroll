@@ -25,7 +25,7 @@ from taiwan_payroll.engine.labor import calc_labor_insurance
 from taiwan_payroll.engine.health import calc_health_insurance
 from taiwan_payroll.engine.pension import calc_pension
 from taiwan_payroll.engine.occupational import calc_occupational
-from taiwan_payroll.engine.supplementary import calc_supplementary
+from taiwan_payroll.engine.supplementary import calc_supplementary, calc_dividend_premium
 from taiwan_payroll.engine.prorated import compute_insured_days, health_charged_this_month, calc_prorated
 
 D = get_year_data(2026)
@@ -134,6 +134,14 @@ def test_supplementary():
     assert (cap.chargeable, cap.premium) == (10000000, 211000)
     with pytest.raises(ValueError, match="monthlyInsuredSalary"):
         calc_supplementary(D, SupplementaryInput(type="bonus", amount=100000), "round")
+
+
+def test_calc_dividend_premium():
+    d = get_year_data(2026)
+    assert calc_dividend_premium(d, 25620) == 541
+    assert calc_dividend_premium(d, 20000) == 422
+    assert calc_dividend_premium(d, 19999) == 0
+    assert calc_dividend_premium(d, 3000000, 2184000) == 17218
 
 
 def test_supplementary_returns_ints_even_for_float_inputs():

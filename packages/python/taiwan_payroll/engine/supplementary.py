@@ -28,3 +28,16 @@ def calc_supplementary(data: dict, inp: SupplementaryInput, rounding: str) -> Su
         rate=sp["rate"],
         premium=apply_rate(chargeable, [sp["rate"]], rounding),
     )
+
+
+def calc_dividend_premium(data: dict, amount: float, employer_insured_total: float = 0) -> int:
+    """股利扣繳補充保費（一般股東/雇主常見情況）。
+
+    一般股東：單次給付 × 費率（單次達下限起扣）；雇主：(單次給付 − 投保額總額) × 費率。
+    股票股利/特殊註記等情形不在涵蓋範圍，請由呼叫端自行判定後以 record.premium 提供。
+    """
+    sp = data["supplementaryPremium"]
+    if amount < sp["lowerThreshold"]:
+        return 0
+    base = int(max(0, min(amount, sp["singlePaymentCap"]) - employer_insured_total))
+    return apply_rate(base, [sp["rate"]], "round")

@@ -6,7 +6,8 @@ import { generateSupplementaryParttimeFiling } from '../src/media/supplementaryP
 import { generateSupplementaryProfessionalFiling } from '../src/media/supplementaryProfessionalFiling';
 import { generateSupplementaryInterestFiling } from '../src/media/supplementaryInterestFiling';
 import { generateSupplementaryRentFiling } from '../src/media/supplementaryRentFiling';
-import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput, SupplementaryProfessionalFilingInput, SupplementaryInterestFilingInput, SupplementaryRentFilingInput } from '../src/types';
+import { generateSupplementaryDividendFiling } from '../src/media/supplementaryDividendFiling';
+import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput, SupplementaryProfessionalFilingInput, SupplementaryInterestFilingInput, SupplementaryRentFilingInput, SupplementaryDividendFilingInput } from '../src/types';
 
 const fixture = readFileSync(
   fileURLToPath(new URL('../../../testdata/media/supplementary-bonus-2022-example.csv', import.meta.url)),
@@ -168,5 +169,33 @@ describe('generateSupplementaryRentFiling', () => {
   });
   it('負值丟錯', () => {
     expect(() => generateSupplementaryRentFiling({ ...rentExample, records: [{ ...rentExample.records[0], amount: -1 }] })).toThrow();
+  });
+});
+
+const dividendFixture = readFileSync(
+  fileURLToPath(new URL('../../../testdata/media/supplementary-dividend-2022-example.csv', import.meta.url)),
+  'utf8',
+);
+const dividendExample: SupplementaryDividendFilingInput = {
+  filingDate: '20220901',
+  unit: { taxId: '11111111', name: '甄健康有限公司', phone: '0227065866#0123', email: 'chuan@mail.tw', contactName: '陳一一' },
+  records: [
+    { action: 'I', payDate: '20220715', payeeId: 'A222222222', payeeName: '甄健康', amount: 25620, premium: 541, exDividendDate: '20220601', dividendType: '3' },
+    { action: 'I', payDate: '20220715', payeeId: 'A233333333', payeeName: '甄美麗', amount: 20000, premium: 422, exDividendDate: '20220601', dividendType: '3' },
+    { action: 'I', payDate: '20220825', payeeId: 'A244444444', payeeName: '甄順利', amount: 3000000, premium: 17218, exDividendDate: '20220701', dividendType: '2', employerInsuredTotal: 2184000, belongingYear: '110' },
+    { action: 'I', payDate: '20220915', payeeId: 'A255555555', payeeName: '甄快樂', amount: 20000, premium: 0, exDividendDate: '20220601', dividendType: '1' },
+  ],
+};
+
+describe('generateSupplementaryDividendFiling', () => {
+  it('逐字元重現官方範例 (dl-9086, 類別66, 17欄)', () => {
+    expect(generateSupplementaryDividendFiling(dividendExample).content).toBe(dividendFixture);
+  });
+  it('檔名/空清單丟錯', () => {
+    expect(generateSupplementaryDividendFiling(dividendExample).filename).toBe('DPR111111111110901001.csv');
+    expect(() => generateSupplementaryDividendFiling({ ...dividendExample, records: [] })).toThrow();
+  });
+  it('負值 premium 丟錯', () => {
+    expect(() => generateSupplementaryDividendFiling({ ...dividendExample, records: [{ ...dividendExample.records[0], premium: -1 }] })).toThrow();
   });
 });

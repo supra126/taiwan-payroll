@@ -30,6 +30,8 @@ export { generateSupplementaryParttimeFiling } from './media/supplementaryPartti
 export { generateSupplementaryProfessionalFiling } from './media/supplementaryProfessionalFiling';
 export { generateSupplementaryInterestFiling } from './media/supplementaryInterestFiling';
 export { generateSupplementaryRentFiling } from './media/supplementaryRentFiling';
+export { generateSupplementaryDividendFiling } from './media/supplementaryDividendFiling';
+export { calcDividendPremium } from './engine/supplementary';
 
 /** Validate the numeric/identity inputs shared by calculate() and calculateProrated(). */
 function validateBaseInput(input: CalculateInput): void {

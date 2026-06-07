@@ -41,3 +41,17 @@ export function calcSupplementary(
 
   return { type: input.type, chargeable, rate: sp.rate, premium: applyRate(chargeable, [sp.rate], rounding) };
 }
+
+/**
+ * 便利函式：算「一般股東/雇主」常見情況的股利扣繳補充保險費。
+ *  - 一般股東 (employerInsuredTotal = 0)：min(amount, singlePaymentCap) × rate
+ *  - 雇主：(min(amount, singlePaymentCap) − 投保額總額) × rate
+ * 單次給付未達 lowerThreshold (2 萬) 不扣。
+ * 不涵蓋股票股利/特殊註記等情形——那些由呼叫端自行判定後以 record.premium 提供。
+ */
+export function calcDividendPremium(data: YearData, amount: number, employerInsuredTotal = 0): number {
+  const sp = data.supplementaryPremium;
+  if (amount < sp.lowerThreshold) return 0;
+  const base = Math.max(0, Math.min(amount, sp.singlePaymentCap) - employerInsuredTotal);
+  return applyRate(base, [sp.rate], 'round');
+}

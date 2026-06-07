@@ -2,6 +2,7 @@ from importlib.metadata import PackageNotFoundError, version as _pkg_version
 
 from ._data import get_available_years, get_year_data
 from ._engine import create_payroll_engine, PayrollEngine
+from .engine.supplementary import calc_dividend_premium
 
 try:
     __version__ = _pkg_version("taiwan-payroll")
@@ -48,6 +49,11 @@ from .media.supplementary_rent_filing import (
     generate_supplementary_rent_filing,
     SupplementaryRentFilingInput,
 )
+from .media.supplementary_dividend_filing import (
+    generate_supplementary_dividend_filing,
+    SupplementaryDividendRecord,
+    SupplementaryDividendFilingInput,
+)
 
 __all__ = [
     "__version__",
@@ -84,4 +90,8 @@ __all__ = [
     "SupplementaryInterestFilingInput",
     "generate_supplementary_rent_filing",
     "SupplementaryRentFilingInput",
+    "calc_dividend_premium",
+    "generate_supplementary_dividend_filing",
+    "SupplementaryDividendRecord",
+    "SupplementaryDividendFilingInput",
 ]

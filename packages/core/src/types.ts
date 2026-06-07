@@ -156,3 +156,28 @@ export interface SupplementaryRentFilingInput {
   sequence?: string;
   records: SupplementaryParttimeRecord[];
 }
+export interface SupplementaryDividendRecord {
+  action: 'I' | 'R';
+  payDate: string; // 'YYYYMMDD' 西元
+  payeeId: string;
+  payeeName: string;
+  amount: number; // 單次給付金額
+  premium: number; // 扣繳補充保險費金額（呼叫端提供，可用 calcDividendPremium 算常見情況）
+  exDividendDate: string; // 除權(息)基準日 'YYYYMMDD' 西元
+  dividendType: '1' | '2' | '3'; // 股利註記：1股票/2現金/3同基準日兩者
+  filingNo?: string; // 預設 '1'
+  trustNote?: string; // 信託註記 T/G，預設 ''
+  creditableTaxWithholding?: number; // 扣取時可扣抵稅額，預設 0（107年後為0）
+  creditableTaxFinal?: number; // 年度確定可扣抵稅額，預設 0
+  employerInsuredTotal?: number; // 股利所屬期間雇主身分投保額總額（雇主才填）
+  specialNote?: string; // 特殊註記 B/C/E/H/M，預設 ''
+  belongingPeriod?: string; // 股利所屬期間起迄年月（民國 yyymmyyymm，雇主才填）預設 ''
+  belongingYear?: string; // 股利所屬年度（民國 yyy，雇主才填）預設 ''
+}
+export interface SupplementaryDividendFilingInput {
+  unit: SupplementaryBonusFilingUnit;
+  filingDate: string; // 'YYYYMMDD'
+  sequence?: string; // 預設 '001'
+  records: SupplementaryDividendRecord[];
+}
+// 結果重用 SupplementaryBonusFilingResult。

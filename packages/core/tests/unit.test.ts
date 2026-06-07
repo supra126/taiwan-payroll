@@ -12,7 +12,7 @@ import { calcLaborInsurance } from '../src/engine/laborInsurance';
 import { calcHealthInsurance } from '../src/engine/healthInsurance';
 import { calcPension } from '../src/engine/pension';
 import { calcOccupational } from '../src/engine/occupational';
-import { calcSupplementary } from '../src/engine/supplementary';
+import { calcSupplementary, calcDividendPremium } from '../src/engine/supplementary';
 import { calcEmployerSupplementary } from '../src/engine/employerSupplementary';
 import { calcWithholding } from '../src/engine/withholding';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
@@ -132,6 +132,20 @@ describe('calcSupplementary (6 categories)', () => {
     expect(() => calcSupplementary(D, { type: 'bonus', amount: 100000, monthlyInsuredSalary: 42000, ytdBonus: NaN }, 'round')).toThrow(/ytdBonus/);
     expect(() => calcSupplementary(D, { type: 'bonus', amount: 100000, monthlyInsuredSalary: 42000, ytdBonus: Infinity }, 'round')).toThrow(/ytdBonus/);
     expect(() => calcSupplementary(D, { type: 'bonus', amount: 100000, monthlyInsuredSalary: 42000, ytdBonus: -1 }, 'round')).toThrow(/ytdBonus/);
+  });
+});
+
+describe('calcDividendPremium', () => {
+  const d = getYearData(2026);
+  it('一般股東 amount×費率（達2萬起扣）', () => {
+    expect(calcDividendPremium(d, 25620)).toBe(541);
+    expect(calcDividendPremium(d, 20000)).toBe(422);
+  });
+  it('未達2萬→0', () => {
+    expect(calcDividendPremium(d, 19999)).toBe(0);
+  });
+  it('雇主：(amount−投保額總額)×費率', () => {
+    expect(calcDividendPremium(d, 3000000, 2184000)).toBe(17218);
   });
 });
 
