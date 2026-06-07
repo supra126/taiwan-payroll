@@ -19,6 +19,24 @@ engine.calculate_supplementary(SupplementaryInput(type="bonus", amount=200000, m
 engine.calculate_prorated(ProratedInput(monthly_salary=29500, start_date="2026-03-08"))
 ```
 
+### 申報媒體檔（健保補充保費）
+
+產生健保署「補充保險費明細申報檔」（CSV／Big5），6 類所得各一（獎金62/兼職63/執行業務65/股利66/利息67/租金68），皆以官方範例逐位元驗證、與 TypeScript 版一致。
+
+```python
+from taiwan_payroll import generate_supplementary_bonus_filing, to_big5_bytes, SupplementaryBonusFilingInput, SupplementaryBonusFilingUnit, SupplementaryBonusRecord
+
+r = generate_supplementary_bonus_filing(SupplementaryBonusFilingInput(
+    year=2026, filing_date="20260901",
+    unit=SupplementaryBonusFilingUnit(tax_id="11111111", name="甲公司", phone="0227065866", email="a@b.tw", contact_name="王小明"),
+    records=[SupplementaryBonusRecord(action="I", pay_date="20260615", payee_id="A123456789", payee_name="李四",
+        bonus_amount=50000, insured_salary=31800, ytd_bonus_cumulative=150000, unit_code="123456789")],
+))
+open(r.filename, "wb").write(to_big5_bytes(r.content))  # 檔案為 Big5
+```
+
+股利（`generate_supplementary_dividend_filing`）逐列保費由呼叫端提供（另附 `calc_dividend_premium`）。
+
 ## 開發
 
 ```bash

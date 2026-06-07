@@ -42,6 +42,30 @@ engine.calculateProrated({ monthlySalary: 29500, startDate: '2026-03-08' });
 
 > **健保破月採「月底歸屬原則」**：以月底所屬投保單位計收整月——到職當月計整月、離職當月不計。此為健保署實務規則（非按日、與 15 日分水嶺無關）。
 
+## 申報媒體檔（健保補充保費，1.2.0 新增）
+
+由申報資料產生健保署「補充保險費明細申報檔」（CSV／Big5），涵蓋 6 類所得：獎金(62)、兼職薪資(63)、執行業務(65)、股利(66)、利息(67)、租金(68)。每個產生器皆以健保署官方範例**逐位元驗證**，TS 與 Python 結果一致。
+
+```ts
+import { generateSupplementaryBonusFiling } from 'taiwan-payroll';
+
+const { filename, content } = generateSupplementaryBonusFiling({
+  year: 2026,
+  filingDate: '20260901', // 用於檔名
+  unit: { taxId: '11111111', name: '甲公司', phone: '0227065866', email: 'a@b.tw', contactName: '王小明' },
+  records: [
+    { action: 'I', payDate: '20260615', payeeId: 'A123456789', payeeName: '李四',
+      bonusAmount: 50000, insuredSalary: 31800, ytdBonusCumulative: 150000, unitCode: '123456789' },
+  ],
+});
+// filename: 'DPR111111111150901001.csv'
+// content : Unicode 字串；檔案實際為 Big5，存檔時請以 Big5 編碼寫出。
+```
+
+- 獎金/兼職/執行業務/利息/租金：逐列補充保費由引擎計算。股利(`generateSupplementaryDividendFiling`)因含股票股利／雇主扣除等情形，逐列保費由呼叫端提供（另附便利函式 `calcDividendPremium`）。
+- 輸出為「資料檔」供以官方入口上傳。**Big5 編碼**：TS 由呼叫端編碼，Python 提供 `to_big5_bytes()`（core 維持零依賴）。
+- API 詳見文件站 `/docs/api`。
+
 ## 架構
 
 - `data/{year}.json` — 單一事實來源，年度法規參數（級距表、費率），以 JSON Schema 驗證。

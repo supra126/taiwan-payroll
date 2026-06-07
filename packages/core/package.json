@@ -1,6 +1,6 @@
 {
   "name": "taiwan-payroll",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "台灣勞健保勞退法定費用計算引擎 — Taiwan statutory payroll calculation engine",
   "license": "MIT",
   "author": "supra126 <supra126@gmail.com>",

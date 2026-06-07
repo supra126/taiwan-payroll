@@ -6,6 +6,28 @@
 
 ---
 
+## [1.2.0] - 2026-06-08
+
+新增「健保二代補充保費明細申報檔（CSV）產生器」——將引擎從「算扣項」延伸到「產申報檔」。本版僅 `taiwan-payroll`（npm core）與 `taiwan-payroll`（PyPI）發佈；`taiwan-payroll-mcp` 無變更，維持 1.1.0（媒體檔產生器刻意不做為 MCP tool，MCP 聚焦計算）。
+
+### Added
+
+- **健保補充保費明細申報檔產生器（6 類所得，CSV／Big5）**（core / Python）：依健保署官方格式產生扣費單位申報檔，並以官方範例**逐位元驗證**（TS≡Python）。
+  - `generateSupplementaryBonusFiling`（獎金，類別 62）
+  - `generateSupplementaryParttimeFiling`（兼職薪資，類別 63）
+  - `generateSupplementaryProfessionalFiling`（執行業務，類別 65）
+  - `generateSupplementaryDividendFiling`（股利，類別 66）
+  - `generateSupplementaryInterestFiling`（利息，類別 67）
+  - `generateSupplementaryRentFiling`（租金，類別 68）
+  - 各函式回傳 `{ filename, content }`；`content` 為 Unicode 字串（檔案實際為 **Big5**：Python 以 `to_big5_bytes()` 取位元組，TS 端由呼叫端以 Big5 編碼寫出，core 維持零依賴）。獎金/兼職/執行業務/利息/租金 的逐列補充保費由 `calculateSupplementary` 計算；股利因含股票股利／雇主扣除等情形，逐列保費由呼叫端提供。
+- **`calculateDividendPremium`**（TS `calcDividendPremium` / Python `calc_dividend_premium`）：股利補充保費便利函式（一般股東 `單次給付×費率`、雇主 `(單次給付−投保額總額)×費率`，單次達 2 萬起扣）。
+- 文件站 `/docs/api`：新增上述各產生器段落。
+
+### Notes
+
+- 媒體檔產生「資料檔」供使用者以官方入口上傳，不涉提交協定。
+- 勞保局投保異動、財政部扣繳憑單等 Big5 固定欄寬媒體檔：因無公開可下載的官方範例可供逐位元驗證，暫不納入，待取得官方範例再實作。
+
 ## [1.1.0] - 2026-06-07
 
 擴大「薪資扣項」涵蓋範圍：補上雇主端二代健保補充保費與薪資所得稅扣繳；型別改由 schema 自動生成；升級開發工具鏈。計算邏輯對既有 API 不變。
