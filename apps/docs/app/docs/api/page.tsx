@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -196,6 +196,23 @@ engine.calculate(CalculateInput(monthly_salary=42000, dependents=1, pension_self
           ['unit', 'unit', 'object', '（必填）', '扣費單位：taxId(8)/name/phone/email/contactName。'],
           ['filingDate', 'filing_date', 'string', '（必填）', "申報日期 'YYYYMMDD'（用於檔名）。"],
           ['records', 'records', 'array', '（必填）', '兼職薪資給付明細（同一給付年度）：action/payDate/payeeId/payeeName/amount，選填 filingNo/trustNote/note。'],
+          ['sequence', 'sequence', 'string', "'001'", '檔名序號。'],
+        ]}
+      />
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>generateSupplementaryProfessionalFiling</code> — 補充保費執行業務申報檔（CSV，類別65）
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        產生健保署「補充保險費明細申報檔（執行業務所得，所得類別 65）」CSV。輸入扣費單位 metadata 與執行業務所得給付明細；逐列補充保費由 <code>calculateSupplementary</code>(professional) 計算（執行業務：單次達 20,000 起扣，全額×費率），回傳 <code>{'{ filename, content }'}</code>。
+        <strong>檔案為 Big5 編碼</strong>：<code>content</code> 為 Unicode 字串，存檔時須以 Big5 編碼（Python 可用 <code>to_big5_bytes()</code>；TS 端請自行以 Big5 寫出）。
+      </p>
+      <ParamTable
+        rows={[
+          ['year', 'year', 'number', '（必填）', '費率年度（2024–2026）。'],
+          ['unit', 'unit', 'object', '（必填）', '扣費單位：taxId(8)/name/phone/email/contactName。'],
+          ['filingDate', 'filing_date', 'string', '（必填）', "申報日期 'YYYYMMDD'（用於檔名）。"],
+          ['records', 'records', 'array', '（必填）', '執行業務所得給付明細（同一給付年度）：action/payDate/payeeId/payeeName/amount，選填 filingNo/trustNote/note/incomeYear。'],
           ['sequence', 'sequence', 'string', "'001'", '檔名序號。'],
         ]}
       />

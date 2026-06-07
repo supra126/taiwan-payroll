@@ -63,3 +63,33 @@ def test_parttime_golden_big5():
 
 def test_parttime_filename():
     assert generate_supplementary_parttime_filing(_pt()).filename == "DPR111111111110901001.csv"
+
+
+from taiwan_payroll import (
+    generate_supplementary_professional_filing,
+    SupplementaryProfessionalFilingInput as FI,
+    SupplementaryProfessionalRecord as FR,
+)
+
+_FCSV = (_TD / "supplementary-professional-2022-example.csv").read_bytes().decode("utf-8")
+_FBIG5 = (_TD / "supplementary-professional-2022-example.big5").read_bytes()
+
+
+def _prof():
+    recs = [
+        FR(action="I", pay_date=d, payee_id="A222222222", payee_name="甄健康", amount=40000, filing_no=n)
+        for d, n in [("20220101", "1"), ("20220301", "1"), ("20220601", "1"), ("20220901", "1"), ("20221201", "1"), ("20221201", "2")]
+    ]
+    return FI(year=2026, filing_date="20220901", unit=U(tax_id="11111111", name="甄健康有限公司", phone="0227065866#0123", email="chuan@mail.tw", contact_name="陳一一"), records=recs)
+
+
+def test_professional_golden_char():
+    assert generate_supplementary_professional_filing(_prof()).content == _FCSV
+
+
+def test_professional_golden_big5():
+    assert to_big5_bytes(generate_supplementary_professional_filing(_prof()).content) == _FBIG5
+
+
+def test_professional_filename():
+    assert generate_supplementary_professional_filing(_prof()).filename == "DPR111111111110901001.csv"

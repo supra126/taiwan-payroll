@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { generateSupplementaryBonusFiling } from '../src/media/supplementaryBonusFiling';
 import { generateSupplementaryParttimeFiling } from '../src/media/supplementaryParttimeFiling';
-import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput } from '../src/types';
+import { generateSupplementaryProfessionalFiling } from '../src/media/supplementaryProfessionalFiling';
+import type { SupplementaryBonusFilingInput, SupplementaryParttimeFilingInput, SupplementaryProfessionalFilingInput } from '../src/types';
 
 const fixture = readFileSync(
   fileURLToPath(new URL('../../../testdata/media/supplementary-bonus-2022-example.csv', import.meta.url)),
@@ -56,6 +57,33 @@ describe('generateSupplementaryBonusFiling', () => {
   it('負值/空清單丟錯', () => {
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [] })).toThrow();
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [{ ...example.records[0], bonusAmount: -1 }] })).toThrow();
+  });
+});
+
+const profFixture = readFileSync(
+  fileURLToPath(new URL('../../../testdata/media/supplementary-professional-2022-example.csv', import.meta.url)),
+  'utf8',
+);
+const profExample: SupplementaryProfessionalFilingInput = {
+  year: 2026,
+  filingDate: '20220901',
+  unit: { taxId: '11111111', name: '甄健康有限公司', phone: '0227065866#0123', email: 'chuan@mail.tw', contactName: '陳一一' },
+  records: ([['20220101', '1'], ['20220301', '1'], ['20220601', '1'], ['20220901', '1'], ['20221201', '1'], ['20221201', '2']] as const).map(
+    ([payDate, filingNo]) => ({ action: 'I' as const, payDate, payeeId: 'A222222222', payeeName: '甄健康', amount: 40000, filingNo }),
+  ),
+};
+
+describe('generateSupplementaryProfessionalFiling', () => {
+  it('逐字元重現官方範例 (dl-9078, 類別65)', () => {
+    expect(generateSupplementaryProfessionalFiling(profExample).content).toBe(profFixture);
+  });
+  it('檔名', () => {
+    expect(generateSupplementaryProfessionalFiling(profExample).filename).toBe('DPR111111111110901001.csv');
+  });
+  it('空清單/負值/跨年度丟錯', () => {
+    expect(() => generateSupplementaryProfessionalFiling({ ...profExample, records: [] })).toThrow();
+    expect(() => generateSupplementaryProfessionalFiling({ ...profExample, records: [{ ...profExample.records[0], amount: -1 }] })).toThrow();
+    expect(() => generateSupplementaryProfessionalFiling({ ...profExample, records: [profExample.records[0], { ...profExample.records[1], payDate: '20230301' }] })).toThrow();
   });
 });
 

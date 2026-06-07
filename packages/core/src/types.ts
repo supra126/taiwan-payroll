@@ -123,3 +123,22 @@ export interface SupplementaryParttimeFilingInput {
   records: SupplementaryParttimeRecord[];
 }
 // 結果型別重用 SupplementaryBonusFilingResult（{ filename, content }）。
+export interface SupplementaryProfessionalRecord {
+  action: 'I' | 'R';
+  payDate: string; // 'YYYYMMDD'
+  payeeId: string;
+  payeeName: string;
+  amount: number; // 單次給付金額
+  filingNo?: string; // 預設 '1'
+  trustNote?: string; // 信託註記，預設 ''
+  note?: string; // 資料註記，預設 ''
+  incomeYear?: string; // 所得所屬年度，預設 ''
+}
+export interface SupplementaryProfessionalFilingInput {
+  year: number; // 費率年度（2024–2026）
+  unit: SupplementaryBonusFilingUnit;
+  filingDate: string; // 'YYYYMMDD'
+  sequence?: string; // 預設 '001'
+  records: SupplementaryProfessionalRecord[];
+}
+// 結果重用 SupplementaryBonusFilingResult。
