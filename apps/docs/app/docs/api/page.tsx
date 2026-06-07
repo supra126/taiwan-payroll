@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateProrated 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -112,6 +112,24 @@ engine.calculate(CalculateInput(monthly_salary=42000, dependents=1, pension_self
       />
       <p className="mt-5 text-sm text-ink-soft">
         <span className="font-semibold text-ink">回傳 <code>SupplementaryResult</code>：</span> <code>type</code>、<code>chargeable</code>（計費金額）、<code>rate</code>（費率字串）、<code>premium</code>（補充保費）。
+      </p>
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>calculateEmployerSupplementary</code> — 雇主端補充保費
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        投保單位（雇主）二代健保補充保費：<code>(每月支付薪資總額 − 受僱者當月健保投保金額總額) × 2.11%</code>，
+        <strong>無上限</strong>。輸入 <code>EmployerSupplementaryInput</code>，回傳 <code>EmployerSupplementaryResult</code>。
+      </p>
+      <ParamTable
+        rows={[
+          ['monthlyPaidTotal', 'monthly_paid_total', 'number', '（必填）', '每月支付薪資所得總額 A（含薪資、獎金、兼職、車馬費、承攬等）。'],
+          ['monthlyInsuredTotal', 'monthly_insured_total', 'number', '（必填）', '受僱者當月健保投保金額總額 B（全體受僱者投保金額合計）。'],
+          ['rounding', 'rounding', 'Rounding', "'round'", '進位策略。'],
+        ]}
+      />
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">回傳 <code>EmployerSupplementaryResult</code>：</span> <code>base</code>（差額 max(0, A−B)）、<code>rate</code>（費率字串）、<code>premium</code>（補充保費）。
       </p>
 
       <h2 className="mt-12 text-xl font-bold text-ink">

@@ -41,11 +41,13 @@ describe('golden test vectors', () => {
     it(`${v.id}: ${v.description}`, () => {
       const engine = createPayrollEngine({ year: v.year });
       const result =
-        kind === 'supplementary'
-          ? engine.calculateSupplementary(v.input)
-          : kind === 'prorated'
-            ? engine.calculateProrated(v.input)
-            : engine.calculate(v.input);
+        kind === 'employer-supplementary'
+          ? engine.calculateEmployerSupplementary(v.input)
+          : kind === 'supplementary'
+            ? engine.calculateSupplementary(v.input)
+            : kind === 'prorated'
+              ? engine.calculateProrated(v.input)
+              : engine.calculate(v.input);
       assertSubset(result, v.expected, '');
     });
   }

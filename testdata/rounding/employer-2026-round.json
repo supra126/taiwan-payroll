@@ -1,0 +1,9 @@
+{
+  "id": "rounding-2026-employer-round",
+  "description": "雇主補充保費四捨五入：100,005 × 0.0211 = 2110.1055 → 2110",
+  "source": "進位策略錨點（round）",
+  "kind": "employer-supplementary",
+  "year": 2026,
+  "input": { "monthlyPaidTotal": 100005, "monthlyInsuredTotal": 0 },
+  "expected": { "base": 100005, "premium": 2110 }
+}

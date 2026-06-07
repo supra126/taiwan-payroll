@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createPayrollEngine, getYearData, getAvailableYears } from 'taiwan-payroll';
-import { calculatePayrollTool, supplementaryTool, proratedTool, listYearsTool, allTools } from '../src/tools';
+import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, proratedTool, listYearsTool, allTools } from '../src/tools';
 
 const latest = Math.max(...getAvailableYears()); // the year the tools default to
 
@@ -54,6 +54,20 @@ describe('calculate_supplementary_premium tool', () => {
   });
 });
 
+describe('calculate_employer_supplementary_premium tool', () => {
+  it('回傳與 core 一致的數字與摘要', () => {
+    const r = employerSupplementaryTool.handler({ monthlyPaidTotal: 5_000_000, monthlyInsuredTotal: 4_200_000 });
+    expect(r.isError).toBeUndefined();
+    const direct = createPayrollEngine({ year: latest }).calculateEmployerSupplementary({ monthlyPaidTotal: 5_000_000, monthlyInsuredTotal: 4_200_000 });
+    const text = r.content[0].type === 'text' ? r.content[0].text : '';
+    expect(text).toContain(JSON.stringify(direct, null, 2));
+    expect(text).toContain(`${direct.premium} 元`);
+  });
+  it('被收進 allTools', () => {
+    expect(allTools.some((t) => t.name === 'calculate_employer_supplementary_premium')).toBe(true);
+  });
+});
+
 describe('calculate_prorated tool', () => {
   it('reports insured days and healthCharged for a mid-month join', () => {
     const r = proratedTool.handler({ monthlySalary: 29500, startDate: '2026-03-08' });
@@ -68,14 +82,15 @@ describe('calculate_prorated tool', () => {
 });
 
 describe('allTools registry', () => {
-  it('exposes the four tools with unique names and a handler each', () => {
+  it('exposes the five tools with unique names and a handler each', () => {
     expect(allTools.map((t) => t.name)).toEqual([
       'calculate_payroll',
       'calculate_supplementary_premium',
+      'calculate_employer_supplementary_premium',
       'calculate_prorated',
       'list_years',
     ]);
-    expect(new Set(allTools.map((t) => t.name)).size).toBe(4);
+    expect(new Set(allTools.map((t) => t.name)).size).toBe(5);
     for (const t of allTools) expect(typeof t.handler).toBe('function');
   });
 });

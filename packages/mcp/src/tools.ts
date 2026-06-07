@@ -151,6 +151,35 @@ export const proratedTool = {
   handler: proratedHandler,
 };
 
+// --- calculate_employer_supplementary_premium ---
+const employerSupplementaryShape = {
+  year: yearField,
+  monthlyPaidTotal: z.number().describe('每月支付薪資所得總額 A，新臺幣元（含薪資、獎金、兼職、車馬費、承攬等）。'),
+  monthlyInsuredTotal: z.number().describe('受僱者當月健保投保金額總額 B，新臺幣元（全體受僱者投保金額合計）。'),
+  rounding: roundingField,
+};
+type EmployerSupplementaryArgs = z.infer<z.ZodObject<typeof employerSupplementaryShape>>;
+
+function employerSupplementaryHandler(args: EmployerSupplementaryArgs): CallToolResult {
+  try {
+    const { year, ...input } = args;
+    const r = createPayrollEngine({ year: year ?? latestYear() }).calculateEmployerSupplementary(input);
+    return ok(r, `投保單位補充保費：差額 ${r.base} 元 × ${r.rate} = ${r.premium} 元。`);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export const employerSupplementaryTool = {
+  name: 'calculate_employer_supplementary_premium',
+  config: {
+    title: '投保單位（雇主）補充保費',
+    description: `計算雇主端二代健保補充保費（費率 2.11%）：(每月支付薪資總額 − 受僱者當月健保投保金額總額) × 費率，無上限。${DISCLAIMER}`,
+    inputSchema: employerSupplementaryShape,
+  },
+  handler: employerSupplementaryHandler,
+};
+
 // --- list_years ---
 const listYearsShape = {};
 type ListYearsArgs = z.infer<z.ZodObject<typeof listYearsShape>>;
@@ -177,4 +206,4 @@ export const listYearsTool = {
   handler: listYearsHandler,
 };
 
-export const allTools = [calculatePayrollTool, supplementaryTool, proratedTool, listYearsTool];
+export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, proratedTool, listYearsTool];

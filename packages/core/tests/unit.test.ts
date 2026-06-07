@@ -13,6 +13,7 @@ import { calcHealthInsurance } from '../src/engine/healthInsurance';
 import { calcPension } from '../src/engine/pension';
 import { calcOccupational } from '../src/engine/occupational';
 import { calcSupplementary } from '../src/engine/supplementary';
+import { calcEmployerSupplementary } from '../src/engine/employerSupplementary';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
 import { createPayrollEngine, getAvailableYears, getYearData } from '../src/index';
 import data2026 from '../../../data/2026.json';
@@ -448,5 +449,31 @@ describe('createPayrollEngine().calculate', () => {
     const d2024 = getYearData(2024);
     expect(d2024.dataVersion).toBe('2024.1.0');
     expect(d2024.minimumWage).toEqual({ monthly: 27470, hourly: 183 });
+  });
+});
+
+describe('calcEmployerSupplementary (雇主端補充保費)', () => {
+  it('官方彩虹案例：(500萬 − 420萬) × 2.11% = 16,880', () => {
+    const r = calcEmployerSupplementary(D, { monthlyPaidTotal: 5_000_000, monthlyInsuredTotal: 4_200_000 }, 'round');
+    expect(r.base).toBe(800_000);
+    expect(r.rate).toBe('0.0211');
+    expect(r.premium).toBe(16_880);
+  });
+
+  it('投保總額≥薪資總額 → base 與 premium 皆 0', () => {
+    const r = calcEmployerSupplementary(D, { monthlyPaidTotal: 4_000_000, monthlyInsuredTotal: 4_200_000 }, 'round');
+    expect(r.base).toBe(0);
+    expect(r.premium).toBe(0);
+  });
+
+  it('負數或 NaN 輸入丟錯', () => {
+    expect(() => calcEmployerSupplementary(D, { monthlyPaidTotal: -1, monthlyInsuredTotal: 0 }, 'round')).toThrow();
+    expect(() => calcEmployerSupplementary(D, { monthlyPaidTotal: NaN, monthlyInsuredTotal: 0 }, 'round')).toThrow();
+    expect(() => calcEmployerSupplementary(D, { monthlyPaidTotal: 0, monthlyInsuredTotal: -1 }, 'round')).toThrow();
+  });
+
+  it('引擎方法委派、rounding 預設 round', () => {
+    const eng = createPayrollEngine({ year: 2026 });
+    expect(eng.calculateEmployerSupplementary({ monthlyPaidTotal: 5_000_000, monthlyInsuredTotal: 4_200_000 }).premium).toBe(16_880);
   });
 });

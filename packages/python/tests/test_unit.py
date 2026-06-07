@@ -7,7 +7,9 @@ from taiwan_payroll import (
     CalculateInput,
     SupplementaryInput,
     ProratedInput,
+    EmployerSupplementaryInput,
 )
+from taiwan_payroll.engine.employer_supplementary import calc_employer_supplementary
 from taiwan_payroll._rounding import (
     round_half_up,
     ceil_div,
@@ -230,3 +232,26 @@ def test_foreign_identities():
     # prorated validates occupationalRate range
     with pytest.raises(ValueError, match="occupationalRate"):
         e.calculate_prorated(ProratedInput(monthly_salary=30000, start_date="2026-03-08", occupational_rate=0.89))
+
+
+def test_employer_supplementary():
+    r = calc_employer_supplementary(D, EmployerSupplementaryInput(monthly_paid_total=5_000_000, monthly_insured_total=4_200_000), "round")
+    assert r.base == 800_000
+    assert r.rate == "0.0211"
+    assert r.premium == 16_880
+    # 投保總額≥薪資總額 → 0
+    z = calc_employer_supplementary(D, EmployerSupplementaryInput(monthly_paid_total=4_000_000, monthly_insured_total=4_200_000), "round")
+    assert z.base == 0 and z.premium == 0
+
+
+def test_employer_supplementary_validation():
+    import pytest
+    with pytest.raises(ValueError):
+        calc_employer_supplementary(D, EmployerSupplementaryInput(monthly_paid_total=-1, monthly_insured_total=0), "round")
+    with pytest.raises(ValueError):
+        calc_employer_supplementary(D, EmployerSupplementaryInput(monthly_paid_total=0, monthly_insured_total=-1), "round")
+
+
+def test_employer_supplementary_engine_method():
+    eng = create_payroll_engine(2026)
+    assert eng.calculate_employer_supplementary(EmployerSupplementaryInput(monthly_paid_total=5_000_000, monthly_insured_total=4_200_000)).premium == 16_880

@@ -6,6 +6,8 @@ import type {
   SupplementaryResult,
   ProratedInput,
   ProratedResult,
+  EmployerSupplementaryInput,
+  EmployerSupplementaryResult,
 } from './types';
 import { getYearData } from './data';
 import { calcLaborInsurance } from './engine/laborInsurance';
@@ -13,6 +15,7 @@ import { calcHealthInsurance } from './engine/healthInsurance';
 import { calcPension } from './engine/pension';
 import { calcOccupational } from './engine/occupational';
 import { calcSupplementary } from './engine/supplementary';
+import { calcEmployerSupplementary } from './engine/employerSupplementary';
 import { calcProrated } from './engine/prorated';
 import { numberToRateString } from './rounding/strategies';
 import { getIdentityRules } from './identity';
@@ -37,6 +40,7 @@ function validateBaseInput(input: CalculateInput): void {
 export interface PayrollEngine {
   calculate(input: CalculateInput): CalculateResult;
   calculateSupplementary(input: SupplementaryInput): SupplementaryResult;
+  calculateEmployerSupplementary(input: EmployerSupplementaryInput): EmployerSupplementaryResult;
   calculateProrated(input: ProratedInput): ProratedResult;
 }
 
@@ -98,6 +102,10 @@ export function createPayrollEngine(opts: { year: number }): PayrollEngine {
 
     calculateSupplementary(input: SupplementaryInput): SupplementaryResult {
       return calcSupplementary(data, input, input.rounding ?? 'round');
+    },
+
+    calculateEmployerSupplementary(input: EmployerSupplementaryInput): EmployerSupplementaryResult {
+      return calcEmployerSupplementary(data, input, input.rounding ?? 'round');
     },
 
     calculateProrated(input: ProratedInput): ProratedResult {

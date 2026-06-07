@@ -93,3 +93,15 @@ export interface ProratedResult extends CalculateResult {
   days: { insured: number };
   healthCharged: boolean;
 }
+
+export interface EmployerSupplementaryInput {
+  monthlyPaidTotal: number; // A：每月支付薪資所得總額
+  monthlyInsuredTotal: number; // B：受僱者當月健保投保金額總額
+  rounding?: Rounding; // default 'round'
+}
+
+export interface EmployerSupplementaryResult {
+  base: number; // max(0, A − B)
+  rate: string; // 補充保險費率，如 '0.0211'
+  premium: number;
+}

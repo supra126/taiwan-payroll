@@ -107,3 +107,17 @@ class Days:
 class ProratedResult(CalculateResult):
     days: Days
     health_charged: bool
+
+
+@dataclass
+class EmployerSupplementaryInput:
+    monthly_paid_total: float
+    monthly_insured_total: float
+    rounding: Rounding = "round"
+
+
+@dataclass
+class EmployerSupplementaryResult:
+    base: int
+    rate: str
+    premium: int

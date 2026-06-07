@@ -15,6 +15,8 @@ from ._types import (
     SupplementaryResult,
     ProratedInput,
     ProratedResult,
+    EmployerSupplementaryInput,
+    EmployerSupplementaryResult,
 )
 from .engine.labor import calc_labor_insurance
 from .engine.health import calc_health_insurance
@@ -22,6 +24,7 @@ from .engine.pension import calc_pension
 from .engine.occupational import calc_occupational
 from .engine.supplementary import calc_supplementary
 from .engine.prorated import calc_prorated
+from .engine.employer_supplementary import calc_employer_supplementary
 
 
 def _validate_base(inp: CalculateInput | ProratedInput) -> None:
@@ -84,6 +87,9 @@ class PayrollEngine:
 
     def calculate_supplementary(self, inp: SupplementaryInput) -> SupplementaryResult:
         return calc_supplementary(self._data, inp, inp.rounding)
+
+    def calculate_employer_supplementary(self, inp: EmployerSupplementaryInput) -> EmployerSupplementaryResult:
+        return calc_employer_supplementary(self._data, inp, inp.rounding)
 
     def calculate_prorated(self, inp: ProratedInput) -> ProratedResult:
         _validate_base(inp)

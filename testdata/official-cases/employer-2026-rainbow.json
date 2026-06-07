@@ -1,0 +1,9 @@
+{
+  "id": "official-2026-employer-rainbow",
+  "description": "雇主補充保費官方案例：彩虹公司 (500萬−420萬)×2.11%=16,880",
+  "source": "健保署 cp-4516 補充保險費計算公式（會計師事務所轉錄案例）",
+  "kind": "employer-supplementary",
+  "year": 2026,
+  "input": { "monthlyPaidTotal": 5000000, "monthlyInsuredTotal": 4200000 },
+  "expected": { "base": 800000, "rate": "0.0211", "premium": 16880 }
+}

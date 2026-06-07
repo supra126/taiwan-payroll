@@ -1,0 +1,9 @@
+{
+  "id": "edge-2026-employer-zero",
+  "description": "投保總額≥薪資總額：base 與 premium 皆 0",
+  "source": "邊界——差額不為負",
+  "kind": "employer-supplementary",
+  "year": 2026,
+  "input": { "monthlyPaidTotal": 4000000, "monthlyInsuredTotal": 4200000 },
+  "expected": { "base": 0, "premium": 0 }
+}
