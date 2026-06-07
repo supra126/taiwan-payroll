@@ -10,6 +10,8 @@ jobs:
       - uses: actions/setup-node@v6
         with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      # 防漂移：data/schema.json 改了卻忘了 `pnpm gen:types` 會在此擋下。
+      - run: pnpm gen:types:check
       - run: pnpm validate:data
       # 先 build core：mcp／docs 的 typecheck 與測試需透過 taiwan-payroll 的 dist 解析型別與執行期模組。
       - run: pnpm --filter taiwan-payroll build

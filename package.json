@@ -11,7 +11,9 @@
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "build": "pnpm -r build",
-    "deploy:docs": "bash scripts/deploy-docs.sh"
+    "deploy:docs": "bash scripts/deploy-docs.sh",
+    "gen:types": "tsx scripts/gen-types.ts",
+    "gen:types:check": "tsx scripts/gen-types.ts --check"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

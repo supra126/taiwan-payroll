@@ -38,7 +38,45 @@
       },
       "additionalProperties": false
     },
-    "brackets": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/bracket" } }
+    "brackets": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/bracket" } },
+    "taxBracket": {
+      "type": "object",
+      "required": ["min", "max", "rate", "progressiveDiff"],
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": ["number", "null"] },
+        "rate": { "$ref": "#/definitions/rate" },
+        "progressiveDiff": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "incomeTax": {
+      "type": "object",
+      "required": ["residentExemption", "standardDeduction", "salaryDeduction", "brackets", "nonMonthly", "nonResident"],
+      "properties": {
+        "residentExemption": { "type": "number" },
+        "standardDeduction": { "type": "number" },
+        "salaryDeduction": { "type": "number" },
+        "brackets": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/taxBracket" } },
+        "nonMonthly": {
+          "type": "object",
+          "required": ["rate", "threshold"],
+          "properties": { "rate": { "$ref": "#/definitions/rate" }, "threshold": { "type": "number" } },
+          "additionalProperties": false
+        },
+        "nonResident": {
+          "type": "object",
+          "required": ["rate", "reducedRate", "reducedThresholdMultiplier"],
+          "properties": {
+            "rate": { "$ref": "#/definitions/rate" },
+            "reducedRate": { "$ref": "#/definitions/rate" },
+            "reducedThresholdMultiplier": { "type": "number" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
   },
   "properties": {
     "year": { "type": "integer" },
@@ -93,43 +131,14 @@
     },
     "supplementaryPremium": {
       "type": "object",
-      "required": ["rate", "bonusThresholdMultiplier"],
+      "required": ["rate", "bonusThresholdMultiplier", "lowerThreshold", "singlePaymentCap"],
       "properties": {
         "rate": { "$ref": "#/definitions/rate" },
-        "bonusThresholdMultiplier": { "type": "integer" }
+        "bonusThresholdMultiplier": { "type": "integer" },
+        "lowerThreshold": { "type": "integer" },
+        "singlePaymentCap": { "type": "integer" }
       }
     },
-    "incomeTax": {
-      "type": "object",
-      "required": ["residentExemption", "standardDeduction", "salaryDeduction", "brackets", "nonMonthly", "nonResident"],
-      "properties": {
-        "residentExemption": { "type": "number" },
-        "standardDeduction": { "type": "number" },
-        "salaryDeduction": { "type": "number" },
-        "brackets": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["min", "max", "rate", "progressiveDiff"],
-            "properties": {
-              "min": { "type": "number" },
-              "max": { "type": ["number", "null"] },
-              "rate": { "type": "string" },
-              "progressiveDiff": { "type": "number" }
-            }
-          }
-        },
-        "nonMonthly": {
-          "type": "object",
-          "required": ["rate", "threshold"],
-          "properties": { "rate": { "type": "string" }, "threshold": { "type": "number" } }
-        },
-        "nonResident": {
-          "type": "object",
-          "required": ["rate", "reducedRate", "reducedThresholdMultiplier"],
-          "properties": { "rate": { "type": "string" }, "reducedRate": { "type": "string" }, "reducedThresholdMultiplier": { "type": "number" } }
-        }
-      }
-    }
+    "incomeTax": { "$ref": "#/definitions/incomeTax" }
   }
 }

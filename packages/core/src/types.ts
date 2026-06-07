@@ -1,50 +1,7 @@
-// Hand-written to mirror data/schema.json. Codegen from schema is deferred to M2.
-
-export interface Bracket {
-  grade: number;
-  min: number;
-  max: number | null;
-  insuredSalary: number;
-}
-
-export interface Burden {
-  employer: string;
-  employee: string;
-  government: string;
-}
-
-export interface YearData {
-  year: number;
-  rocYear?: number;
-  effectiveDate: string;
-  dataVersion: string;
-  minimumWage: { monthly: number; hourly: number };
-  laborInsurance: {
-    rate: string;
-    rateWithoutEmploymentInsurance: string;
-    burden: Burden;
-    brackets: Bracket[];
-    partTimeBrackets?: Bracket[];
-  };
-  occupationalInsurance: { defaultRate: string; brackets: Bracket[] };
-  healthInsurance: {
-    rate: string;
-    burden: Burden;
-    avgDependents: string;
-    employerMultiplier: string;
-    maxDependentsCharged: number;
-    brackets: Bracket[];
-    partTimeBrackets?: Bracket[];
-  };
-  pension: { employerRate: string; brackets: Bracket[] };
-  supplementaryPremium: {
-    rate: string;
-    bonusThresholdMultiplier: number;
-    lowerThreshold: number;
-    singlePaymentCap: number;
-  };
-  incomeTax?: IncomeTax;
-}
+// Data-shape types (YearData, Bracket, Burden, IncomeTax, TaxBracket) are GENERATED from
+// data/schema.json — see ./types.generated.ts (run `pnpm gen:types` after changing the schema).
+// The API input/result types below are hand-written.
+export type { Bracket, Burden, YearData, TaxBracket, IncomeTax } from './types.generated';
 
 export type Identity = 'category1' | 'migrantGeneral' | 'migrantDomestic';
 export type Rounding = 'round' | 'ceil' | 'aggregate-then-round';
@@ -105,22 +62,6 @@ export interface EmployerSupplementaryResult {
   base: number; // max(0, A − B)
   rate: string; // 補充保險費率，如 '0.0211'
   premium: number;
-}
-
-export interface TaxBracket {
-  min: number;
-  max: number | null;
-  rate: string;
-  progressiveDiff: number;
-}
-
-export interface IncomeTax {
-  residentExemption: number;
-  standardDeduction: number;
-  salaryDeduction: number;
-  brackets: TaxBracket[];
-  nonMonthly: { rate: string; threshold: number };
-  nonResident: { rate: string; reducedRate: string; reducedThresholdMultiplier: number };
 }
 
 export type WithholdingInput =
