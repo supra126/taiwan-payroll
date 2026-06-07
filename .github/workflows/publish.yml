@@ -29,10 +29,10 @@ jobs:
       id-token: write # OIDC trusted publishing
       contents: read # 顯式宣告 permissions 後其餘預設降為 none；checkout 私有 repo 需要 contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
         with: { version: 10 } # pnpm 10：直接 pnpm publish 走 OIDC（pnpm 11 的 OIDC 有 404 bug）
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24 # OIDC 需 Node >= 22.14.0
           cache: pnpm
@@ -70,8 +70,8 @@ jobs:
       id-token: write # OIDC trusted publishing
       contents: read # 顯式宣告 permissions 後其餘預設降為 none；checkout 私有 repo 需要 contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with: { python-version: '3.12' }
       - run: pip install build
       - name: Build sdist + wheel
