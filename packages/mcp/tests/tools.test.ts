@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createPayrollEngine, getYearData, getAvailableYears } from 'taiwan-payroll';
-import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, oldAgeLumpSumTool, proratedTool, listYearsTool, allTools } from '../src/tools';
+import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, oldAgeLumpSumTool, oldAgeSinglePaymentTool, proratedTool, listYearsTool, allTools } from '../src/tools';
 
 const latest = Math.max(...getAvailableYears()); // the year the tools default to
 
@@ -130,8 +130,26 @@ describe('calculate_old_age_lump_sum tool', () => {
   });
 });
 
+describe('calculate_old_age_single_payment tool', () => {
+  it('回傳與 core 一致的數字與摘要（官方 exact 32000/20年6月+後60五年）', () => {
+    const r = oldAgeSinglePaymentTool.handler({ year: 2026, avgInsuredSalary: 32000, preSixtyYears: 20, preSixtyMonths: 6, postSixtyYears: 5 });
+    expect(r.isError).toBeUndefined();
+    const direct = createPayrollEngine({ year: 2026 }).calculateOldAgeSinglePayment({ avgInsuredSalary: 32000, preSixtyYears: 20, preSixtyMonths: 6, postSixtyYears: 5 });
+    expect(textOf(r)).toContain(JSON.stringify(direct, null, 2));
+    expect(textOf(r)).toContain(`一次請領老年給付：${direct.payment} 元`);
+  });
+  it('passes core errors through as isError', () => {
+    const r = oldAgeSinglePaymentTool.handler({ year: 2026, avgInsuredSalary: 30000, preSixtyYears: 1.5 });
+    expect(r.isError).toBe(true);
+    expect(textOf(r)).toMatch(/preSixtyYears/);
+  });
+  it('被收進 allTools', () => {
+    expect(allTools.some((t) => t.name === 'calculate_old_age_single_payment')).toBe(true);
+  });
+});
+
 describe('allTools registry', () => {
-  it('exposes the eight tools with unique names and a handler each', () => {
+  it('exposes the nine tools with unique names and a handler each', () => {
     expect(allTools.map((t) => t.name)).toEqual([
       'calculate_payroll',
       'calculate_supplementary_premium',
@@ -139,10 +157,11 @@ describe('allTools registry', () => {
       'calculate_income_tax_withholding',
       'calculate_old_age_pension',
       'calculate_old_age_lump_sum',
+      'calculate_old_age_single_payment',
       'calculate_prorated',
       'list_years',
     ]);
-    expect(new Set(allTools.map((t) => t.name)).size).toBe(8);
+    expect(new Set(allTools.map((t) => t.name)).size).toBe(9);
     for (const t of allTools) expect(typeof t.handler).toBe('function');
   });
 });

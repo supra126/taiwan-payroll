@@ -337,3 +337,19 @@ def test_old_age_lump_sum():
         calc_old_age_lump_sum(d, OLI(avg_insured_salary=30000, years=1, post_sixty_months=20))
     with pytest.raises(ValueError):
         calc_old_age_lump_sum(get_year_data(2025), OLI(avg_insured_salary=30000, years=10))
+
+
+def test_old_age_single_payment():
+    from taiwan_payroll import calc_old_age_single_payment, OldAgeSinglePaymentInput as OSP
+    d = get_year_data(2026)
+    g = lambda **k: calc_old_age_single_payment(d, OSP(**k))
+    assert (g(avg_insured_salary=30000, pre_sixty_years=40).payment) == 1350000   # 45上限
+    assert (g(avg_insured_salary=30000, pre_sixty_years=40, post_sixty_years=5).payment) == 1500000  # 50上限
+    assert (g(avg_insured_salary=32000, pre_sixty_years=20, pre_sixty_months=6, post_sixty_years=5).payment) == 1152000
+    assert (g(avg_insured_salary=30001, pre_sixty_years=16, pre_sixty_months=3).payment) == 525018
+    assert (g(avg_insured_salary=30000, pre_sixty_years=10).basis_twelfths) == 120
+    assert (g(avg_insured_salary=30000, pre_sixty_years=0, post_sixty_years=7).basis_twelfths) == 120  # 截5年
+    with pytest.raises(ValueError):
+        g(avg_insured_salary=30000, pre_sixty_years=1.5)
+    with pytest.raises(ValueError):
+        calc_old_age_single_payment(get_year_data(2025), OSP(avg_insured_salary=30000, pre_sixty_years=10))

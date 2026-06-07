@@ -53,7 +53,9 @@ describe('golden test vectors', () => {
                   ? engine.calculateOldAgePension(v.input)
                   : kind === 'old-age-lump-sum'
                     ? engine.calculateOldAgeLumpSum(v.input)
-                    : engine.calculate(v.input);
+                    : kind === 'old-age-single-payment'
+                      ? engine.calculateOldAgeSinglePayment(v.input)
+                      : engine.calculate(v.input);
       assertSubset(result, v.expected, '');
     });
   }

@@ -1,0 +1,9 @@
+{
+  "id": "old-age-single-payment-2026-50cap",
+  "description": "一次請領老年給付 前60年資40年＋逾60後5年 觸50基數合併上限",
+  "year": 2026,
+  "kind": "old-age-single-payment",
+  "source": "勞保局一次請領試算 bli.gov.tw/0100397.html",
+  "input": { "avgInsuredSalary": 30000, "preSixtyYears": 40, "postSixtyYears": 5 },
+  "expected": { "payment": 1500000, "basisTwelfths": 600 }
+}

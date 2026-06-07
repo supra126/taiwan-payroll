@@ -14,6 +14,8 @@ import type {
   OldAgePensionResult,
   OldAgeLumpSumInput,
   OldAgeLumpSumResult,
+  OldAgeSinglePaymentInput,
+  OldAgeSinglePaymentResult,
 } from './types';
 import { getYearData } from './data';
 import { calcLaborInsurance } from './engine/laborInsurance';
@@ -26,6 +28,7 @@ import { calcWithholding } from './engine/withholding';
 import { calcProrated } from './engine/prorated';
 import { calcOldAgePension } from './engine/oldAgePension';
 import { calcOldAgeLumpSum } from './engine/oldAgeLumpSum';
+import { calcOldAgeSinglePayment } from './engine/oldAgeSinglePayment';
 import { numberToRateString } from './rounding/strategies';
 import { getIdentityRules } from './identity';
 
@@ -40,6 +43,7 @@ export { generateSupplementaryDividendFiling } from './media/supplementaryDivide
 export { calcDividendPremium } from './engine/supplementary';
 export { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from './engine/oldAgePension';
 export { calcOldAgeLumpSum } from './engine/oldAgeLumpSum';
+export { calcOldAgeSinglePayment } from './engine/oldAgeSinglePayment';
 
 /** Validate the numeric/identity inputs shared by calculate() and calculateProrated(). */
 function validateBaseInput(input: CalculateInput): void {
@@ -63,6 +67,7 @@ export interface PayrollEngine {
   calculateProrated(input: ProratedInput): ProratedResult;
   calculateOldAgePension(input: OldAgePensionInput): OldAgePensionResult;
   calculateOldAgeLumpSum(input: OldAgeLumpSumInput): OldAgeLumpSumResult;
+  calculateOldAgeSinglePayment(input: OldAgeSinglePaymentInput): OldAgeSinglePaymentResult;
 }
 
 export function createPayrollEngine(opts: { year: number }): PayrollEngine {
@@ -143,6 +148,9 @@ export function createPayrollEngine(opts: { year: number }): PayrollEngine {
       return calcOldAgePension(data, input);
     },
 
+    calculateOldAgeSinglePayment(input: OldAgeSinglePaymentInput): OldAgeSinglePaymentResult {
+      return calcOldAgeSinglePayment(data, input);
+    },
     calculateOldAgeLumpSum(input: OldAgeLumpSumInput): OldAgeLumpSumResult {
       return calcOldAgeLumpSum(data, input);
     },

@@ -167,3 +167,18 @@ class OldAgeLumpSumInput:
 class OldAgeLumpSumResult:
     payment: int
     insured_months_counted: int
+
+
+@dataclass
+class OldAgeSinglePaymentInput:
+    avg_insured_salary: float
+    pre_sixty_years: int
+    pre_sixty_months: int = 0
+    post_sixty_years: int = 0
+    post_sixty_months: int = 0
+
+
+@dataclass
+class OldAgeSinglePaymentResult:
+    payment: int
+    basis_twelfths: int

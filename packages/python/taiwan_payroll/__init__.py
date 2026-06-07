@@ -9,6 +9,7 @@ from .engine.old_age_pension import (
     statutory_claim_age,
 )
 from .engine.old_age_lump_sum import calc_old_age_lump_sum
+from .engine.old_age_single_payment import calc_old_age_single_payment
 
 try:
     __version__ = _pkg_version("taiwan-payroll")
@@ -29,6 +30,8 @@ from ._types import (
     OldAgePensionResult,
     OldAgeLumpSumInput,
     OldAgeLumpSumResult,
+    OldAgeSinglePaymentInput,
+    OldAgeSinglePaymentResult,
     Rounding,
     SupplementaryType,
     Identity,
@@ -85,8 +88,11 @@ __all__ = [
     "OldAgePensionResult",
     "OldAgeLumpSumInput",
     "OldAgeLumpSumResult",
+    "OldAgeSinglePaymentInput",
+    "OldAgeSinglePaymentResult",
     "calc_old_age_pension",
     "calc_old_age_lump_sum",
+    "calc_old_age_single_payment",
     "average_highest_insured_salary",
     "statutory_claim_age",
     "Rounding",

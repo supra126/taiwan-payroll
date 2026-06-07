@@ -206,3 +206,15 @@ export interface OldAgeLumpSumResult {
   payment: number;
   insuredMonthsCounted: number;
 }
+
+export interface OldAgeSinglePaymentInput {
+  avgInsuredSalary: number;
+  preSixtyYears: number;
+  preSixtyMonths?: number;
+  postSixtyYears?: number;
+  postSixtyMonths?: number;
+}
+export interface OldAgeSinglePaymentResult {
+  payment: number;
+  basisTwelfths: number;
+}

@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、calculateOldAgeLumpSum、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、calculateOldAgeLumpSum、calculateOldAgeSinglePayment、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -238,6 +238,45 @@ engine.calculate_old_age_lump_sum(OldAgeLumpSumInput(avg_insured_salary=30000, y
       </p>
       <p className="mt-5 text-sm text-ink-soft">
         <span className="font-semibold text-ink">回傳 <code>OldAgeLumpSumResult</code>：</span> <code>payment</code>（一次金給付金額）、<code>insuredMonthsCounted</code>（實際計入的給付月數）。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">免責：</span>試算結果僅供參考，實際請領金額以勞保局核定為準。
+      </p>
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>calculateOldAgeSinglePayment</code> — 勞保一次請領老年給付試算
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        勞保<strong>一次請領老年給付</strong>試算（基數制，適用 98 年前有保險年資、選擇一次請領者）。TS <code>calculateOldAgeSinglePayment</code>（函式 <code>calcOldAgeSinglePayment</code>）／Python <code>calculate_old_age_single_payment</code>（函式 <code>calc_old_age_single_payment</code>）。輸入 <code>OldAgeSinglePaymentInput</code>，回傳 <code>OldAgeSinglePaymentResult</code>。僅內建 2026；其餘年度未提供時丟錯。
+      </p>
+      <pre className={pre}>
+        <code>{`// TS
+engine.calculateOldAgeSinglePayment({ avgInsuredSalary: 32000, preSixtyYears: 20, preSixtyMonths: 6, postSixtyYears: 5 });
+# Python
+engine.calculate_old_age_single_payment(OldAgeSinglePaymentInput(avg_insured_salary=32000, pre_sixty_years=20, pre_sixty_months=6, post_sixty_years=5))`}</code>
+      </pre>
+      <ParamTable
+        rows={[
+          ['year', 'year', 'number', '最新年度', '費率／法定參數年度（僅 2026 提供老年給付資料）。'],
+          ['avgInsuredSalary', 'avg_insured_salary', 'number', '（必填）', '平均月投保薪資（採退保前 3 年、即 36 個月平均；與老年年金／一次金的最高 60 月不同）。'],
+          ['preSixtyYears', 'pre_sixty_years', 'number', '（必填）', '滿 60 歲前的保險年資：年（整數）。'],
+          ['preSixtyMonths', 'pre_sixty_months', 'number', '0', '滿 60 歲前的保險年資：月（0–11）。'],
+          ['postSixtyYears', 'post_sixty_years', 'number', '0', '逾 60 歲以後的保險年資：年（整數）。'],
+          ['postSixtyMonths', 'post_sixty_months', 'number', '0', '逾 60 歲以後的保險年資：月（0–11）。'],
+        ]}
+      />
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">基數制：</span>
+        保險年資前 15 年每滿 1 年給 1 個基數、超過 15 年的部分每滿 1 年給 2 個基數；
+        <span className="font-semibold text-ink"> 滿 60 歲前上限：</span>
+        最高 45 個基數。
+        <span className="font-semibold text-ink"> 逾 60 歲後：</span>
+        逾 60 歲以後的年資最多計 5 年（每滿 1 年 2 個基數），與滿 60 歲前合併計算最高 50 個基數。
+        <span className="font-semibold text-ink"> 給付公式：</span>
+        <code>給付 = 平均月投保薪資 × 基數</code>。
+      </p>
+      <p className="mt-5 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">回傳 <code>OldAgeSinglePaymentResult</code>：</span> <code>payment</code>（一次請領給付金額）、<code>basisTwelfths</code>（基數 × 12；基數＝<code>basisTwelfths / 12</code>，以 12 倍整數空間表示避免分數浮點誤差）。
       </p>
       <p className="mt-5 text-sm text-ink-soft">
         <span className="font-semibold text-ink">免責：</span>試算結果僅供參考，實際請領金額以勞保局核定為準。

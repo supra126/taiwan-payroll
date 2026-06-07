@@ -38,6 +38,7 @@ export interface OldAgePension {
   maxAdjustYears: number;
   minYearsForPension: number;
   lumpSumPostAgeCapYears: number;
+  singlePaymentBasis: { firstTierYears: number; firstTierBasisPerYear: number; secondTierBasisPerYear: number; preSixtyMaxBasis: number; postSixtyCapYears: number; combinedMaxBasis: number };
   statutoryAge: { schedule: { maxBornRocYear: number; age: number }[]; defaultAge: number };
 }
 

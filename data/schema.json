@@ -79,7 +79,7 @@
     },
     "oldAgePension": {
       "type": "object",
-      "required": ["formulaARate", "formulaABonus", "formulaBRate", "adjustPerYearRate", "maxAdjustYears", "minYearsForPension", "lumpSumPostAgeCapYears", "statutoryAge"],
+      "required": ["formulaARate", "formulaABonus", "formulaBRate", "adjustPerYearRate", "maxAdjustYears", "minYearsForPension", "lumpSumPostAgeCapYears", "singlePaymentBasis", "statutoryAge"],
       "additionalProperties": false,
       "properties": {
         "formulaARate": { "$ref": "#/definitions/rate" },
@@ -89,6 +89,19 @@
         "maxAdjustYears": { "type": "integer" },
         "minYearsForPension": { "type": "integer" },
         "lumpSumPostAgeCapYears": { "type": "integer" },
+        "singlePaymentBasis": {
+          "type": "object",
+          "required": ["firstTierYears", "firstTierBasisPerYear", "secondTierBasisPerYear", "preSixtyMaxBasis", "postSixtyCapYears", "combinedMaxBasis"],
+          "additionalProperties": false,
+          "properties": {
+            "firstTierYears": { "type": "integer" },
+            "firstTierBasisPerYear": { "type": "integer" },
+            "secondTierBasisPerYear": { "type": "integer" },
+            "preSixtyMaxBasis": { "type": "integer" },
+            "postSixtyCapYears": { "type": "integer" },
+            "combinedMaxBasis": { "type": "integer" }
+          }
+        },
         "statutoryAge": {
           "type": "object",
           "required": ["schedule", "defaultAge"],

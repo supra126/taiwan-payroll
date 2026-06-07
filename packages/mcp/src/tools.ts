@@ -286,6 +286,54 @@ export const oldAgeLumpSumTool = {
   handler: oldAgeLumpSumHandler,
 };
 
+// --- calculate_old_age_single_payment ---
+const oldAgeSinglePaymentShape = {
+  year: yearField,
+  avgInsuredSalary: z.number().describe('平均月投保薪資（採退保前 3 年內最高 36 個月平均），新臺幣元。'),
+  preSixtyYears: z.number().int().min(0).describe('60 歲（含）以前之保險年資：年。'),
+  preSixtyMonths: z
+    .number()
+    .int()
+    .min(0)
+    .max(11)
+    .optional()
+    .describe('60 歲（含）以前之保險年資：月（0–11），預設 0。'),
+  postSixtyYears: z
+    .number()
+    .int()
+    .min(0)
+    .optional()
+    .describe('逾 60 歲以後之保險年資：年。逾 60 歲後最多計入 5 年，超過部分不計。預設 0。'),
+  postSixtyMonths: z
+    .number()
+    .int()
+    .min(0)
+    .max(11)
+    .optional()
+    .describe('逾 60 歲以後之保險年資：月（0–11），預設 0。'),
+};
+type OldAgeSinglePaymentArgs = z.infer<z.ZodObject<typeof oldAgeSinglePaymentShape>>;
+
+function oldAgeSinglePaymentHandler(args: OldAgeSinglePaymentArgs): CallToolResult {
+  try {
+    const { year, ...input } = args;
+    const r = createPayrollEngine({ year: year ?? latestYear() }).calculateOldAgeSinglePayment(input);
+    return ok(r, `一次請領老年給付：${r.payment} 元（給付基數 ${r.basisTwelfths / 12}）。`);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export const oldAgeSinglePaymentTool = {
+  name: 'calculate_old_age_single_payment',
+  config: {
+    title: '計算勞保一次請領老年給付',
+    description: `依勞保一次請領老年給付法定公式（基數制：前 15 年每年 1 個基數、第 16 年起每年 2 個基數、60 歲前最高 45 個基數、逾 60 歲後年資每年 2 個基數最多計 5 年、合併最高 50 個基數）試算給付金額。適用 98 年前已有保險年資者。${DISCLAIMER}`,
+    inputSchema: oldAgeSinglePaymentShape,
+  },
+  handler: oldAgeSinglePaymentHandler,
+};
+
 // --- list_years ---
 const listYearsShape = {};
 type ListYearsArgs = z.infer<z.ZodObject<typeof listYearsShape>>;
@@ -312,4 +360,4 @@ export const listYearsTool = {
   handler: listYearsHandler,
 };
 
-export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, oldAgeLumpSumTool, proratedTool, listYearsTool];
+export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, oldAgePensionTool, oldAgeLumpSumTool, oldAgeSinglePaymentTool, proratedTool, listYearsTool];

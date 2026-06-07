@@ -1255,6 +1255,7 @@
     "maxAdjustYears": 5,
     "minYearsForPension": 15,
     "lumpSumPostAgeCapYears": 5,
+    "singlePaymentBasis": { "firstTierYears": 15, "firstTierBasisPerYear": 1, "secondTierBasisPerYear": 2, "preSixtyMaxBasis": 45, "postSixtyCapYears": 5, "combinedMaxBasis": 50 },
     "statutoryAge": {
       "schedule": [
         { "maxBornRocYear": 46, "age": 60 },

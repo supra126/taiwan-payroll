@@ -18,6 +18,7 @@ import { calcWithholding } from '../src/engine/withholding';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
 import { calcOldAgePension, averageHighestInsuredSalary, statutoryClaimAge } from '../src/engine/oldAgePension';
 import { calcOldAgeLumpSum } from '../src/engine/oldAgeLumpSum';
+import { calcOldAgeSinglePayment } from '../src/engine/oldAgeSinglePayment';
 import { createPayrollEngine, getAvailableYears, getYearData } from '../src/index';
 import data2026 from '../../../data/2026.json';
 import type { Bracket, YearData } from '../src/types';
@@ -615,6 +616,29 @@ describe('calcOldAgeLumpSum', () => {
   });
   it('缺年度資料丟錯', () => {
     expect(() => calcOldAgeLumpSum(getYearData(2025), { avgInsuredSalary: 30000, years: 10 })).toThrow();
+  });
+});
+
+describe('calcOldAgeSinglePayment', () => {
+  const d = getYearData(2026);
+  const f = (i: object) => calcOldAgeSinglePayment(d, i as never);
+  it('官方案例', () => {
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 10 })).toEqual({ payment: 300000, basisTwelfths: 120 });
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 20 })).toEqual({ payment: 750000, basisTwelfths: 300 });
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 40 })).toEqual({ payment: 1350000, basisTwelfths: 540 }); // 45上限
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 40, postSixtyYears: 5 })).toEqual({ payment: 1500000, basisTwelfths: 600 }); // 50上限
+    expect(f({ avgInsuredSalary: 32000, preSixtyYears: 20, preSixtyMonths: 6, postSixtyYears: 5 })).toEqual({ payment: 1152000, basisTwelfths: 432 });
+    expect(f({ avgInsuredSalary: 30001, preSixtyYears: 16, preSixtyMonths: 3 })).toEqual({ payment: 525018, basisTwelfths: 210 }); // 捨入
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 16, preSixtyMonths: 6 })).toEqual({ payment: 540000, basisTwelfths: 216 });
+  });
+  it('postSixty 超5年自動截至5年', () => {
+    // 後60 7年 與 5年 結果相同（前60=0時 basis=2×min(84,60)=120）
+    expect(f({ avgInsuredSalary: 30000, preSixtyYears: 0, postSixtyYears: 7 }).basisTwelfths).toBe(120);
+  });
+  it('驗證丟錯', () => {
+    expect(() => f({ avgInsuredSalary: -1, preSixtyYears: 10 })).toThrow();
+    expect(() => f({ avgInsuredSalary: 30000, preSixtyYears: 1.5 })).toThrow();
+    expect(() => calcOldAgeSinglePayment(getYearData(2025), { avgInsuredSalary: 30000, preSixtyYears: 10 })).toThrow();
   });
 });
 
