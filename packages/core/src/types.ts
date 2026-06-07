@@ -43,6 +43,7 @@ export interface YearData {
     lowerThreshold: number;
     singlePaymentCap: number;
   };
+  incomeTax?: IncomeTax;
 }
 
 export type Identity = 'category1' | 'migrantGeneral' | 'migrantDomestic';
@@ -104,4 +105,31 @@ export interface EmployerSupplementaryResult {
   base: number; // max(0, A − B)
   rate: string; // 補充保險費率，如 '0.0211'
   premium: number;
+}
+
+export interface TaxBracket {
+  min: number;
+  max: number | null;
+  rate: string;
+  progressiveDiff: number;
+}
+
+export interface IncomeTax {
+  residentExemption: number;
+  standardDeduction: number;
+  salaryDeduction: number;
+  brackets: TaxBracket[];
+  nonMonthly: { rate: string; threshold: number };
+  nonResident: { rate: string; reducedRate: string; reducedThresholdMultiplier: number };
+}
+
+export type WithholdingInput =
+  | { type: 'resident'; monthlySalary: number; dependents?: number }
+  | { type: 'residentBonus'; amount: number }
+  | { type: 'nonResident'; monthlySalary: number };
+
+export interface WithholdingResult {
+  withholding: number; // 每月（或該筆）應扣繳稅額，整數元
+  rate: string; // 適用稅率字串
+  taxableAnnual?: number; // 僅 resident：估計全年應稅薪資所得
 }

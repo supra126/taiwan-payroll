@@ -98,6 +98,38 @@
         "rate": { "$ref": "#/definitions/rate" },
         "bonusThresholdMultiplier": { "type": "integer" }
       }
+    },
+    "incomeTax": {
+      "type": "object",
+      "required": ["residentExemption", "standardDeduction", "salaryDeduction", "brackets", "nonMonthly", "nonResident"],
+      "properties": {
+        "residentExemption": { "type": "number" },
+        "standardDeduction": { "type": "number" },
+        "salaryDeduction": { "type": "number" },
+        "brackets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["min", "max", "rate", "progressiveDiff"],
+            "properties": {
+              "min": { "type": "number" },
+              "max": { "type": ["number", "null"] },
+              "rate": { "type": "string" },
+              "progressiveDiff": { "type": "number" }
+            }
+          }
+        },
+        "nonMonthly": {
+          "type": "object",
+          "required": ["rate", "threshold"],
+          "properties": { "rate": { "type": "string" }, "threshold": { "type": "number" } }
+        },
+        "nonResident": {
+          "type": "object",
+          "required": ["rate", "reducedRate", "reducedThresholdMultiplier"],
+          "properties": { "rate": { "type": "string" }, "reducedRate": { "type": "string" }, "reducedThresholdMultiplier": { "type": "number" } }
+        }
+      }
     }
   }
 }

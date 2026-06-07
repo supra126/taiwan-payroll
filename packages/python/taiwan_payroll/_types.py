@@ -121,3 +121,18 @@ class EmployerSupplementaryResult:
     base: int
     rate: str
     premium: int
+
+
+@dataclass
+class WithholdingInput:
+    type: Literal["resident", "residentBonus", "nonResident"]
+    monthly_salary: Optional[float] = None
+    dependents: float = 0
+    amount: Optional[float] = None
+
+
+@dataclass
+class WithholdingResult:
+    withholding: int
+    rate: str
+    taxable_annual: Optional[int] = None

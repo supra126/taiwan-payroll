@@ -51,7 +51,8 @@
       "document": "補充保險費率2.11%",
       "issuedDate": "2021-01-01",
       "note": "自110年1月1日起為2.11%，115年沿用"
-    }
+    },
+    { "topic": "薪資所得扣繳稅額表（公式法）／綜所稅級距", "authority": "財政部", "url": "https://www.mof.gov.tw/", "document": "115年度薪資所得扣繳稅額表說明、115年度綜合所得稅課稅級距公告、各類所得扣繳率標準", "issuedDate": "2025-11-30", "note": "居住者公式法：免稅額101,000、標準扣除額272,000(有配偶基準)、薪資特別扣除額227,000；非每月給付5%起扣90,501；非居住者18%、≤1.5倍基本工資6%。官網擋直連，經twworkforce轉錄交叉驗證。" }
   ],
   "minimumWage": {
     "monthly": 29500,
@@ -1231,5 +1232,19 @@
     "singlePaymentCap": 10000000,
     "lowerThreshold": 20000,
     "note": "二代健保補充保費2.11%；獎金累計超過當月投保金額4倍部分課徵；單次給付上限1000萬。"
+  },
+  "incomeTax": {
+    "residentExemption": 101000,
+    "standardDeduction": 272000,
+    "salaryDeduction": 227000,
+    "brackets": [
+      { "min": 0, "max": 610000, "rate": "0.05", "progressiveDiff": 0 },
+      { "min": 610001, "max": 1380000, "rate": "0.12", "progressiveDiff": 42700 },
+      { "min": 1380001, "max": 2770000, "rate": "0.20", "progressiveDiff": 153100 },
+      { "min": 2770001, "max": 5190000, "rate": "0.30", "progressiveDiff": 430100 },
+      { "min": 5190001, "max": null, "rate": "0.40", "progressiveDiff": 949100 }
+    ],
+    "nonMonthly": { "rate": "0.05", "threshold": 90501 },
+    "nonResident": { "rate": "0.18", "reducedRate": "0.06", "reducedThresholdMultiplier": 1.5 }
   }
 }

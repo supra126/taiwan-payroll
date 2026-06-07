@@ -14,6 +14,7 @@ import { calcPension } from '../src/engine/pension';
 import { calcOccupational } from '../src/engine/occupational';
 import { calcSupplementary } from '../src/engine/supplementary';
 import { calcEmployerSupplementary } from '../src/engine/employerSupplementary';
+import { calcWithholding } from '../src/engine/withholding';
 import { computeInsuredDays, healthChargedThisMonth } from '../src/engine/prorated';
 import { createPayrollEngine, getAvailableYears, getYearData } from '../src/index';
 import data2026 from '../../../data/2026.json';
@@ -475,5 +476,40 @@ describe('calcEmployerSupplementary (雇主端補充保費)', () => {
   it('引擎方法委派、rounding 預設 round', () => {
     const eng = createPayrollEngine({ year: 2026 });
     expect(eng.calculateEmployerSupplementary({ monthlyPaidTotal: 5_000_000, monthlyInsuredTotal: 4_200_000 }).premium).toBe(16_880);
+  });
+});
+
+describe('calcWithholding (薪資所得扣繳)', () => {
+  it('居住者公式法：月薪60000/扶養0 → 每月500', () => {
+    const r = calcWithholding(D, { type: 'resident', monthlySalary: 60000 });
+    expect(r.withholding).toBe(500);
+    expect(r.rate).toBe('0.05');
+    expect(r.taxableAnnual).toBe(120000);
+  });
+  it('居住者公式法：月薪100000/扶養2 → 每月1658', () => {
+    expect(calcWithholding(D, { type: 'resident', monthlySalary: 100000, dependents: 2 }).withholding).toBe(1658);
+  });
+  it('居住者起扣點：月薪50000/扶養0 → 0', () => {
+    expect(calcWithholding(D, { type: 'resident', monthlySalary: 50000 }).withholding).toBe(0);
+  });
+  it('獎金 100000 → 5000；90000 → 0', () => {
+    expect(calcWithholding(D, { type: 'residentBonus', amount: 100000 }).withholding).toBe(5000);
+    expect(calcWithholding(D, { type: 'residentBonus', amount: 90000 }).withholding).toBe(0);
+  });
+  it('非居住者：月薪40000 → 2400(6%)；50000 → 9000(18%)', () => {
+    expect(calcWithholding(D, { type: 'nonResident', monthlySalary: 40000 }).withholding).toBe(2400);
+    expect(calcWithholding(D, { type: 'nonResident', monthlySalary: 40000 }).rate).toBe('0.06');
+    expect(calcWithholding(D, { type: 'nonResident', monthlySalary: 50000 }).withholding).toBe(9000);
+  });
+  it('負數丟錯', () => {
+    expect(() => calcWithholding(D, { type: 'resident', monthlySalary: -1 })).toThrow();
+    expect(() => calcWithholding(D, { type: 'residentBonus', amount: -1 })).toThrow();
+  });
+  it('該年度無 incomeTax 丟明確錯誤', () => {
+    const noTax = { ...D, incomeTax: undefined } as typeof D;
+    expect(() => calcWithholding(noTax, { type: 'resident', monthlySalary: 60000 })).toThrow(/incomeTax|所得稅/);
+  });
+  it('引擎方法委派', () => {
+    expect(createPayrollEngine({ year: 2026 }).calculateWithholding({ type: 'resident', monthlySalary: 60000 }).withholding).toBe(500);
   });
 });

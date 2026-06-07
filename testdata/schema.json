@@ -8,7 +8,7 @@
     "description": { "type": "string" },
     "source": { "type": "string" },
     "year": { "type": "integer" },
-    "kind": { "type": "string", "enum": ["calculate", "supplementary", "prorated", "employer-supplementary"], "default": "calculate" },
+    "kind": { "type": "string", "enum": ["calculate", "supplementary", "prorated", "employer-supplementary", "withholding"], "default": "calculate" },
     "input": { "type": "object" },
     "expected": { "type": "object" }
   },

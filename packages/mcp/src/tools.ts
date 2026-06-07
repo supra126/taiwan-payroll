@@ -180,6 +180,40 @@ export const employerSupplementaryTool = {
   handler: employerSupplementaryHandler,
 };
 
+// --- calculate_income_tax_withholding ---
+const withholdingShape = {
+  year: yearField,
+  type: z
+    .enum(['resident', 'residentBonus', 'nonResident'])
+    .describe('扣繳類型：resident=居住者固定月薪(公式法)、residentBonus=居住者非每月給付(獎金)5%、nonResident=非居住者18%/6%。'),
+  monthlySalary: z.number().optional().describe('月薪資，新臺幣元（resident／nonResident 用）。'),
+  dependents: z.number().int().optional().describe('配偶及受扶養親屬人數（僅 resident），預設 0。'),
+  amount: z.number().optional().describe('該筆給付金額，新臺幣元（僅 residentBonus）。'),
+};
+type WithholdingArgs = z.infer<z.ZodObject<typeof withholdingShape>>;
+
+function withholdingHandler(args: WithholdingArgs): CallToolResult {
+  try {
+    const { year, ...input } = args;
+    const r = createPayrollEngine({ year: year ?? latestYear() }).calculateWithholding(
+      input as Parameters<ReturnType<typeof createPayrollEngine>['calculateWithholding']>[0],
+    );
+    return ok(r, `應扣繳稅額 ${r.withholding} 元（稅率 ${r.rate}）。`);
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+export const withholdingTool = {
+  name: 'calculate_income_tax_withholding',
+  config: {
+    title: '薪資所得扣繳稅額',
+    description: `計算薪資所得扣繳稅額：居住者固定月薪(公式法)、非每月給付獎金(5%，未達起扣標準免扣)、非居住者(18%；月薪≤1.5倍基本工資為6%)。${DISCLAIMER}`,
+    inputSchema: withholdingShape,
+  },
+  handler: withholdingHandler,
+};
+
 // --- list_years ---
 const listYearsShape = {};
 type ListYearsArgs = z.infer<z.ZodObject<typeof listYearsShape>>;
@@ -206,4 +240,4 @@ export const listYearsTool = {
   handler: listYearsHandler,
 };
 
-export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, proratedTool, listYearsTool];
+export const allTools = [calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, proratedTool, listYearsTool];

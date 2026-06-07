@@ -1,0 +1,1 @@
+{ "id": "official-2026-withholding-resident-100k-2dep", "description": "居住者公式法 月薪100000/扶養2 → 每月1658", "source": "財政部115薪資扣繳公式法", "kind": "withholding", "year": 2026, "input": { "type": "resident", "monthlySalary": 100000, "dependents": 2 }, "expected": { "withholding": 1658 } }

@@ -1,0 +1,1 @@
+{ "id": "edge-2026-withholding-bonus-below", "description": "獎金未達起扣標準90501 → 0", "source": "財政部 etax 1506 起扣標準", "kind": "withholding", "year": 2026, "input": { "type": "residentBonus", "amount": 90000 }, "expected": { "withholding": 0 } }

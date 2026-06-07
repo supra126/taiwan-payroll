@@ -1,0 +1,1 @@
+{ "id": "edge-2026-withholding-resident-threshold", "description": "居住者起扣點：月薪50000/扶養0 → 0", "source": "公式法起扣點（應稅恰為0）", "kind": "withholding", "year": 2026, "input": { "type": "resident", "monthlySalary": 50000 }, "expected": { "withholding": 0, "taxableAnnual": 0 } }

@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'API 參考 | taiwan-payroll',
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
@@ -146,6 +146,24 @@ engine.calculate(CalculateInput(monthly_salary=42000, dependents=1, pension_self
       />
       <p className="mt-5 text-sm text-ink-soft">
         <span className="font-semibold text-ink">回傳 <code>ProratedResult</code>：</span> 同 <code>CalculateResult</code>，再加 <code>days.insured</code>（投保天數）與 <code>healthCharged</code> / <code>health_charged</code>（健保當月是否計費）。
+      </p>
+
+      <h2 className="mt-12 text-xl font-bold text-ink">
+        <code>calculateWithholding</code> — 薪資所得扣繳
+      </h2>
+      <p className="mt-3 text-ink-soft">
+        薪資所得稅代扣，三條路徑以 <code>type</code> 區分。輸入 <code>WithholdingInput</code>，回傳 <code>WithholdingResult</code>（<code>withholding</code> 應扣繳稅額、<code>rate</code> 適用稅率、<code>taxableAnnual</code> 僅居住者）。
+      </p>
+      <ParamTable
+        rows={[
+          ['type', 'type', "'resident'|'residentBonus'|'nonResident'", '（必填）', '居住者固定月薪(公式法)／居住者非每月給付(獎金)／非居住者。'],
+          ['monthlySalary', 'monthly_salary', 'number', '—', '月薪（resident／nonResident）。'],
+          ['dependents', 'dependents', 'number', '0', '配偶及受扶養親屬數（僅 resident）。'],
+          ['amount', 'amount', 'number', '—', '該筆給付金額（僅 residentBonus）。'],
+        ]}
+      />
+      <p className="mt-5 text-sm text-ink-soft">
+        居住者公式法：免稅額 101,000×(本人＋扶養)＋標準扣除 272,000＋薪資特別扣除 227,000，依級距稅率減累進差額、兩步四捨五入至元。獎金按 5%（單次未達 90,501 免扣）。非居住者月薪 ≤ 1.5× 基本工資為 6%、否則 18%。僅內建 2026；其餘年度未提供時丟錯。
       </p>
 
       <h2 className="mt-12 text-xl font-bold text-ink">年度資料</h2>

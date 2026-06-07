@@ -8,6 +8,8 @@ import type {
   ProratedResult,
   EmployerSupplementaryInput,
   EmployerSupplementaryResult,
+  WithholdingInput,
+  WithholdingResult,
 } from './types';
 import { getYearData } from './data';
 import { calcLaborInsurance } from './engine/laborInsurance';
@@ -16,6 +18,7 @@ import { calcPension } from './engine/pension';
 import { calcOccupational } from './engine/occupational';
 import { calcSupplementary } from './engine/supplementary';
 import { calcEmployerSupplementary } from './engine/employerSupplementary';
+import { calcWithholding } from './engine/withholding';
 import { calcProrated } from './engine/prorated';
 import { numberToRateString } from './rounding/strategies';
 import { getIdentityRules } from './identity';
@@ -41,6 +44,7 @@ export interface PayrollEngine {
   calculate(input: CalculateInput): CalculateResult;
   calculateSupplementary(input: SupplementaryInput): SupplementaryResult;
   calculateEmployerSupplementary(input: EmployerSupplementaryInput): EmployerSupplementaryResult;
+  calculateWithholding(input: WithholdingInput): WithholdingResult;
   calculateProrated(input: ProratedInput): ProratedResult;
 }
 
@@ -106,6 +110,10 @@ export function createPayrollEngine(opts: { year: number }): PayrollEngine {
 
     calculateEmployerSupplementary(input: EmployerSupplementaryInput): EmployerSupplementaryResult {
       return calcEmployerSupplementary(data, input, input.rounding ?? 'round');
+    },
+
+    calculateWithholding(input: WithholdingInput): WithholdingResult {
+      return calcWithholding(data, input);
     },
 
     calculateProrated(input: ProratedInput): ProratedResult {

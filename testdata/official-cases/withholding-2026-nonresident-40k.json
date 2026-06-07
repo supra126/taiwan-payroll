@@ -1,0 +1,1 @@
+{ "id": "official-2026-withholding-nonresident-40k", "description": "非居住者 月薪40000 ≤1.5×基本工資 → 6% = 2400", "source": "各類所得扣繳率標準", "kind": "withholding", "year": 2026, "input": { "type": "nonResident", "monthlySalary": 40000 }, "expected": { "withholding": 2400, "rate": "0.06" } }

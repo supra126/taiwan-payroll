@@ -8,8 +8,10 @@ from taiwan_payroll import (
     SupplementaryInput,
     ProratedInput,
     EmployerSupplementaryInput,
+    WithholdingInput,
 )
 from taiwan_payroll.engine.employer_supplementary import calc_employer_supplementary
+from taiwan_payroll.engine.withholding import calc_withholding
 from taiwan_payroll._rounding import (
     round_half_up,
     ceil_div,
@@ -255,3 +257,30 @@ def test_employer_supplementary_validation():
 def test_employer_supplementary_engine_method():
     eng = create_payroll_engine(2026)
     assert eng.calculate_employer_supplementary(EmployerSupplementaryInput(monthly_paid_total=5_000_000, monthly_insured_total=4_200_000)).premium == 16_880
+
+
+def test_withholding_resident():
+    r = calc_withholding(D, WithholdingInput(type="resident", monthly_salary=60000))
+    assert r.withholding == 500 and r.rate == "0.05" and r.taxable_annual == 120000
+    assert calc_withholding(D, WithholdingInput(type="resident", monthly_salary=100000, dependents=2)).withholding == 1658
+    assert calc_withholding(D, WithholdingInput(type="resident", monthly_salary=50000)).withholding == 0
+
+
+def test_withholding_bonus_and_nonresident():
+    assert calc_withholding(D, WithholdingInput(type="residentBonus", amount=100000)).withholding == 5000
+    assert calc_withholding(D, WithholdingInput(type="residentBonus", amount=90000)).withholding == 0
+    assert calc_withholding(D, WithholdingInput(type="nonResident", monthly_salary=40000)).withholding == 2400
+    assert calc_withholding(D, WithholdingInput(type="nonResident", monthly_salary=50000)).withholding == 9000
+
+
+def test_withholding_validation_and_missing():
+    import pytest
+    with pytest.raises(ValueError):
+        calc_withholding(D, WithholdingInput(type="resident", monthly_salary=-1))
+    no_tax = {k: v for k, v in D.items() if k != "incomeTax"}
+    with pytest.raises(ValueError):
+        calc_withholding(no_tax, WithholdingInput(type="resident", monthly_salary=60000))
+
+
+def test_withholding_engine_method():
+    assert create_payroll_engine(2026).calculate_withholding(WithholdingInput(type="resident", monthly_salary=60000)).withholding == 500

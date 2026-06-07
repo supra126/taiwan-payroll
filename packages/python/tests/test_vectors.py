@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from taiwan_payroll import create_payroll_engine, CalculateInput, SupplementaryInput, ProratedInput, EmployerSupplementaryInput
+from taiwan_payroll import create_payroll_engine, CalculateInput, SupplementaryInput, ProratedInput, EmployerSupplementaryInput, WithholdingInput
 
 
 def _find_testdata() -> Path:
@@ -57,7 +57,9 @@ def test_vector(name, vector):
     kind = vector.get("kind", "calculate")
     engine = create_payroll_engine(vector["year"])
     args = _convert_keys(vector["input"])
-    if kind == "employer-supplementary":
+    if kind == "withholding":
+        result = engine.calculate_withholding(WithholdingInput(**args))
+    elif kind == "employer-supplementary":
         result = engine.calculate_employer_supplementary(EmployerSupplementaryInput(**args))
     elif kind == "supplementary":
         result = engine.calculate_supplementary(SupplementaryInput(**args))

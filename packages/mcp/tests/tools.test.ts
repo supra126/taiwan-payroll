@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createPayrollEngine, getYearData, getAvailableYears } from 'taiwan-payroll';
-import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, proratedTool, listYearsTool, allTools } from '../src/tools';
+import { calculatePayrollTool, supplementaryTool, employerSupplementaryTool, withholdingTool, proratedTool, listYearsTool, allTools } from '../src/tools';
 
 const latest = Math.max(...getAvailableYears()); // the year the tools default to
 
@@ -81,16 +81,30 @@ describe('calculate_prorated tool', () => {
   });
 });
 
+describe('calculate_income_tax_withholding tool', () => {
+  it('回傳與 core 一致', () => {
+    const r = withholdingTool.handler({ type: 'resident', monthlySalary: 60000 });
+    expect(r.isError).toBeUndefined();
+    const direct = createPayrollEngine({ year: latest }).calculateWithholding({ type: 'resident', monthlySalary: 60000 });
+    const text = r.content[0].type === 'text' ? r.content[0].text : '';
+    expect(text).toContain(JSON.stringify(direct, null, 2));
+  });
+  it('被收進 allTools', () => {
+    expect(allTools.some((t) => t.name === 'calculate_income_tax_withholding')).toBe(true);
+  });
+});
+
 describe('allTools registry', () => {
-  it('exposes the five tools with unique names and a handler each', () => {
+  it('exposes the six tools with unique names and a handler each', () => {
     expect(allTools.map((t) => t.name)).toEqual([
       'calculate_payroll',
       'calculate_supplementary_premium',
       'calculate_employer_supplementary_premium',
+      'calculate_income_tax_withholding',
       'calculate_prorated',
       'list_years',
     ]);
-    expect(new Set(allTools.map((t) => t.name)).size).toBe(5);
+    expect(new Set(allTools.map((t) => t.name)).size).toBe(6);
     for (const t of allTools) expect(typeof t.handler).toBe('function');
   });
 });

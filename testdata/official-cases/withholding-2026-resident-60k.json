@@ -1,0 +1,1 @@
+{ "id": "official-2026-withholding-resident-60k", "description": "居住者公式法 月薪60000/扶養0 → 每月500", "source": "財政部115薪資扣繳公式法", "kind": "withholding", "year": 2026, "input": { "type": "resident", "monthlySalary": 60000 }, "expected": { "withholding": 500, "rate": "0.05", "taxableAnnual": 120000 } }
