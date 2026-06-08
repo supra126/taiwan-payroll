@@ -1,13 +1,24 @@
 # taiwan-payroll
 
-開源的台灣勞健保勞退法定費用計算引擎。輸入薪資與身份參數，輸出勞保（含就保）、健保、勞退的各方負擔明細。
+[![npm](https://img.shields.io/npm/v/taiwan-payroll?logo=npm)](https://www.npmjs.com/package/taiwan-payroll)
+[![PyPI](https://img.shields.io/pypi/v/taiwan-payroll?logo=pypi&logoColor=white)](https://pypi.org/project/taiwan-payroll/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#license)
 
-> **定位是「計算引擎」而非「法遵保證」。**
+開源的台灣勞健保勞退法定費用計算引擎。輸入薪資與身份，算出勞保（含就保）、健保、勞退、職災與二代健保補充保費的各方負擔——並涵蓋薪資所得扣繳、月中到職／離職破月、健保補充保費申報媒體檔，以及勞保老年給付試算。
+
+- 🧮 **線上試算**：<https://taiwan-payroll.vercel.app>（免安裝，瀏覽器直接算）
+- 🔌 **三種介面**：TypeScript（npm）、Python（PyPI，純 stdlib）、MCP server（給 AI 助理呼叫）
+- 📑 **官方對證**：級距表與費率逐級取自主管機關公告，計算結果對官方範例黃金向量逐位元驗證
+- 🔁 **跨語言一致**：TS 與 Python 讀同一份 `data/`、跑同一套 `testdata/`，結果逐位元相同
+- 📦 **零執行期依賴**：core 不帶任何 runtime 套件
+
+> **定位是「計算引擎」而非「法遵保證」。** 內建民國 113–115（2024–2026）年度官方參數。
 
 ## 安裝
 
 ```bash
-npm install taiwan-payroll
+npm install taiwan-payroll      # TypeScript / Node
+pip install taiwan-payroll      # Python
 ```
 
 ## 快速上手
@@ -42,7 +53,7 @@ engine.calculateProrated({ monthlySalary: 29500, startDate: '2026-03-08' });
 
 > **健保破月採「月底歸屬原則」**：以月底所屬投保單位計收整月——到職當月計整月、離職當月不計。此為健保署實務規則（非按日、與 15 日分水嶺無關）。
 
-## 申報媒體檔（健保補充保費，1.2.0 新增）
+## 申報媒體檔（健保補充保費）
 
 由申報資料產生健保署「補充保險費明細申報檔」（CSV／Big5），涵蓋 6 類所得：獎金(62)、兼職薪資(63)、執行業務(65)、股利(66)、利息(67)、租金(68)。每個產生器皆以健保署官方範例**逐位元驗證**，TS 與 Python 結果一致。
 
@@ -66,7 +77,7 @@ const { filename, content } = generateSupplementaryBonusFiling({
 - 輸出為「資料檔」供以官方入口上傳。**Big5 編碼**：TS 由呼叫端編碼，Python 提供 `to_big5_bytes()`（core 維持零依賴）。
 - API 詳見文件站 `/docs/api`。
 
-## 勞保老年給付試算（1.3.0 新增）
+## 勞保老年給付試算
 
 依勞保局官方公式試算三種老年給付（皆對官方數值/公式驗證、TS≡Python）：
 
@@ -78,7 +89,7 @@ calcOldAgeLumpSum(d, { avgInsuredSalary: 30000, years: 10 });                // 
 calcOldAgeSinglePayment(d, { avgInsuredSalary: 30000, preSixtyYears: 20 });  // 一次請領（舊制基數）
 ```
 
-- **老年年金**：擇優兩式（`平均×年資×0.775%+3000` vs `×1.55%`），提前/延後 `claimOffsetMonths`（±4%/年、上限±20%）；附 `averageHighestInsuredSalary`、`statutoryClaimAge`。
+- **老年年金**：擇優兩式（`平均×年資×0.775%+3000` vs `×1.55%`），提前/延後 `claimOffsetMonths`（±4%/年、上限 ±5 年（±20%））；附 `averageHighestInsuredSalary`、`statutoryClaimAge`。
 - **老年一次金**：年資每滿 1 年發 1 個月，逾 60 歲後年資最多 5 年。
 - **一次請領**：基數制（前 15 年每年 1 基數、超過部分每年 2 基數、前 60 上限 45、合併上限 50），平均採退保前 36 個月。
 - 試算僅供參考，實際以勞保局核定為準。
@@ -88,6 +99,12 @@ calcOldAgeSinglePayment(d, { avgInsuredSalary: 30000, preSixtyYears: 20 });  // 
 - `data/{year}.json` — 單一事實來源，年度法規參數（級距表、費率），以 JSON Schema 驗證。
 - `testdata/` — 語言無關的黃金測試向量（官方案例，含 `source` 出處），是跨語言行為一致性的根基。
 - `packages/core` — 零執行期依賴的 TypeScript 引擎。
+
+## 其他語言與介面
+
+- **Python**：`pip install taiwan-payroll`，純 stdlib、API 對應 TS 版（[PyPI](https://pypi.org/project/taiwan-payroll/)）。
+- **MCP server**：讓 Claude 等 AI 助理直接呼叫試算。遠端免安裝端點 `https://taiwan-payroll.simoko.workers.dev/mcp`（Streamable HTTP），或本地 `npx taiwan-payroll-mcp`（stdio，[npm](https://www.npmjs.com/package/taiwan-payroll-mcp)）。
+- **線上計算機與完整 API**：<https://taiwan-payroll.vercel.app>
 
 ## 資料來源（2026 / 民國115年）
 

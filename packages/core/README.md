@@ -24,10 +24,12 @@ const { filename, content } = generateSupplementaryBonusFiling({
   unit: { taxId: '11111111', name: '甲公司', phone: '0227065866', email: 'a@b.tw', contactName: '王小明' },
   records: [{ action: 'I', payDate: '20260615', payeeId: 'A123456789', payeeName: '李四', bonusAmount: 50000, insuredSalary: 31800, ytdBonusCumulative: 150000, unitCode: '123456789' }],
 });
-// content 為 Unicode 字串；檔案實際為 Big5，存檔請以 Big5 編碼寫出。
+// content 為 Unicode 字串；檔案實際為 Big5，存檔請以 Big5 編碼寫出（如 iconv-lite）。
 ```
 
-皆以健保署官方範例逐位元驗證。股利逐列保費由呼叫端提供（另附 `calcDividendPremium`）。完整 API 見 [文件站 /docs/api](https://taiwan-payroll-docs.vercel.app/docs/api)。
+> Big5 編碼刻意留給呼叫端處理，讓 core 維持零依賴；Python 套件則隨附 `to_big5_bytes()` 便利函式。
+
+皆以健保署官方範例逐位元驗證。股利逐列保費由呼叫端提供（另附 `calcDividendPremium`）。完整 API 見 [文件站 /docs/api](https://taiwan-payroll.vercel.app/docs/api)。
 
 ## 勞保老年給付試算
 
