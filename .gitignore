@@ -4,5 +4,7 @@ dist/
 .DS_Store
 coverage/
 .turbo/
+.wrangler/
+.dev.vars
 # build-time vendored copy of the shared data/ (see packages/python/hatch_build.py)
 packages/python/taiwan_payroll/data/

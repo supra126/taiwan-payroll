@@ -224,7 +224,7 @@ const oldAgePensionShape = {
     .number()
     .int()
     .optional()
-    .describe('提前(負)/延後(正)請領月數，相對法定請領年齡；每年 ±4%，上限 ±5 年。預設 0。'),
+    .describe('提前(負)/延後(正)請領月數，相對法定請領年齡；每年 ±4%，上限 ±5 年（±20%）。預設 0。'),
 };
 type OldAgePensionArgs = z.infer<z.ZodObject<typeof oldAgePensionShape>>;
 
@@ -245,7 +245,7 @@ export const oldAgePensionTool = {
   name: 'calculate_old_age_pension',
   config: {
     title: '計算勞保老年年金（月領）',
-    description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4% 上限 ±5 年）試算月領金額；年資未滿 15 年不符年金請領資格。${DISCLAIMER}`,
+    description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4%，上限 ±5 年（±20%））試算月領金額；年資未滿 15 年不符年金請領資格。${DISCLAIMER}`,
     inputSchema: oldAgePensionShape,
   },
   handler: oldAgePensionHandler,

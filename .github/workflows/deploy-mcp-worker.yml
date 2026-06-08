@@ -1,0 +1,33 @@
+name: Deploy MCP Worker (Cloudflare)
+
+# 選用：把 packages/mcp 的無狀態 Streamable HTTP server 部署到 Cloudflare Workers。
+# 只手動觸發（不在 push 時自動部署）。首次部署也可直接在本地：
+#   wrangler login && pnpm --filter taiwan-payroll-mcp deploy
+#
+# 用 CI 部署需要一個 secret：
+#   CLOUDFLARE_API_TOKEN —— 在 Cloudflare 後台用「Edit Cloudflare Workers」範本建立 API token，
+#                           再到 repo Settings → Secrets and variables → Actions 加入。
+#   （若帳號下有多個 account 而報錯，另加 CLOUDFLARE_ACCOUNT_ID secret 並取消下方 accountId 註解。）
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: packages/mcp
+          command: deploy

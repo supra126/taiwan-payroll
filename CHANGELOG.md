@@ -6,14 +6,26 @@
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **`taiwan-payroll-mcp` 1.4.0 — 遠端傳輸**：新增無狀態 Streamable HTTP handler（`http.ts`，Web 標準 `Request`→`Response`）與 Cloudflare Worker 進入點（`worker.ts`），可部署為公開遠端 MCP server；stdio 與 HTTP 共用同一份 `create-server.ts` 組裝，工具清單不漂移。**計算邏輯與 9 個 tool 皆不變**，純 mcp 套件變更。
+
+### Fixed
+
+- **整數 NTD 契約跨語言對齊（core）**：TS 端對小數金額輸入改為先 `Math.floor` 取整再計算（補充保費 `chargeable`、雇主補充保費 `base`、扣繳 `taxable`/獎金/非居住者月薪、老年給付平均投保薪資、`calcDividendPremium` base），與 Python 端既有 `int()` 契約**逐位元一致**。先前小數輸入兩語言會在進位邊界差 1 元（如 dividend 20,023.7 → 422 vs 423）；整數輸入結果不變。
+- **`calculateProrated`**：同月份 `startDate` 晚於 `endDate` 時明確丟錯（原會回傳異常天數）。TS≡Python。
+- **`generateSupplementaryBonusFiling`**：年度累計獎金 `ytdBonusCumulative` 小於本筆 `bonusAmount` 時丟錯（避免下游 `ytdBonus` 變負數）。TS≡Python。
+
 ## [1.3.0] - 2026-06-08
 
-新增「勞保老年給付試算」——引擎從「算扣項／產申報檔」延伸到「算給付」。三套件同步發佈 1.3.0（`taiwan-payroll-mcp` 自 1.1.0 起含此版新增的 tool 與一項修正）。
+新增「勞保老年給付試算」——引擎從「算扣項／產申報檔」延伸到「算給付」。三套件同步發佈 1.3.0（`taiwan-payroll-mcp` 自 1.1.0 跳升至 1.3.0，納入本版新增的 3 個老年給付 tool 與漏註冊修正）。
 
 ### Added
 
 - **勞保老年給付試算（3 種，core / Python / MCP）**，皆以勞保局官方試算數值/公式驗證，整數運算、TS≡Python：
-  - `calculateOldAgePension`（老年年金月領）：擇優兩式（`平均×年資×0.775%+3000`、`×1.55%`），提前/延後請領 `claimOffsetMonths`（每年 ±4%、上限 ±20%），年資未滿 15 年 `eligible:false`。便利函式 `averageHighestInsuredSalary`、`statutoryClaimAge`。
+  - `calculateOldAgePension`（老年年金月領）：擇優兩式（`平均×年資×0.775%+3000`、`×1.55%`），提前/延後請領 `claimOffsetMonths`（每年 ±4%，上限 ±5 年（±20%）），年資未滿 15 年 `eligible:false`。便利函式 `averageHighestInsuredSalary`、`statutoryClaimAge`。
   - `calculateOldAgeLumpSum`（老年一次金）：`平均 × 給付月數`（年資每滿 1 年 1 個月、逾 60 歲後年資最多 5 年）。
   - `calculateOldAgeSinglePayment`（一次請領老年給付，舊制基數）：前 15 年每年 1 基數、超過部分每年 2 基數、滿 60 歲前最高 45 基數、逾 60 歲後合併最高 50 基數；平均採退保前 36 個月。
 - `data/{year}.json` 新增 `oldAgePension` 區段（法定參數，目前 2026）。
@@ -65,7 +77,7 @@
 - **型別 codegen**：`packages/core` 的資料型別（`YearData`/`Bracket`/`Burden`/`IncomeTax`/`TaxBracket`）改由 `data/schema.json` 自動生成（`scripts/gen-types.ts` → `types.generated.ts`），根除手寫鏡像漂移；CI 加 `gen:types:check`。順帶補完 schema 既有缺漏（`supplementaryPremium` 的 `lowerThreshold`／`singlePaymentCap`、`YearData` 的 `sources`）。
 - **開發工具鏈**：TypeScript 升 6.0；GitHub Actions 升 v6（Node 24 runtime）、CI build Node 20→24。pnpm 維持 10。
 
-
+## [1.0.1] - 2026-06-05
 
 維護性釋出，計算邏輯與資料不變。
 
@@ -139,4 +151,9 @@
 - 跨語言 184 測試（TypeScript 128 + Python 56）。
 - License：MIT。
 
+[Unreleased]: https://github.com/supra126/taiwan-payroll/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/supra126/taiwan-payroll/releases/tag/v1.3.0
+[1.2.0]: https://github.com/supra126/taiwan-payroll/releases/tag/v1.2.0
+[1.1.0]: https://github.com/supra126/taiwan-payroll/releases/tag/v1.1.0
+[1.0.1]: https://github.com/supra126/taiwan-payroll/releases/tag/v1.0.1
 [1.0.0]: https://github.com/supra126/taiwan-payroll/releases/tag/v1.0.0

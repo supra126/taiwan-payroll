@@ -1,0 +1,50 @@
+name: Publish to MCP Registry
+
+# 把 packages/mcp/server.json 發佈到官方 MCP Registry（registry.modelcontextprotocol.io）。
+# 採 GitHub OIDC —— 不需任何 token secret，只需 id-token: write。
+# 命名空間 io.github.supra126/* 由本 repo 擁有者（supra126）的 OIDC 身分授權。
+#
+# 前置（各做一次）：
+#   1. 部署 Cloudflare Worker，並把實際 URL 填進 server.json：
+#        wrangler login && pnpm --filter taiwan-payroll-mcp deploy
+#        pnpm --filter taiwan-payroll-mcp set-url https://taiwan-payroll-mcp.<subdomain>.workers.dev/mcp
+#        （commit server.json）
+#   2. npm 上已有 taiwan-payroll-mcp@<server.json version>（由 publish.yml 於 release 時發佈）。
+# 觸發：手動 workflow_dispatch（待部署＋npm 都就緒後按一次；日後改版可重跑）。
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # OIDC 認證必要
+      contents: read # 顯式宣告 permissions 後其餘降為 none；checkout 私有 repo 需要
+    defaults:
+      run:
+        working-directory: packages/mcp
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 前置防呆（URL 已填、npm 版本已存在）
+        run: |
+          URL=$(node -p "require('./server.json').remotes?.[0]?.url || ''")
+          # 必須是已填好的 https://.../mcp 實際端點（涵蓋佔位符、空值、漏 /mcp 等情形）。
+          if ! echo "$URL" | grep -qE '^https://[A-Za-z0-9.-]+/mcp$'; then
+            echo "::error::server.json 的 remote URL 無效或仍是佔位符（得到：'$URL'）。請先部署並執行 set-url 填入實際 https://.../mcp。"; exit 1
+          fi
+          V=$(node -p "require('./server.json').version")
+          if ! npm view "taiwan-payroll-mcp@$V" version >/dev/null 2>&1; then
+            echo "::error::npm 尚無 taiwan-payroll-mcp@$V。請先發佈該版本（publish.yml）。"; exit 1
+          fi
+          echo "remote=$URL version=$V，前置檢查通過。"
+
+      - name: 安裝 mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: 認證（GitHub OIDC）
+        run: ./mcp-publisher login github-oidc
+
+      - name: 發佈到 MCP Registry
+        run: ./mcp-publisher publish

@@ -18,6 +18,10 @@
 
 ## 安裝與設定（MCP client）
 
+兩種連線方式，擇一即可。
+
+### 1. 本地 stdio（npx，免部署）
+
 於 MCP client（如 Claude Desktop）的設定加入：
 
 ```json
@@ -30,6 +34,31 @@
   }
 }
 ```
+
+### 2. 遠端 Streamable HTTP（免安裝）
+
+公開無狀態端點，支援原生 remote MCP 的 client 可直接填 URL：
+
+```json
+{
+  "mcpServers": {
+    "taiwan-payroll": {
+      "type": "streamable-http",
+      "url": "https://taiwan-payroll.simoko.workers.dev/mcp"
+    }
+  }
+}
+```
+
+> 此端點無狀態、無需登入；計算純在 edge 執行，不蒐集輸入資料。
+
+## 自行部署（Cloudflare Workers）
+
+```bash
+pnpm --filter taiwan-payroll-mcp deploy   # wrangler deploy
+```
+
+`src/worker.ts` 為 Cloudflare Worker 進入點，沿用與 stdio 版相同的工具集（`src/create-server.ts`）。本地預覽：`pnpm --filter taiwan-payroll-mcp dev:http`。
 
 ## 免責聲明
 
