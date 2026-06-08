@@ -61,6 +61,11 @@ describe('generateSupplementaryBonusFiling', () => {
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [] })).toThrow();
     expect(() => generateSupplementaryBonusFiling({ ...example, records: [{ ...example.records[0], bonusAmount: -1 }] })).toThrow();
   });
+  it('年度累計獎金 < 本筆獎金丟錯（避免 ytdBonus 變負數）', () => {
+    expect(() =>
+      generateSupplementaryBonusFiling({ ...example, records: [{ ...example.records[0], bonusAmount: 50000, ytdBonusCumulative: 40000 }] }),
+    ).toThrow(/must be >= bonusAmount/);
+  });
 });
 
 const profFixture = readFileSync(

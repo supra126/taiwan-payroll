@@ -33,10 +33,11 @@ export function calcSupplementary(
       throw new Error(`ytdBonus must be a finite non-negative number, got ${ytd}`);
     }
     const threshold = sp.bonusThresholdMultiplier * input.monthlyInsuredSalary;
-    chargeable = Math.max(0, ytd + input.amount - Math.max(ytd, threshold));
+    // 金額一律以整數 NTD 計（與 Python 端 int() 契約一致，避免兩語言在小數輸入時差 1 元）。
+    chargeable = Math.floor(Math.max(0, ytd + input.amount - Math.max(ytd, threshold)));
   } else {
     const threshold = input.type === 'parttime' ? data.minimumWage.monthly : sp.lowerThreshold;
-    chargeable = input.amount >= threshold ? Math.min(input.amount, sp.singlePaymentCap) : 0;
+    chargeable = input.amount >= threshold ? Math.floor(Math.min(input.amount, sp.singlePaymentCap)) : 0;
   }
 
   return { type: input.type, chargeable, rate: sp.rate, premium: applyRate(chargeable, [sp.rate], rounding) };
@@ -52,6 +53,6 @@ export function calcSupplementary(
 export function calcDividendPremium(data: YearData, amount: number, employerInsuredTotal = 0): number {
   const sp = data.supplementaryPremium;
   if (amount < sp.lowerThreshold) return 0;
-  const base = Math.max(0, Math.min(amount, sp.singlePaymentCap) - employerInsuredTotal);
+  const base = Math.floor(Math.max(0, Math.min(amount, sp.singlePaymentCap) - employerInsuredTotal));
   return applyRate(base, [sp.rate], 'round');
 }

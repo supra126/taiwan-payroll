@@ -150,6 +150,18 @@ def test_supplementary_returns_ints_even_for_float_inputs():
     assert isinstance(r.chargeable, int) and isinstance(r.premium, int)
 
 
+def test_integer_ntd_contract_floors_fractional_inputs():
+    # 小數金額一律 floor 為整數 NTD —— 與 TS 端 Math.floor 契約逐位元一致。
+    r = calc_supplementary(D, SupplementaryInput(type="dividend", amount=20023.7), "round")
+    assert r.chargeable == 20023 and r.premium == 422  # 非 423
+    assert calc_dividend_premium(D, 20023.7) == 422
+    assert calc_withholding(D, WithholdingInput(type="nonResident", monthly_salary=40008.34)).withholding == 2400  # 非 2401
+    assert calc_withholding(D, WithholdingInput(type="residentBonus", amount=100000.9)).withholding == 5000
+    assert calc_employer_supplementary(
+        D, EmployerSupplementaryInput(monthly_paid_total=5_000_000.9, monthly_insured_total=4_200_000), "round"
+    ).base == 800_000
+
+
 def test_prorated_days():
     assert compute_insured_days("2026-03-08", None) == 23
     assert compute_insured_days(None, "2026-03-08") == 8
@@ -163,6 +175,8 @@ def test_prorated_days():
         compute_insured_days("2026-01-10", "2026-02-10")
     with pytest.raises(ValueError, match="YYYY-MM-DD"):
         compute_insured_days("2026-3-8", None)
+    with pytest.raises(ValueError, match="must not be after"):
+        compute_insured_days("2026-02-18", "2026-02-03")
 
 
 def test_prorated():

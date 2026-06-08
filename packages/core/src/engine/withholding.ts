@@ -24,7 +24,8 @@ export function calcWithholding(data: YearData, input: WithholdingInput): Withho
     const dependents = input.dependents ?? 0;
     assertNonNeg('dependents', dependents);
     const deductions = it.residentExemption * (1 + dependents) + it.standardDeduction + it.salaryDeduction;
-    const taxable = Math.max(0, input.monthlySalary * 12 - deductions);
+    // 應稅所得以整數 NTD 計（與 Python 端 int() 契約一致）。
+    const taxable = Math.floor(Math.max(0, input.monthlySalary * 12 - deductions));
     const bracket = it.brackets.find((b) => taxable >= b.min && (b.max === null || taxable <= b.max));
     if (!bracket) throw new Error(`No tax bracket for taxable ${taxable}`);
     const { num: rNum, den: rDen } = parseRate(bracket.rate);
@@ -35,12 +36,12 @@ export function calcWithholding(data: YearData, input: WithholdingInput): Withho
   if (input.type === 'residentBonus') {
     assertNonNeg('amount', input.amount);
     const { rate, threshold } = it.nonMonthly;
-    return { withholding: input.amount >= threshold ? applyRate(input.amount, [rate], 'round') : 0, rate };
+    return { withholding: input.amount >= threshold ? applyRate(Math.floor(input.amount), [rate], 'round') : 0, rate };
   }
 
   // nonResident
   assertNonNeg('monthlySalary', input.monthlySalary);
   const threshold = it.nonResident.reducedThresholdMultiplier * data.minimumWage.monthly;
   const rate = input.monthlySalary <= threshold ? it.nonResident.reducedRate : it.nonResident.rate;
-  return { withholding: applyRate(input.monthlySalary, [rate], 'round'), rate };
+  return { withholding: applyRate(Math.floor(input.monthlySalary), [rate], 'round'), rate };
 }

@@ -24,7 +24,8 @@ export function calcOldAgeLumpSum(data: YearData, input: OldAgeLumpSumInput): Ol
   const cap = oap.lumpSumPostAgeCapYears * 12;
   const effective = M - post60 + Math.min(post60, cap);
   return {
-    payment: roundHalfUp(input.avgInsuredSalary * effective, 12),
+    // 平均月投保薪資以整數 NTD 計（與 Python 端 int() 契約一致）。
+    payment: roundHalfUp(Math.floor(input.avgInsuredSalary) * effective, 12),
     insuredMonthsCounted: effective,
   };
 }

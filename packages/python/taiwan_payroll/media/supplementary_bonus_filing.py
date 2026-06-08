@@ -75,6 +75,9 @@ def generate_supplementary_bonus_filing(inp: SupplementaryBonusFilingInput) -> S
         assert_non_neg("bonus_amount", r.bonus_amount)
         assert_non_neg("insured_salary", r.insured_salary)
         assert_non_neg("ytd_bonus_cumulative", r.ytd_bonus_cumulative)
+        # ytd_bonus_cumulative 為「含本筆」的年度累計，須 >= 本筆獎金；否則下游 ytd_bonus 會變負數並丟出費解的錯誤。
+        if r.ytd_bonus_cumulative < r.bonus_amount:
+            raise ValueError(f"ytd_bonus_cumulative ({r.ytd_bonus_cumulative}) must be >= bonus_amount ({r.bonus_amount})")
     start, end = range_ym([r.pay_date for r in recs])
     data = get_year_data(inp.year)
     premiums = [

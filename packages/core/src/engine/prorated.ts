@@ -24,7 +24,8 @@ export function computeInsuredDays(startDate?: string, endDate?: string): number
   if (startDate && endDate) {
     const s = Math.min(dayOfMonth(startDate), 30);
     const e = Math.min(dayOfMonth(endDate), 30);
-    return clamp(e - s + 1, 0, 30);
+    if (s > e) throw new Error(`startDate (${startDate}) must not be after endDate (${endDate})`);
+    return e - s + 1;
   }
   if (startDate) return clamp(30 - Math.min(dayOfMonth(startDate), 30) + 1, 0, 30);
   return clamp(Math.min(dayOfMonth(endDate as string), 30), 0, 30);

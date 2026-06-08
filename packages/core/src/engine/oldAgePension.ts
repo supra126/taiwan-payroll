@@ -18,6 +18,7 @@ export function calcOldAgePension(data: YearData, input: OldAgePensionInput): Ol
   if (!Number.isInteger(offset)) throw new Error(`claimOffsetMonths must be an integer, got ${offset}`);
 
   const M = input.years * 12 + months;
+  const avg = Math.floor(input.avgInsuredSalary); // 平均月投保薪資以整數 NTD 計（與 Python 端 int() 契約一致）
   const cap = oap.maxAdjustYears * 12;
   const adjMonths = Math.max(-cap, Math.min(cap, offset));
   const a = parseRate(oap.adjustPerYearRate); // {num:4, den:100}
@@ -26,11 +27,11 @@ export function calcOldAgePension(data: YearData, input: OldAgePensionInput): Ol
 
   const ra = parseRate(oap.formulaARate); // {num:775, den:100000}
   const formulaA = roundHalfUp(
-    (input.avgInsuredSalary * M * ra.num + oap.formulaABonus * 12 * ra.den) * factorN,
+    (avg * M * ra.num + oap.formulaABonus * 12 * ra.den) * factorN,
     12 * ra.den * factorD,
   );
   const rb = parseRate(oap.formulaBRate); // {num:155, den:10000}
-  const formulaB = roundHalfUp(input.avgInsuredSalary * M * rb.num * factorN, 12 * rb.den * factorD);
+  const formulaB = roundHalfUp(avg * M * rb.num * factorN, 12 * rb.den * factorD);
 
   return {
     formulaA,
@@ -46,7 +47,7 @@ export function averageHighestInsuredSalary(monthlySalaries: number[]): number {
   monthlySalaries.forEach((s, i) => assertNonNeg(`monthlySalaries[${i}]`, s));
   const top = [...monthlySalaries].sort((x, y) => y - x).slice(0, 60);
   return roundHalfUp(
-    top.reduce((s, v) => s + v, 0),
+    top.reduce((s, v) => s + Math.floor(v), 0),
     top.length,
   );
 }

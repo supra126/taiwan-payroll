@@ -20,6 +20,7 @@ export function calcEmployerSupplementary(
     throw new Error(`monthlyInsuredTotal must be a finite non-negative number, got ${monthlyInsuredTotal}`);
   }
   const rate = data.supplementaryPremium.rate;
-  const base = Math.max(0, monthlyPaidTotal - monthlyInsuredTotal);
+  // base 以整數 NTD 計（與 Python 端 int() 契約一致）。
+  const base = Math.floor(Math.max(0, monthlyPaidTotal - monthlyInsuredTotal));
   return { base, rate, premium: applyRate(base, [rate], rounding) };
 }

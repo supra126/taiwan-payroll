@@ -40,7 +40,9 @@ def compute_insured_days(start_date: str | None, end_date: str | None) -> int:
     if start_date and end_date:
         s = min(_day(start_date), 30)
         e = min(_day(end_date), 30)
-        return _clamp(e - s + 1, 0, 30)
+        if s > e:
+            raise ValueError(f"startDate ({start_date}) must not be after endDate ({end_date})")
+        return e - s + 1
     if start_date:
         return _clamp(30 - min(_day(start_date), 30) + 1, 0, 30)
     return _clamp(min(_day(end_date), 30), 0, 30)

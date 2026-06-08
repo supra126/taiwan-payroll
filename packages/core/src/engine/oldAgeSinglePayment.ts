@@ -40,5 +40,6 @@ export function calcOldAgeSinglePayment(
   );
   const post60 = spb.secondTierBasisPerYear * Math.min(Q, spb.postSixtyCapYears * 12);
   const basisTwelfths = Math.min(pre60 + post60, spb.combinedMaxBasis * 12);
-  return { payment: roundHalfUp(input.avgInsuredSalary * basisTwelfths, 12), basisTwelfths };
+  // 平均月投保薪資以整數 NTD 計（與 Python 端 int() 契約一致）。
+  return { payment: roundHalfUp(Math.floor(input.avgInsuredSalary) * basisTwelfths, 12), basisTwelfths };
 }

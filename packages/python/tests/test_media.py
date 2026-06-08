@@ -35,6 +35,13 @@ def test_validation():
         generate_supplementary_bonus_filing(I(year=2026, filing_date="20220901", unit=_example().unit, records=[]))
 
 
+def test_ytd_below_bonus_raises():
+    # 年度累計獎金 < 本筆獎金 → 丟錯（避免下游 ytd_bonus 變負數）
+    bad = R(action="I", pay_date="20220615", payee_id="A222222222", payee_name="甄健康", bonus_amount=50000, insured_salary=31800, ytd_bonus_cumulative=40000, unit_code="123456789")
+    with pytest.raises(ValueError, match="must be >= bonus_amount"):
+        generate_supplementary_bonus_filing(I(year=2026, filing_date="20220901", unit=_example().unit, records=[bad]))
+
+
 from taiwan_payroll import (
     generate_supplementary_parttime_filing,
     SupplementaryParttimeFilingInput as PI,

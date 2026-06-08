@@ -39,6 +39,10 @@ export function generateSupplementaryBonusFiling(input: SupplementaryBonusFiling
     assertNonNeg('bonusAmount', r.bonusAmount);
     assertNonNeg('insuredSalary', r.insuredSalary);
     assertNonNeg('ytdBonusCumulative', r.ytdBonusCumulative);
+    // ytdBonusCumulative 為「含本筆」的年度累計，須 >= 本筆獎金；否則下游 ytdBonus 會變負數並丟出費解的錯誤。
+    if (r.ytdBonusCumulative < r.bonusAmount) {
+      throw new Error(`ytdBonusCumulative (${r.ytdBonusCumulative}) must be >= bonusAmount (${r.bonusAmount})`);
+    }
   }
   const { start, end } = rangeYM(records.map((r) => r.payDate));
   const premiums = records.map((r) => premiumOf(year, r));

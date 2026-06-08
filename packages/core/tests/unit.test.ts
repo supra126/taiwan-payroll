@@ -152,6 +152,28 @@ describe('calcDividendPremium', () => {
   });
 });
 
+describe('integer-NTD contract (float inputs floor to integer, TS≡Python)', () => {
+  it('supplementary floors a fractional amount before charging', () => {
+    const r = calcSupplementary(D, { type: 'dividend', amount: 20023.7 }, 'round');
+    expect(r.chargeable).toBe(20023); // floor(20023.7)
+    expect(r.premium).toBe(422); // round(20023 × 2.11%) — not 423
+    expect(Number.isInteger(r.chargeable)).toBe(true);
+  });
+  it('calcDividendPremium floors the base too', () => {
+    expect(calcDividendPremium(D, 20023.7)).toBe(422);
+  });
+  it('withholding floors monthlySalary/amount before applying the rate', () => {
+    expect(calcWithholding(D, { type: 'nonResident', monthlySalary: 40008.34 }).withholding).toBe(2400); // not 2401
+    expect(calcWithholding(D, { type: 'residentBonus', amount: 100000.9 }).withholding).toBe(5000);
+  });
+  it('employer supplementary floors the base', () => {
+    expect(calcEmployerSupplementary(D, { monthlyPaidTotal: 5_000_000.9, monthlyInsuredTotal: 4_200_000 }, 'round').base).toBe(800_000);
+  });
+  it('old-age uses a floored average insured salary', () => {
+    expect(calcOldAgeLumpSum(D, { avgInsuredSalary: 30000.9, years: 10 }).payment).toBe(300000);
+  });
+});
+
 describe('calcLaborInsurance aggregate-then-round', () => {
   it('government absorbs the rounding remainder so the parts sum to round(insured x rate)', () => {
     const round = calcLaborInsurance(D, 31800, true, 'round');
@@ -179,6 +201,9 @@ describe('prorated day count', () => {
   it('throws when neither date is given, or dates span different months', () => {
     expect(() => computeInsuredDays(undefined, undefined)).toThrow(/startDate or endDate/);
     expect(() => computeInsuredDays('2026-01-10', '2026-02-10')).toThrow(/same month/);
+  });
+  it('throws when a same-month startDate is after endDate', () => {
+    expect(() => computeInsuredDays('2026-02-18', '2026-02-03')).toThrow(/must not be after/);
   });
   it('throws on a malformed (non-YYYY-MM-DD) date instead of returning NaN', () => {
     expect(() => computeInsuredDays('2026-3-8', undefined)).toThrow(/YYYY-MM-DD/);
