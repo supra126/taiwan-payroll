@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "taiwan-payroll"
-version = "1.3.0"
+version = "1.3.1"
 description = "台灣勞健保勞退計算引擎（Python 純 stdlib）— 與 TypeScript 版同源、計算逐位元一致；勞保／健保／勞退／補充保費／薪資扣繳／老年給付。"
 readme = "README.md"
 requires-python = ">=3.10"

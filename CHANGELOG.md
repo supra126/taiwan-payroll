@@ -6,13 +6,15 @@
 
 ---
 
-## [Unreleased]
+## [mcp 1.4.0 · core/python 1.3.1] - 2026-06-08
+
+`taiwan-payroll-mcp` 升 **1.4.0**（新增遠端傳輸）；`taiwan-payroll`（core/npm）與 PyPI 套件升 **1.3.1**（整數契約一致性與驗證修正）。
 
 ### Added
 
 - **`taiwan-payroll-mcp` 1.4.0 — 遠端傳輸**：新增無狀態 Streamable HTTP handler（`http.ts`，Web 標準 `Request`→`Response`）與 Cloudflare Worker 進入點（`worker.ts`），可部署為公開遠端 MCP server；stdio 與 HTTP 共用同一份 `create-server.ts` 組裝，工具清單不漂移。**計算邏輯與 9 個 tool 皆不變**，純 mcp 套件變更。
 
-### Fixed
+### Fixed（core / python 1.3.1）
 
 - **整數 NTD 契約跨語言對齊（core）**：TS 端對小數金額輸入改為先 `Math.floor` 取整再計算（補充保費 `chargeable`、雇主補充保費 `base`、扣繳 `taxable`/獎金/非居住者月薪、老年給付平均投保薪資、`calcDividendPremium` base），與 Python 端既有 `int()` 契約**逐位元一致**。先前小數輸入兩語言會在進位邊界差 1 元（如 dividend 20,023.7 → 422 vs 423）；整數輸入結果不變。
 - **`calculateProrated`**：同月份 `startDate` 晚於 `endDate` 時明確丟錯（原會回傳異常天數）。TS≡Python。
