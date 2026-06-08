@@ -31,3 +31,20 @@ export function ErrorNote({ children }: { children: ReactNode }) {
 export function ResultPanel({ children }: { children: ReactNode }) {
   return <div className="mt-7 border-t border-rule pt-6">{children}</div>;
 }
+
+/** 醒目的重點數字摘要（結果表上方），第一眼即抓到關鍵金額。 */
+export function ResultSummary({ items }: { items: { label: string; value: string; accent?: boolean }[] }) {
+  return (
+    <div className="mb-6 flex flex-wrap gap-x-10 gap-y-4">
+      {items.map((it) => (
+        <div key={it.label}>
+          <div className="font-mono text-xs uppercase tracking-wider text-ink-faint">{it.label}</div>
+          <div className={`mt-1 font-serif text-2xl font-bold figures ${it.accent ? 'text-cinnabar-deep' : 'text-ink'}`}>
+            {it.value}
+            <span className="ml-1 text-sm font-normal text-ink-faint">元</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

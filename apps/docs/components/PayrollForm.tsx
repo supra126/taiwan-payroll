@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import { getAvailableYears } from 'taiwan-payroll';
 import { runCalculate, toRows, type PayrollForm as PForm } from '../lib/calc';
+import { formatNTD } from '../lib/format';
 import { ResultTable } from './ResultTable';
-import { Field, ErrorNote, ResultPanel, inputCls, selectCls } from './ui';
+import { Field, ErrorNote, ResultPanel, ResultSummary, inputCls, selectCls } from './ui';
 
 const years = getAvailableYears();
 
@@ -85,6 +86,12 @@ export function PayrollForm() {
       {out === null && <ResultPanel><p className="text-sm text-ink-faint">請輸入月薪。</p></ResultPanel>}
       {out && out.ok && (
         <ResultPanel>
+          <ResultSummary
+            items={[
+              { label: '員工自付合計', value: formatNTD(out.result.employee.total), accent: true },
+              { label: '雇主負擔合計', value: formatNTD(out.result.employer.total) },
+            ]}
+          />
           <ResultTable rows={toRows(out.result)} />
         </ResultPanel>
       )}
