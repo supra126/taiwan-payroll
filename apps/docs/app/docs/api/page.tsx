@@ -1,50 +1,91 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
+const OG_DESC =
+  'taiwan-payroll 完整 API 參考：勞健保勞退計算、二代健保補充保費、薪資扣繳、申報媒體檔、勞保老年給付各函數的參數、預設值與回傳結構，TypeScript 與 Python 並列。';
+
 export const metadata: Metadata = {
-  title: 'API 參考 | taiwan-payroll',
+  title: 'API 參考',
+  alternates: { canonical: '/docs/api' },
   description:
-    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、calculateOldAgeLumpSum、calculateOldAgeSinglePayment、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+    'taiwan-payroll 完整 API 參考：createPayrollEngine、calculate、calculateSupplementary、calculateEmployerSupplementary、calculateProrated、calculateWithholding、calculateOldAgePension、calculateOldAgeLumpSum、calculateOldAgeSinglePayment、generateSupplementaryBonusFiling、generateSupplementaryParttimeFiling、generateSupplementaryProfessionalFiling、generateSupplementaryInterestFiling、generateSupplementaryRentFiling、generateSupplementaryDividendFiling、calcDividendPremium / calculateDividendPremium、averageHighestInsuredSalary、statutoryClaimAge、getYearData、getAvailableYears 各函數的參數、預設值、範圍與回傳結構，TypeScript 與 Python 並列。',
+  openGraph: { title: 'API 參考｜台灣勞健保勞退試算', description: OG_DESC, url: '/docs/api', type: 'article' },
+  twitter: { title: 'API 參考｜台灣勞健保勞退試算', description: OG_DESC },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: '首頁', item: 'https://taiwan-payroll.vercel.app' },
+    { '@type': 'ListItem', position: 2, name: '快速上手', item: 'https://taiwan-payroll.vercel.app/docs' },
+    { '@type': 'ListItem', position: 3, name: 'API 參考', item: 'https://taiwan-payroll.vercel.app/docs/api' },
+  ],
 };
 
 const pre = 'mt-3 overflow-x-auto rounded-md border border-rule bg-ink px-4 py-3.5 text-sm leading-relaxed text-paper figures';
-const th = 'py-2.5 px-3 font-mono text-xs uppercase tracking-wider text-ink-faint';
-const td = 'py-2.5 px-3 align-top';
+const cols =
+  'sm:grid sm:grid-cols-[minmax(8.5rem,1.3fr)_minmax(4.5rem,0.6fr)_minmax(4rem,0.5fr)_minmax(0,2fr)] sm:gap-4';
+const colHead = 'pb-2.5 font-mono text-xs uppercase tracking-wider text-ink-faint';
+// 手機端的欄位小標（桌機隱藏，由表頭代替）
+const mLabel = 'w-11 shrink-0 font-mono text-[0.65rem] uppercase leading-5 tracking-wider text-ink-faint sm:hidden';
 
-/** 參數表：每列 [TS 名稱, Python 名稱, 型別, 預設, 說明]。Python 同名則留空。 */
+/** 在 '/' 與 '|' 後插入 <wbr> 斷點，讓長欄位清單／型別聯集優先在分隔符處換行（較好讀）。 */
+function withBreaks(text: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  text.split(/([/|])/).forEach((seg, i) => {
+    if (seg === '') return;
+    out.push(seg);
+    if (seg === '/' || seg === '|') out.push(<wbr key={i} />);
+  });
+  return out;
+}
+
+/**
+ * 參數表：每列 [TS 名稱, Python 名稱, 型別, 預設, 說明]。Python 同名則留空。
+ * 桌機為四欄表格；手機改為堆疊——說明取得整列寬度，避免被擠到每幾字就換行。
+ */
 function ParamTable({ rows }: { rows: [string, string, string, string, string][] }) {
   return (
-    <div className="mt-4 overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
-        <thead>
-          <tr className="border-b-2 border-rule-strong text-left">
-            <th className={th}>參數（TS · Python）</th>
-            <th className={th}>型別</th>
-            <th className={th}>預設</th>
-            <th className={th}>說明</th>
-          </tr>
-        </thead>
-        <tbody className="text-ink-soft">
-          {rows.map(([ts, py, type, def, desc]) => (
-            <tr key={ts} className="border-b border-rule/70">
-              <td className={`${td} whitespace-nowrap`}>
-                <code className="text-ink">{ts}</code>
-                {py && <div className="font-mono text-xs text-ink-faint">{py}</div>}
-              </td>
-              <td className={`${td} font-mono text-xs`}>{type}</td>
-              <td className={`${td} figures whitespace-nowrap`}>{def}</td>
-              <td className={td}>{desc}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="mt-4">
+      <div className={`hidden border-b-2 border-rule-strong text-left ${cols}`}>
+        <div className={colHead}>參數（TS · Python）</div>
+        <div className={colHead}>型別</div>
+        <div className={colHead}>預設</div>
+        <div className={colHead}>說明</div>
+      </div>
+      {rows.map(([ts, py, type, def, desc]) => (
+        <div
+          key={ts}
+          className={`border-b border-rule/70 py-3.5 text-sm text-ink-soft [overflow-wrap:anywhere] sm:items-baseline sm:py-2.5 ${cols}`}
+        >
+          <div className="sm:pr-2">
+            <code className="text-ink">{ts}</code>
+            {py && <span className="ml-2 font-mono text-xs text-ink-faint sm:ml-0 sm:block">{py}</span>}
+          </div>
+          <div className="mt-1.5 flex gap-2 font-mono text-xs sm:mt-0 sm:block">
+            <span className={mLabel}>型別</span>
+            <span>{withBreaks(type)}</span>
+          </div>
+          <div className="mt-1.5 flex gap-2 sm:mt-0 sm:block">
+            <span className={mLabel}>預設</span>
+            <span className="figures">{def}</span>
+          </div>
+          <div className="mt-1.5 flex gap-2 sm:mt-0 sm:block">
+            <span className={mLabel}>說明</span>
+            <span>{withBreaks(desc)}</span>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
 
 export default function ApiReference() {
   return (
-    <article className="max-w-3xl">
+    <article className="max-w-5xl [&_p]:max-w-3xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <p className="mb-8">
         <Link href="/docs" className="font-mono text-xs uppercase tracking-widest text-cinnabar-deep hover:underline">
           ← 回快速上手

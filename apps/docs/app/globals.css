@@ -6,7 +6,7 @@
   --color-panel: #fbf9f4;
   --color-ink: #1b1916;
   --color-ink-soft: #5b564e;
-  --color-ink-faint: #8a8478;
+  --color-ink-faint: #6f6960;
   --color-rule: #d8d0c0;
   --color-rule-strong: #b8ad97;
   --color-cinnabar: #b23c2e;
@@ -41,6 +41,12 @@
   h3 {
     font-family: var(--font-serif);
     letter-spacing: 0.01em;
+    /* 長函數名等識別字置於標題時可斷行，避免在窄螢幕撐寬版面 */
+    overflow-wrap: anywhere;
+  }
+  /* 行內 code（非 pre 內）允許長識別字斷行；pre 內的程式碼維持不換行、由 overflow-x-auto 捲動 */
+  code:not(pre code) {
+    overflow-wrap: anywhere;
   }
   /* tabular figures everywhere numbers matter */
   .figures {
