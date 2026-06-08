@@ -2,6 +2,10 @@
 
 台灣勞健保勞退計算引擎（TypeScript，零執行期依賴）。完整文件見 [GitHub repository](https://github.com/supra126/taiwan-payroll#readme)。
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/supra126/taiwan-payroll/main/assets/calc-result.png" alt="月薪 42,000 第一類計算結果：員工負擔 4,872、雇主負擔 8,315、政府補助 864（新台幣／月，民國115年度）" width="760">
+</p>
+
 ```ts
 import { createPayrollEngine } from 'taiwan-payroll';
 

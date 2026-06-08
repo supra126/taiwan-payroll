@@ -1,0 +1,97 @@
+<svg width="760" height="466" viewBox="0 0 760 466" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10161f"/>
+      <stop offset="1" stop-color="#0a0e14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3fb950"/>
+      <stop offset="0.5" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#d29922"/>
+    </linearGradient>
+    <style>
+      .cjk  { font-family: -apple-system, 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
+      .kw   { fill: #ff7b72; }
+      .fn   { fill: #d2a8ff; }
+      .str  { fill: #a5d6ff; }
+      .num  { fill: #79c0ff; }
+      .prop { fill: #7ee787; }
+      .pun  { fill: #8b949e; }
+      .com  { fill: #6e7681; }
+    </style>
+  </defs>
+
+  <!-- card -->
+  <rect x="0.5" y="0.5" width="759" height="465" rx="14" fill="url(#bg)" stroke="#222c38"/>
+  <rect x="0" y="0" width="760" height="4" rx="2" fill="url(#accent)"/>
+
+  <!-- window chrome -->
+  <circle cx="28" cy="32" r="6" fill="#ff5f57"/>
+  <circle cx="48" cy="32" r="6" fill="#febc2e"/>
+  <circle cx="68" cy="32" r="6" fill="#28c840"/>
+  <text x="100" y="37" font-size="13" fill="#8b949e">taiwan-payroll · engine.calculate()</text>
+  <text x="732" y="37" text-anchor="end" font-size="12" fill="#6e7681" class="cjk">民國115 (2026) 年度官方參數</text>
+  <line x1="0" y1="52" x2="760" y2="52" stroke="#1c252f"/>
+
+  <!-- code block -->
+  <rect x="20" y="68" width="720" height="132" rx="9" fill="#0d1219" stroke="#1c252f"/>
+  <g font-size="14">
+    <text x="38" y="94"><tspan class="kw">const</tspan><tspan class="pun"> </tspan><tspan fill="#e6edf3">engine</tspan><tspan class="pun"> = </tspan><tspan class="fn">createPayrollEngine</tspan><tspan class="pun">({ </tspan><tspan class="prop">year</tspan><tspan class="pun">: </tspan><tspan class="num">2026</tspan><tspan class="pun"> });</tspan></text>
+    <text x="38" y="118"><tspan class="kw">const</tspan><tspan class="pun"> </tspan><tspan fill="#e6edf3">r</tspan><tspan class="pun"> = </tspan><tspan fill="#e6edf3">engine</tspan><tspan class="pun">.</tspan><tspan class="fn">calculate</tspan><tspan class="pun">({</tspan></text>
+    <text x="38" y="142"><tspan class="pun">  </tspan><tspan class="prop">monthlySalary</tspan><tspan class="pun">: </tspan><tspan class="num">42000</tspan><tspan class="pun">, </tspan><tspan class="prop">identity</tspan><tspan class="pun">: </tspan><tspan class="str">'category1'</tspan><tspan class="pun">, </tspan><tspan class="prop">dependents</tspan><tspan class="pun">: </tspan><tspan class="num">1</tspan><tspan class="pun">,</tspan></text>
+    <text x="38" y="166"><tspan class="pun">  </tspan><tspan class="prop">employmentInsurance</tspan><tspan class="pun">: </tspan><tspan class="kw">true</tspan><tspan class="pun">, </tspan><tspan class="prop">pensionSelfContribution</tspan><tspan class="pun">: </tspan><tspan class="num">0.06</tspan><tspan class="pun">,</tspan></text>
+    <text x="38" y="190"><tspan class="pun">});</tspan></text>
+  </g>
+
+  <!-- caption -->
+  <text x="20" y="226" font-size="12.5" fill="#8b949e" class="cjk">// 計算結果　·　單位：新台幣／月</text>
+
+  <!-- ===== column 1: employee ===== -->
+  <rect x="20" y="238" width="224" height="184" rx="9" fill="#0e1620" stroke="#1f3026"/>
+  <text x="38" y="264" font-size="14" font-weight="700" fill="#3fb950" class="cjk">員工負擔</text>
+  <line x1="38" y1="274" x2="226" y2="274" stroke="#26352b"/>
+  <g font-size="13.5" fill="#c9d1d9">
+    <text x="38"  y="300" class="cjk">勞保</text>       <text x="226" y="300" text-anchor="end">1,050</text>
+    <text x="38"  y="324" class="cjk">健保</text>       <text x="226" y="324" text-anchor="end">1,302</text>
+    <text x="38"  y="348" class="cjk">勞退自提</text>   <text x="226" y="348" text-anchor="end">2,520</text>
+  </g>
+  <line x1="38" y1="364" x2="226" y2="364" stroke="#26352b"/>
+  <rect x="30" y="374" width="204" height="32" rx="6" fill="#132a1b"/>
+  <text x="38" y="396" font-size="14" font-weight="700" fill="#7ee787" class="cjk">合計</text>
+  <text x="226" y="396" text-anchor="end" font-size="16" font-weight="700" fill="#7ee787">4,872</text>
+
+  <!-- ===== column 2: employer ===== -->
+  <rect x="268" y="238" width="224" height="184" rx="9" fill="#0d1722" stroke="#1d2c3d"/>
+  <text x="286" y="264" font-size="14" font-weight="700" fill="#58a6ff" class="cjk">雇主負擔</text>
+  <line x1="286" y1="274" x2="474" y2="274" stroke="#22303f"/>
+  <g font-size="13.5" fill="#c9d1d9">
+    <text x="286" y="298" class="cjk">勞保</text>   <text x="474" y="298" text-anchor="end">3,675</text>
+    <text x="286" y="320" class="cjk">健保</text>   <text x="474" y="320" text-anchor="end">2,032</text>
+    <text x="286" y="342" class="cjk">勞退</text>   <text x="474" y="342" text-anchor="end">2,520</text>
+    <text x="286" y="364" class="cjk">職災</text>   <text x="474" y="364" text-anchor="end">88</text>
+  </g>
+  <line x1="286" y1="378" x2="474" y2="378" stroke="#22303f"/>
+  <rect x="278" y="386" width="204" height="30" rx="6" fill="#11233a"/>
+  <text x="286" y="407" font-size="14" font-weight="700" fill="#79c0ff" class="cjk">合計</text>
+  <text x="474" y="407" text-anchor="end" font-size="16" font-weight="700" fill="#79c0ff">8,315</text>
+
+  <!-- ===== column 3: government ===== -->
+  <rect x="516" y="238" width="224" height="184" rx="9" fill="#19140c" stroke="#37301d"/>
+  <text x="534" y="264" font-size="14" font-weight="700" fill="#d29922" class="cjk">政府補助</text>
+  <line x1="534" y1="274" x2="722" y2="274" stroke="#3a3320"/>
+  <g font-size="13.5" fill="#c9d1d9">
+    <text x="534" y="300" class="cjk">勞保</text>   <text x="722" y="300" text-anchor="end">525</text>
+    <text x="534" y="324" class="cjk">健保</text>   <text x="722" y="324" text-anchor="end">339</text>
+  </g>
+  <line x1="534" y1="340" x2="722" y2="340" stroke="#3a3320"/>
+  <rect x="526" y="350" width="204" height="30" rx="6" fill="#2a2110"/>
+  <text x="534" y="371" font-size="14" font-weight="700" fill="#e3b341" class="cjk">合計</text>
+  <text x="722" y="371" text-anchor="end" font-size="16" font-weight="700" fill="#e3b341">864</text>
+  <text x="534" y="406" font-size="11.5" fill="#8b949e" class="cjk">就保 / 職災基金由</text>
+  <text x="534" y="420" font-size="11.5" fill="#8b949e" class="cjk">政府依法分攤</text>
+
+  <!-- footer -->
+  <line x1="0" y1="438" x2="760" y2="438" stroke="#1c252f"/>
+  <text x="20" y="456" font-size="11.5" fill="#6e7681" class="cjk">✓ 級距表逐級取自主管機關公告，計算結果對官方範例逐位元驗證</text>
+  <text x="740" y="456" text-anchor="end" font-size="11.5" fill="#6e7681">dataVersion 2026.1.0</text>
+</svg>

@@ -2,6 +2,10 @@
 
 台灣勞健保勞退法定費用計算引擎的 Python 實作。讀同一份 `data/`，跑通同一套 `testdata/` 黃金向量，與 TypeScript 版計算結果完全一致。零執行期依賴（純 stdlib）。
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/supra126/taiwan-payroll/main/assets/calc-result.png" alt="月薪 42,000 第一類計算結果：員工負擔 4,872、雇主負擔 8,315、政府補助 864（新台幣／月，民國115年度）" width="760">
+</p>
+
 ## 安裝
 
 ```bash

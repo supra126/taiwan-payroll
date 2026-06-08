@@ -3,8 +3,13 @@
 [![npm](https://img.shields.io/npm/v/taiwan-payroll?logo=npm)](https://www.npmjs.com/package/taiwan-payroll)
 [![PyPI](https://img.shields.io/pypi/v/taiwan-payroll?logo=pypi&logoColor=white)](https://pypi.org/project/taiwan-payroll/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](#license)
+[![smithery](https://smithery.ai/badge/supra126/taiwan-payroll)](https://smithery.ai/servers/supra126/taiwan-payroll)
 
 開源的台灣勞健保勞退法定費用計算引擎。輸入薪資與身份，算出勞保（含就保）、健保、勞退、職災與二代健保補充保費的各方負擔——並涵蓋薪資所得扣繳、月中到職／離職破月、健保補充保費申報媒體檔，以及勞保老年給付試算。
+
+<p align="center">
+  <img src="./assets/calc-result.svg" alt="月薪 42,000 第一類計算結果：員工負擔 4,872、雇主負擔 8,315、政府補助 864（新台幣／月，民國115年度）" width="760">
+</p>
 
 - 🧮 **線上試算**：<https://taiwan-payroll.vercel.app>（免安裝，瀏覽器直接算）
 - 🔌 **三種介面**：TypeScript（npm）、Python（PyPI，純 stdlib）、MCP server（給 AI 助理呼叫）
@@ -104,6 +109,7 @@ calcOldAgeSinglePayment(d, { avgInsuredSalary: 30000, preSixtyYears: 20 });  // 
 
 - **Python**：`pip install taiwan-payroll`，純 stdlib、API 對應 TS 版（[PyPI](https://pypi.org/project/taiwan-payroll/)）。
 - **MCP server**：讓 Claude 等 AI 助理直接呼叫試算。遠端免安裝端點 `https://taiwan-payroll.simoko.workers.dev/mcp`（Streamable HTTP），或本地 `npx taiwan-payroll-mcp`（stdio，[npm](https://www.npmjs.com/package/taiwan-payroll-mcp)）。
+  - 上架於官方 MCP Registry（`io.github.supra126/taiwan-payroll`）與 [Smithery](https://smithery.ai/servers/supra126/taiwan-payroll)（一鍵安裝）。
 - **線上計算機與完整 API**：<https://taiwan-payroll.vercel.app>
 
 ## 資料來源（2026 / 民國115年）
