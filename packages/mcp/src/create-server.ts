@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { allTools } from './tools.js';
 
 export const SERVER_NAME = 'taiwan-payroll-mcp';
-export const SERVER_VERSION = '1.4.0';
+export const SERVER_VERSION = '1.4.1';
 
 /**
  * 建立並註冊所有工具的 McpServer。stdio 與 Streamable HTTP 兩種傳輸共用同一份組裝，

@@ -1,6 +1,6 @@
 {
   "name": "taiwan-payroll-mcp",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "台灣勞健保勞退計算 MCP server — 勞保、健保、勞退、補充保費、薪資扣繳、老年給付；支援 npx (stdio) 與遠端 Streamable HTTP。",
   "mcpName": "io.github.supra126/taiwan-payroll",
   "license": "MIT",

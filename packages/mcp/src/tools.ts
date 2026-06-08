@@ -20,12 +20,77 @@ const roundingField = z
   .optional()
   .describe('進位策略：round=四捨五入（預設）、ceil=無條件進位、aggregate-then-round=合計後分配（政府方吸收進位差）。');
 
-function ok(data: unknown, summary: string): CallToolResult {
-  return { content: [{ type: 'text', text: `${summary}\n${JSON.stringify(data, null, 2)}` }] };
+// 所有工具皆為純計算：唯讀、同輸入同輸出、無破壞性、封閉計算（不連外部世界）。
+const ANNOTATIONS = {
+  readOnlyHint: true,
+  idempotentHint: true,
+  destructiveHint: false,
+  openWorldHint: false,
+} as const;
+
+function ok(data: object, summary: string): CallToolResult {
+  return {
+    content: [{ type: 'text', text: `${summary}\n${JSON.stringify(data, null, 2)}` }],
+    structuredContent: data as { [k: string]: unknown },
+  };
 }
 function fail(err: unknown): CallToolResult {
   return { content: [{ type: 'text', text: err instanceof Error ? err.message : String(err) }], isError: true };
 }
+
+// --- 各工具回傳結構（outputSchema，對應 core 的 Result 型別）---
+const calculateOutputShape = {
+  brackets: z.object({ labor: z.number(), health: z.number(), pension: z.number(), occupational: z.number() }),
+  employee: z.object({ labor: z.number(), health: z.number(), pensionSelf: z.number(), total: z.number() }),
+  employer: z.object({ labor: z.number(), health: z.number(), pension: z.number(), occupational: z.number(), total: z.number() }),
+  government: z.object({ labor: z.number(), health: z.number() }),
+  meta: z.object({ year: z.number(), dataVersion: z.string() }),
+};
+const proratedOutputShape = {
+  ...calculateOutputShape,
+  days: z.object({ insured: z.number() }),
+  healthCharged: z.boolean(),
+};
+const supplementaryOutputShape = {
+  type: z.string(),
+  chargeable: z.number(),
+  rate: z.string(),
+  premium: z.number(),
+};
+const employerSupplementaryOutputShape = {
+  base: z.number(),
+  rate: z.string(),
+  premium: z.number(),
+};
+const withholdingOutputShape = {
+  withholding: z.number(),
+  rate: z.string(),
+  taxableAnnual: z.number().optional(),
+};
+const oldAgePensionOutputShape = {
+  formulaA: z.number(),
+  formulaB: z.number(),
+  monthly: z.number(),
+  adjustmentMonths: z.number(),
+  eligible: z.boolean(),
+};
+const oldAgeLumpSumOutputShape = {
+  payment: z.number(),
+  insuredMonthsCounted: z.number(),
+};
+const oldAgeSinglePaymentOutputShape = {
+  payment: z.number(),
+  basisTwelfths: z.number(),
+};
+const listYearsOutputShape = {
+  years: z.array(
+    z.object({
+      year: z.number(),
+      dataVersion: z.string(),
+      minimumWage: z.object({ monthly: z.number(), hourly: z.number() }),
+    }),
+  ),
+};
 
 // --- calculate_payroll ---
 const calculatePayrollShape = {
@@ -74,6 +139,8 @@ export const calculatePayrollTool = {
     title: '計算台灣勞健保勞退',
     description: `計算台灣某月薪資的勞保（含就保）、健保、勞退、職災各方（員工/雇主/政府）負擔。支援不同身份別、眷屬、自提、部分工時。${DISCLAIMER}`,
     inputSchema: calculatePayrollShape,
+    outputSchema: calculateOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: calculatePayrollHandler,
 };
@@ -113,6 +180,8 @@ export const supplementaryTool = {
     title: '二代健保補充保費',
     description: `計算二代健保補充保費（費率 2.11%）。bonus 課徵年度累計超過當月投保額 4 倍部分；其餘五類單次達門檻全額課（單次上限 1,000 萬）。${DISCLAIMER}`,
     inputSchema: supplementaryShape,
+    outputSchema: supplementaryOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: supplementaryHandler,
 };
@@ -147,6 +216,8 @@ export const proratedTool = {
     title: '月中到職／離職破月計算',
     description: `計算月中到職或離職當月的破月保費。勞保/職保/勞退按日（30 日基準）；健保採官方「月底歸屬」——到職當月計整月、離職當月不計。${DISCLAIMER}`,
     inputSchema: proratedShape,
+    outputSchema: proratedOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: proratedHandler,
 };
@@ -176,6 +247,8 @@ export const employerSupplementaryTool = {
     title: '投保單位（雇主）補充保費',
     description: `計算雇主端二代健保補充保費（費率 2.11%）：(每月支付薪資總額 − 受僱者當月健保投保金額總額) × 費率，無上限。${DISCLAIMER}`,
     inputSchema: employerSupplementaryShape,
+    outputSchema: employerSupplementaryOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: employerSupplementaryHandler,
 };
@@ -210,6 +283,8 @@ export const withholdingTool = {
     title: '薪資所得扣繳稅額',
     description: `計算薪資所得扣繳稅額：居住者固定月薪(公式法)、非每月給付獎金(5%，未達起扣標準免扣)、非居住者(18%；月薪≤1.5倍基本工資為6%)。${DISCLAIMER}`,
     inputSchema: withholdingShape,
+    outputSchema: withholdingOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: withholdingHandler,
 };
@@ -247,6 +322,8 @@ export const oldAgePensionTool = {
     title: '計算勞保老年年金（月領）',
     description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4%，上限 ±5 年（±20%））試算月領金額；年資未滿 15 年不符年金請領資格。${DISCLAIMER}`,
     inputSchema: oldAgePensionShape,
+    outputSchema: oldAgePensionOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: oldAgePensionHandler,
 };
@@ -282,6 +359,8 @@ export const oldAgeLumpSumTool = {
     title: '計算勞保老年一次金',
     description: `依勞保老年一次金法定公式（平均月投保薪資 × 給付月數；年資每滿 1 年給 1 個月、逾 60 歲後之年資最多計入 5 年）試算給付金額。${DISCLAIMER}`,
     inputSchema: oldAgeLumpSumShape,
+    outputSchema: oldAgeLumpSumOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: oldAgeLumpSumHandler,
 };
@@ -330,6 +409,8 @@ export const oldAgeSinglePaymentTool = {
     title: '計算勞保一次請領老年給付',
     description: `依勞保一次請領老年給付法定公式（基數制：前 15 年每年 1 個基數、第 16 年起每年 2 個基數、60 歲前最高 45 個基數、逾 60 歲後年資每年 2 個基數最多計 5 年、合併最高 50 個基數）試算給付金額。適用 98 年前已有保險年資者。${DISCLAIMER}`,
     inputSchema: oldAgeSinglePaymentShape,
+    outputSchema: oldAgeSinglePaymentOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: oldAgeSinglePaymentHandler,
 };
@@ -344,7 +425,7 @@ function listYearsHandler(_args: ListYearsArgs): CallToolResult {
       const d = getYearData(year);
       return { year: d.year, dataVersion: d.dataVersion, minimumWage: d.minimumWage };
     });
-    return ok(years, `可用年度：${years.map((y) => y.year).join('、')}。`);
+    return ok({ years }, `可用年度：${years.map((y) => y.year).join('、')}。`);
   } catch (err) {
     return fail(err);
   }
@@ -356,6 +437,8 @@ export const listYearsTool = {
     title: '列出可用年度',
     description: '列出目前支援的年度、資料版本與基本工資（月薪/時薪）。計算前可先用本工具確認有效的 year 值。',
     inputSchema: listYearsShape,
+    outputSchema: listYearsOutputShape,
+    annotations: ANNOTATIONS,
   },
   handler: listYearsHandler,
 };
