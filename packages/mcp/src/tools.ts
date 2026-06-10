@@ -137,7 +137,7 @@ export const calculatePayrollTool = {
   name: 'calculate_payroll',
   config: {
     title: '計算台灣勞健保勞退',
-    description: `計算台灣某月薪資的勞保（含就保）、健保、勞退、職災各方（員工/雇主/政府）負擔。支援不同身份別、眷屬、自提、部分工時。${DISCLAIMER}`,
+    description: `計算台灣某月薪資的勞保（含就保）、健保、勞退、職災各方（員工/雇主/政府）負擔。支援不同身份別、眷屬、自提、部分工時。回傳員工/雇主/政府各方分項與合計金額；唯讀、確定性整數運算。月中到職／離職當月的破月計算請改用 calculate_prorated。${DISCLAIMER}`,
     inputSchema: calculatePayrollShape,
     outputSchema: calculateOutputShape,
     annotations: ANNOTATIONS,
@@ -178,7 +178,7 @@ export const supplementaryTool = {
   name: 'calculate_supplementary_premium',
   config: {
     title: '二代健保補充保費',
-    description: `計算二代健保補充保費（費率 2.11%）。bonus 課徵年度累計超過當月投保額 4 倍部分；其餘五類單次達門檻全額課（單次上限 1,000 萬）。${DISCLAIMER}`,
+    description: `計算個人／受領人被扣取的二代健保補充保費（費率 2.11%）。bonus 課徵年度累計超過當月投保額 4 倍部分；其餘五類單次達門檻全額課（單次上限 1,000 萬）。投保單位（雇主）端應負擔的補充保費請改用 calculate_employer_supplementary_premium。${DISCLAIMER}`,
     inputSchema: supplementaryShape,
     outputSchema: supplementaryOutputShape,
     annotations: ANNOTATIONS,
@@ -214,7 +214,7 @@ export const proratedTool = {
   name: 'calculate_prorated',
   config: {
     title: '月中到職／離職破月計算',
-    description: `計算月中到職或離職當月的破月保費。勞保/職保/勞退按日（30 日基準）；健保採官方「月底歸屬」——到職當月計整月、離職當月不計。${DISCLAIMER}`,
+    description: `計算月中到職或離職當月的破月保費。勞保/職保/勞退按日（30 日基準）；健保採官方「月底歸屬」——到職當月計整月、離職當月不計。整月（非破月）的一般計算請改用 calculate_payroll。${DISCLAIMER}`,
     inputSchema: proratedShape,
     outputSchema: proratedOutputShape,
     annotations: ANNOTATIONS,
@@ -245,7 +245,7 @@ export const employerSupplementaryTool = {
   name: 'calculate_employer_supplementary_premium',
   config: {
     title: '投保單位（雇主）補充保費',
-    description: `計算雇主端二代健保補充保費（費率 2.11%）：(每月支付薪資總額 − 受僱者當月健保投保金額總額) × 費率，無上限。${DISCLAIMER}`,
+    description: `計算投保單位（雇主）端二代健保補充保費（費率 2.11%）：(每月支付薪資總額 − 受僱者當月健保投保金額總額) × 費率，無上限。個人／受領人被扣取的補充保費請改用 calculate_supplementary_premium。${DISCLAIMER}`,
     inputSchema: employerSupplementaryShape,
     outputSchema: employerSupplementaryOutputShape,
     annotations: ANNOTATIONS,
@@ -320,7 +320,7 @@ export const oldAgePensionTool = {
   name: 'calculate_old_age_pension',
   config: {
     title: '計算勞保老年年金（月領）',
-    description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4%，上限 ±5 年（±20%））試算月領金額；年資未滿 15 年不符年金請領資格。${DISCLAIMER}`,
+    description: `依勞保老年年金法定公式（擇優兩式、提前/延後增減給每年 ±4%，上限 ±5 年（±20%））試算「按月領取」金額；年資未滿 15 年不符年金請領資格。若要「一次領清」：新制一次金請用 calculate_old_age_lump_sum，98 年前已有年資之舊制一次請領請用 calculate_old_age_single_payment。回傳為估算，整數元。${DISCLAIMER}`,
     inputSchema: oldAgePensionShape,
     outputSchema: oldAgePensionOutputShape,
     annotations: ANNOTATIONS,
@@ -357,7 +357,7 @@ export const oldAgeLumpSumTool = {
   name: 'calculate_old_age_lump_sum',
   config: {
     title: '計算勞保老年一次金',
-    description: `依勞保老年一次金法定公式（平均月投保薪資 × 給付月數；年資每滿 1 年給 1 個月、逾 60 歲後之年資最多計入 5 年）試算給付金額。${DISCLAIMER}`,
+    description: `依勞保老年一次金法定公式（平均月投保薪資 × 給付月數；年資每滿 1 年給 1 個月、逾 60 歲後之年資最多計入 5 年）試算「新制一次領清」給付。回傳給付金額（整數元）與計入投保月數，為唯讀、確定性整數運算之估算。按月領取請改用 calculate_old_age_pension；98 年前已有年資之舊制一次請領（基數制）請改用 calculate_old_age_single_payment。${DISCLAIMER}`,
     inputSchema: oldAgeLumpSumShape,
     outputSchema: oldAgeLumpSumOutputShape,
     annotations: ANNOTATIONS,
@@ -407,7 +407,7 @@ export const oldAgeSinglePaymentTool = {
   name: 'calculate_old_age_single_payment',
   config: {
     title: '計算勞保一次請領老年給付',
-    description: `依勞保一次請領老年給付法定公式（基數制：前 15 年每年 1 個基數、第 16 年起每年 2 個基數、60 歲前最高 45 個基數、逾 60 歲後年資每年 2 個基數最多計 5 年、合併最高 50 個基數）試算給付金額。適用 98 年前已有保險年資者。${DISCLAIMER}`,
+    description: `依勞保一次請領老年給付法定公式（基數制：前 15 年每年 1 個基數、第 16 年起每年 2 個基數、60 歲前最高 45 個基數、逾 60 歲後年資每年 2 個基數最多計 5 年、合併最高 50 個基數）試算給付金額。適用 98 年前已有保險年資、選舊制一次請領者；與新制一次金 calculate_old_age_lump_sum（月數制）不同。按月領取請改用 calculate_old_age_pension。${DISCLAIMER}`,
     inputSchema: oldAgeSinglePaymentShape,
     outputSchema: oldAgeSinglePaymentOutputShape,
     annotations: ANNOTATIONS,

@@ -114,8 +114,14 @@ calcOldAgeSinglePayment(d, { avgInsuredSalary: 30000, preSixtyYears: 20 });  // 
 
 - **Python**：`pip install taiwan-payroll`，純 stdlib、API 對應 TS 版（[PyPI](https://pypi.org/project/taiwan-payroll/)）。
 - **MCP server**：讓 Claude 等 AI 助理直接呼叫試算。遠端免安裝端點 `https://taiwan-payroll.simoko.workers.dev/mcp`（Streamable HTTP），或本地 `npx taiwan-payroll-mcp`（stdio，[npm](https://www.npmjs.com/package/taiwan-payroll-mcp)）。
-  - 上架於官方 MCP Registry（`io.github.supra126/taiwan-payroll`）與 [Smithery](https://smithery.ai/servers/supra126/taiwan-payroll)（一鍵安裝）。
+  - 上架於官方 MCP Registry（`io.github.supra126/taiwan-payroll`）、[Smithery](https://smithery.ai/servers/supra126/taiwan-payroll)（一鍵安裝）與 [Glama](https://glama.ai/mcp/servers/supra126/taiwan-payroll)。
 - **線上計算機與完整 API**：<https://taiwan-payroll.vercel.app>
+
+<p align="center">
+  <a href="https://glama.ai/mcp/servers/supra126/taiwan-payroll">
+    <img src="https://glama.ai/mcp/servers/supra126/taiwan-payroll/badges/score.svg" alt="taiwan-payroll MCP server — Glama 品質評分">
+  </a>
+</p>
 
 ## 資料來源（2026 / 民國115年）
 

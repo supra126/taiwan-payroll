@@ -7,6 +7,12 @@
   <br><sub>示意：在支援 MCP 的 AI 助理（Claude / Cursor 等）中呼叫 taiwan-payroll</sub>
 </p>
 
+<p align="center">
+  <a href="https://glama.ai/mcp/servers/supra126/taiwan-payroll">
+    <img src="https://glama.ai/mcp/servers/supra126/taiwan-payroll/badges/score.svg" alt="taiwan-payroll MCP server — Glama 品質評分">
+  </a>
+</p>
+
 ## Tools
 
 | Tool | 功能 |
