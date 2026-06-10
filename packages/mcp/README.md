@@ -3,7 +3,8 @@
 台灣勞健保勞退計算的 MCP（Model Context Protocol）server。薄包裝 [`taiwan-payroll`](https://www.npmjs.com/package/taiwan-payroll) core，零計算邏輯。
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/supra126/taiwan-payroll/main/assets/calc-result.png" alt="月薪 42,000 第一類計算結果：員工負擔 4,872、雇主負擔 8,315、政府補助 864（新台幣／月，民國115年度）" width="760">
+  <img src="https://raw.githubusercontent.com/supra126/taiwan-payroll/main/assets/mcp-demo.gif" alt="在 AI 助理中以自然語言詢問薪資，taiwan-payroll MCP server 呼叫 calculate_payroll 即時算出員工自付 4,872、雇主負擔 8,315" width="760">
+  <br><sub>示意：在支援 MCP 的 AI 助理（Claude / Cursor 等）中呼叫 taiwan-payroll</sub>
 </p>
 
 ## Tools

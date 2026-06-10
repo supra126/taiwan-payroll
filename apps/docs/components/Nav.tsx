@@ -6,6 +6,7 @@ const items = [
   { href: '/', label: '計算機' },
   { href: '/docs', label: '文件' },
   { href: '/docs/api', label: 'API' },
+  { href: '/mcp', label: 'AI / MCP' },
 ];
 
 export function Nav() {

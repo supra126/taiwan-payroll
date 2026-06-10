@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><style>
+  :root{--bg:#f7f4ee;--ink:#2b2722;--muted:#8a8178;--seal:#c0492f;--line:#e6dfd2;--green:#3f7d52}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1280px;height:640px;overflow:hidden}
+  body{
+    font-family:-apple-system,"PingFang TC","Noto Sans TC","Segoe UI",sans-serif;color:var(--ink);
+    background:
+      radial-gradient(110% 120% at 88% 8%, rgba(192,73,47,.10) 0%, rgba(192,73,47,0) 42%),
+      radial-gradient(120% 120% at 0% 100%, #faf8f3 0%, #f1ece2 70%, #e9e2d4 100%);
+    padding:64px 72px;display:flex;flex-direction:column;justify-content:space-between;position:relative;
+  }
+  /* faint giant seal watermark */
+  .wm{position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+    font-family:"Songti TC","PingFang TC",serif;font-weight:800;font-size:560px;line-height:1;
+    color:var(--seal);opacity:.05;user-select:none}
+  .top{display:flex;align-items:center;gap:22px;z-index:1}
+  .seal{width:108px;height:108px;border-radius:16px;background:var(--seal);position:relative;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(192,73,47,.32)}
+  .seal::after{content:"";position:absolute;inset:7px;border-radius:10px;border:2px solid rgba(255,255,255,.5)}
+  .seal span{font-family:"Songti TC","PingFang TC",serif;font-weight:800;font-size:62px;color:#fff;position:relative}
+  .name{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:46px;font-weight:700;letter-spacing:-.5px}
+  .name b{color:var(--seal)}
+  .mid{z-index:1}
+  .h1{font-size:54px;font-weight:800;line-height:1.18;letter-spacing:-.5px}
+  .h1 .hl{color:var(--seal)}
+  .sub{margin-top:18px;font-size:25px;color:var(--muted);line-height:1.5;max-width:880px}
+  .chips{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
+  .chip{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:20px;font-weight:600;
+    padding:8px 18px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#4a443c}
+  .chip.k{background:var(--seal);color:#fff;border-color:var(--seal)}
+  .bot{display:flex;align-items:center;justify-content:space-between;z-index:1}
+  .verify{display:inline-flex;align-items:center;gap:11px;font-size:22px;font-weight:600;color:var(--green)}
+  .verify .b{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;font-size:17px}
+  .repo{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:21px;color:var(--muted)}
+  .repo b{color:var(--ink)}
+</style></head>
+<body>
+  <div class="wm">算</div>
+
+  <div class="top">
+    <div class="seal"><span>算</span></div>
+    <div class="name"><b>taiwan</b>-payroll</div>
+  </div>
+
+  <div class="mid">
+    <div class="h1">台灣勞健保勞退<span class="hl">法定費用計算引擎</span></div>
+    <div class="sub">勞保‧健保‧勞退‧職災‧二代健保補充保費‧薪資所得扣繳‧勞保老年給付，一套算到底。</div>
+    <div class="chips">
+      <div class="chip">TypeScript · npm</div>
+      <div class="chip">Python · PyPI</div>
+      <div class="chip k">MCP server · 給 AI 呼叫</div>
+      <div class="chip">線上計算機</div>
+    </div>
+  </div>
+
+  <div class="bot">
+    <div class="verify"><span class="b">✓</span>級距費率取自主管機關公告，對官方範例逐位元驗證</div>
+    <div class="repo">github.com/<b>supra126/taiwan-payroll</b> · MIT</div>
+  </div>
+</body></html>

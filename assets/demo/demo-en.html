@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root{
+    --bg:#f7f4ee; --panel:#ffffff; --ink:#2b2722; --muted:#8a8178;
+    --line:#ece6dc; --seal:#c0492f; --accent:#bf4a2e;
+    --user:#efe9df; --code:#1f1c18; --codeink:#e8e3d8; --green:#3f7d52;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:900px;height:600px;overflow:hidden}
+  body{
+    background:radial-gradient(120% 100% at 0% 0%, #faf8f3 0%, #f3efe6 60%, #ece6da 100%);
+    font-family:-apple-system,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;
+    color:var(--ink); display:flex; flex-direction:column;
+  }
+  .bar{display:flex;align-items:center;gap:10px;padding:14px 22px;border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.55);backdrop-filter:blur(4px)}
+  .seal{width:30px;height:30px;border-radius:7px;background:var(--seal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;
+    font-family:"PingFang TC","Songti TC",serif;font-size:18px;box-shadow:0 2px 6px rgba(192,73,47,.35)}
+  .title{font-weight:700;font-size:15px;letter-spacing:.3px}
+  .title .dim{color:var(--muted);font-weight:500}
+  .pill{margin-left:auto;font-size:11.5px;color:var(--muted);border:1px solid var(--line);
+    padding:4px 10px;border-radius:999px;background:#fff}
+  .pill b{color:var(--seal)}
+  .chat{flex:1;padding:20px 26px;display:flex;flex-direction:column;gap:14px;justify-content:flex-start}
+  .row{display:flex;gap:11px;align-items:flex-start}
+  .row.user{justify-content:flex-end}
+  .av{width:28px;height:28px;border-radius:7px;flex:0 0 28px;display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-size:15px;font-family:"PingFang TC","Songti TC",serif}
+  .av.ai{background:var(--seal);color:#fff;box-shadow:0 2px 5px rgba(192,73,47,.3)}
+  .bubble{max-width:580px;padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.6}
+  .user .bubble{background:var(--user);border:1px solid #e4ddd0;border-top-right-radius:4px}
+  .ai .bubble{background:var(--panel);border:1px solid var(--line);border-top-left-radius:4px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .caret{display:inline-block;width:2px;height:1.05em;background:var(--accent);
+    vertical-align:-2px;margin-left:1px}
+  .tool{max-width:560px;border:1px solid #2a2722;border-radius:12px;overflow:hidden;
+    font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;
+    box-shadow:0 6px 18px rgba(40,34,28,.12)}
+  .tool .head{background:#26221d;color:#f3efe6;padding:8px 13px;display:flex;align-items:center;gap:8px;font-weight:600}
+  .tool .head .dot{width:7px;height:7px;border-radius:50%;background:#e0a23c}
+  .tool .head .dot.ok{background:#5fb87a}
+  .tool .head .nm{color:#ffd9a8}
+  .tool .head .st{margin-left:auto;font-weight:500;font-size:11.5px;color:#b8b0a4}
+  .tool .body{background:var(--code);color:var(--codeink);padding:11px 14px;line-height:1.65}
+  .tool .body .k{color:#9ecbff}
+  .tool .body .s{color:#c3e88d}
+  .tool .body .n{color:#f6c177}
+  .tool .ln{opacity:0;transform:translateY(4px)}
+  .tool .res{border-top:1px dashed #3a352e;margin-top:8px;padding-top:8px;color:#cfcabf}
+  .tool .res .big{color:#7fd49a;font-weight:700}
+  .ans .bubble{max-width:600px}
+  .ans .ln{opacity:0;transform:translateY(6px);margin:1px 0}
+  .ans .h{font-size:15px}
+  .ans .amt{font-weight:800;font-size:18px;color:var(--seal)}
+  .ans .sub{color:var(--muted);font-size:13px;padding-left:2px}
+  .ans .verify{color:var(--green);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .ans .verify .b{display:inline-flex;width:16px;height:16px;border-radius:50%;background:var(--green);
+    color:#fff;align-items:center;justify-content:center;font-size:10px}
+  .think{display:inline-flex;gap:4px;padding:4px 2px}
+  .think i{width:6px;height:6px;border-radius:50%;background:#c9c1b5;display:inline-block}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="seal">算</div>
+    <div class="title">taiwan-payroll <span class="dim">· MCP server</span></div>
+    <div class="pill">Taiwan payroll in plain language · <b>no install</b></div>
+  </div>
+  <div class="chat" id="chat">
+    <div class="row user" id="rUser" style="opacity:0">
+      <div class="bubble"><span id="qText"></span><span class="caret" id="qCaret"></span></div>
+    </div>
+    <div class="row ai" id="rThink" style="opacity:0">
+      <div class="av ai">算</div>
+      <div class="bubble"><span class="think"><i></i><i></i><i></i></span></div>
+    </div>
+    <div class="row ai" id="rTool" style="opacity:0">
+      <div class="av ai">算</div>
+      <div class="tool">
+        <div class="head"><span class="dot" id="tDot"></span><span class="nm">calculate_payroll</span>
+          <span class="st" id="tSt">running…</span></div>
+        <div class="body">
+          <div class="ln" data-i="0">{</div>
+          <div class="ln" data-i="1">&nbsp;&nbsp;<span class="k">"monthlySalary"</span>: <span class="n">42000</span>,</div>
+          <div class="ln" data-i="2">&nbsp;&nbsp;<span class="k">"identity"</span>: <span class="s">"category1"</span>,</div>
+          <div class="ln" data-i="3">&nbsp;&nbsp;<span class="k">"dependents"</span>: <span class="n">1</span>,</div>
+          <div class="ln" data-i="4">&nbsp;&nbsp;<span class="k">"pensionSelfContribution"</span>: <span class="n">0.06</span></div>
+          <div class="ln" data-i="5">}</div>
+          <div class="ln res" data-i="6" id="tRes">→ employee.total <span class="big">4872</span> · employer.total <span class="big">8315</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="row ai ans" id="rAns" style="opacity:0">
+      <div class="av ai">算</div>
+      <div class="bubble" id="ansBubble">
+        <div class="ln h" data-a="0">For <b>2026</b>, here's the monthly breakdown:</div>
+        <div class="ln" data-a="1" style="height:6px"></div>
+        <div class="ln h" data-a="2">💴 Employee pays <span class="amt" id="empAmt">NT$4,872</span></div>
+        <div class="ln sub" data-a="3">Labor 1,050 · Health 1,302 · Pension (self) 2,520</div>
+        <div class="ln" data-a="4" style="height:8px"></div>
+        <div class="ln h" data-a="5">🏢 Employer pays <span class="amt" id="erAmt">NT$8,315</span></div>
+        <div class="ln sub" data-a="6">Labor 3,675 · Health 2,032 · Pension 2,520 · Occ. 88</div>
+        <div class="ln" data-a="7" style="height:8px"></div>
+        <div class="ln" data-a="8"><span class="verify"><span class="b">✓</span> Rates from official gazettes · verified byte-for-byte vs official samples</span></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+var QUESTION = "Salary NT$42,000, category-1 insured, 1 dependent, 6% voluntary pension. What's deducted from my pay each month, and the employer's share?";
+function clamp(x){return x<0?0:x>1?1:x;}
+function showRow(el,t,start,dur){var p=clamp((t-start)/dur);el.style.opacity=p;el.style.transform="translateY("+(1-p)*8+"px)";}
+function reveal(el,t,start,dur){var p=clamp((t-start)/dur);el.style.opacity=p;el.style.transform="translateY("+(1-p)*6+"px)";}
+
+function seek(t){
+  var rUser=document.getElementById('rUser');
+  rUser.style.opacity = clamp((t-400)/300);
+  var qp = clamp((t-700)/3000);
+  var n = Math.round(QUESTION.length*qp);
+  document.getElementById('qText').textContent = QUESTION.slice(0,n);
+  document.getElementById('qCaret').style.opacity = (t>700 && t<4000 && (Math.floor(t/400)%2===0))?1:0;
+  if(t>=4000) document.getElementById('qCaret').style.display='none'; else document.getElementById('qCaret').style.display='inline-block';
+
+  var rThink=document.getElementById('rThink');
+  rThink.style.opacity = (t>4000 && t<4800)? clamp((t-4000)/250) : 0;
+  rThink.style.display = (t>=4800)?'none':'flex';
+
+  var rTool=document.getElementById('rTool');
+  showRow(rTool,t,4800,350);
+  var lns=rTool.querySelectorAll('.ln');
+  for(var i=0;i<6;i++){ reveal(lns[i],t,5100+i*150,260); }
+  var done = t>=6600;
+  document.getElementById('tDot').className = 'dot'+(done?' ok':'');
+  document.getElementById('tSt').textContent = done? '✓ done · 2026.1.0' : 'running…';
+  reveal(document.getElementById('tRes'),t,6600,320);
+
+  var rAns=document.getElementById('rAns');
+  showRow(rAns,t,7200,350);
+  var as=rAns.querySelectorAll('.ln');
+  var times=[7400,7400,7800,8200,8500,9200,9600,9900,10600];
+  for(var j=0;j<as.length;j++){ reveal(as[j],t,times[j],380); }
+
+  var pulseStart=11200, period=1400;
+  function pulse(el,phase){
+    if(t<pulseStart){el.style.textShadow='none';el.style.transform='none';return;}
+    var u=((t-pulseStart+phase)%period)/period;
+    var s=Math.sin(u*Math.PI*2)*0.5+0.5;
+    el.style.transform='scale('+(1+0.06*s)+')';
+    el.style.display='inline-block';
+    el.style.textShadow='0 0 '+(10*s)+'px rgba(192,73,47,'+(0.5*s)+')';
+  }
+  pulse(document.getElementById('empAmt'),0);
+  pulse(document.getElementById('erAmt'),700);
+}
+window.seek=seek;
+seek(0);
+</script>
+</body>
+</html>
